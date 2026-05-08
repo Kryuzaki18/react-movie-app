@@ -1,0 +1,82 @@
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #0d0d1a;
+  color: #fff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* ── Light mode body ──────────────────────────────────────────────────────── */
+[data-theme='light'] body {
+  background: #f0f2f5;
+  color: #111;
+}
+
+/* ── Scrollbar ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c0c0d0; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #e50914; }
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb { background: #2a2a4a; }
+
+/* ── Card hover overlay ───────────────────────────────────────────────────── */
+.ant-card:hover .card-overlay {
+  opacity: 1 !important;
+}
+
+/* ── Nav responsive ───────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-links    { display: none !important; }
+  .nav-hamburger { display: inline-flex !important; }
+}
+
+/* ── Theme toggle button animation ───────────────────────────────────────── */
+.theme-toggle-btn:hover .anticon {
+  transform: rotate(20deg) scale(1.15);
+}
+
+/* ── Skeleton Image fill fix ──────────────────────────────────────────────── */
+.ant-skeleton-image {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ── Input autofill ───────────────────────────────────────────────────────── */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--autofill-bg, #0d0d1a) inset !important;
+  -webkit-text-fill-color: inherit !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+[data-theme='light'] input:-webkit-autofill,
+[data-theme='light'] input:-webkit-autofill:hover,
+[data-theme='light'] input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+}
+
+/* ── Smooth theme transition on Ant Design elements ──────────────────────── */
+.ant-layout,
+.ant-card,
+.ant-drawer-content,
+.ant-modal-content,
+.ant-menu,
+.ant-input,
+.ant-select-selector,
+.ant-btn {
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease !important;
+}
