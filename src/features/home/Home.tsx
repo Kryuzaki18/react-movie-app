@@ -1,28 +1,28 @@
-import { Typography, Row, Col, Space } from 'antd';
+import { Typography, Row, Col, Space, Skeleton } from 'antd';
 import { FireOutlined, ThunderboltOutlined, StarOutlined } from '@ant-design/icons';
 import HeroBanner from '../../components/ui/hero-banner/HeroBanner';
 import MovieCard from '../../components/ui/movie-card/MovieCard';
-import { useMovies } from '../../hooks/useMovies';
-import { useTheme } from '../../context/ThemeContext';
+import { usePlayerStore } from '../../store/playerStore';
+import {
+  useFeaturedMoviesQuery,
+  useTrendingMoviesQuery,
+  useNewReleasesQuery,
+} from '../../api/useMoviesQuery';
 import type { Movie } from '../../models/movie';
 import './Home.css';
 
 const { Title } = Typography;
 
-interface HomeProps {
-  onPlay: (movie: Movie) => void;
-  onDetail: (movie: Movie) => void;
-}
-
 interface SectionProps {
-  title: string;
-  icon: React.ReactNode;
-  movies: Movie[];
-  onPlay: (movie: Movie) => void;
-  onDetail: (movie: Movie) => void;
+  title:    string;
+  icon:     React.ReactNode;
+  movies:   Movie[];
+  isLoading: boolean;
 }
 
-function MovieSection({ title, icon, movies, onPlay, onDetail }: SectionProps) {
+function MovieSection({ title, icon, movies, isLoading }: SectionProps) {
+  const { playMovie, openDetail } = usePlayerStore();
+
   return (
     <section className="home-section">
       <Space align="center" className="home-section__header">
@@ -30,29 +30,57 @@ function MovieSection({ title, icon, movies, onPlay, onDetail }: SectionProps) {
         <Title level={3} className="home-section__title">{title}</Title>
       </Space>
       <Row gutter={[16, 16]}>
-        {movies.map((movie) => (
-          <Col key={movie.id} xs={24} sm={12} md={8} lg={6} xl={6}>
-            <MovieCard movie={movie} onPlay={onPlay} onDetail={onDetail} />
-          </Col>
-        ))}
+        {isLoading
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <Col key={i} xs={24} sm={12} md={8} lg={6} xl={6}>
+                <Skeleton.Image active style={{ width: '100%', height: 180 }} />
+              </Col>
+            ))
+          : movies.map((movie) => (
+              <Col key={movie.id} xs={24} sm={12} md={8} lg={6} xl={6}>
+                <MovieCard movie={movie} onPlay={playMovie} onDetail={openDetail} />
+              </Col>
+            ))}
       </Row>
     </section>
   );
 }
 
-export default function Home({ onPlay, onDetail }: HomeProps) {
-  const { featured, trending, newReleases } = useMovies();
-  useTheme();
+export default function Home() {
+  const { playMovie, openDetail } = usePlayerStore();
+
+  const { data: featured    = [], isLoading: loadingFeatured    } = useFeaturedMoviesQuery();
+  const { data: trending    = [], isLoading: loadingTrending    } = useTrendingMoviesQuery();
+  const { data: newReleases = [], isLoading: loadingNewReleases } = useNewReleasesQuery();
 
   return (
     <div>
       <div className="home-hero-wrap">
-        <HeroBanner movies={featured} onPlay={onPlay} onDetail={onDetail} />
+        <HeroBanner
+          movies={featured}
+          onPlay={playMovie}
+          onDetail={openDetail}
+        />
       </div>
 
-      <MovieSection title="Trending Now"  icon={<FireOutlined />}        movies={trending}    onPlay={onPlay} onDetail={onDetail} />
-      <MovieSection title="New Releases"  icon={<ThunderboltOutlined />} movies={newReleases} onPlay={onPlay} onDetail={onDetail} />
-      <MovieSection title="Top Rated"     icon={<StarOutlined />}        movies={featured}    onPlay={onPlay} onDetail={onDetail} />
+      <MovieSection
+        title="Trending Now"
+        icon={<FireOutlined />}
+        movies={trending}
+        isLoading={loadingTrending}
+      />
+      <MovieSection
+        title="New Releases"
+        icon={<ThunderboltOutlined />}
+        movies={newReleases}
+        isLoading={loadingNewReleases}
+      />
+      <MovieSection
+        title="Top Rated"
+        icon={<StarOutlined />}
+        movies={featured}
+        isLoading={loadingFeatured}
+      />
     </div>
   );
 }

@@ -1,22 +1,23 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { Layout, ConfigProvider, theme, Spin } from 'antd';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { useUIStore }     from './store/uiStore';
+import { usePlayerStore } from './store/playerStore';
 import Nav from './components/navigation/nav/Nav';
 import Sidebar from './components/navigation/sidebar/Sidebar';
-import VideoPlayer from './features/player/VideoPlayer';
+import VideoPlayer from './features/video-player/VideoPlayer';
 import MovieDetailDrawer from './components/ui/movie-detail-drawer/MovieDetailDrawer';
-import type { Movie } from './models/movie';
 
 // ─── Lazy-loaded routes ───────────────────────────────────────────────────────
-const Home    = lazy(() => import('./features/home/Home'));
-const Browse  = lazy(() => import('./features/browse/Browse'));
-const Login   = lazy(() => import('./features/auth/login/Login'));
-const Signup  = lazy(() => import('./features/auth/signup/Signup'));
+const Home       = lazy(() => import('./features/home/Home'));
+const Browse     = lazy(() => import('./features/browse/Browse'));
+const Login      = lazy(() => import('./features/auth/login/Login'));
+const Signup     = lazy(() => import('./features/auth/signup/Signup'));
+const PlayerPage = lazy(() => import('./features/player/Player'));
 
 const { Content, Footer } = Layout;
 
-// Full-page loading fallback
 function PageLoader() {
   const { colors } = useTheme();
   return (
@@ -35,11 +36,18 @@ function PageLoader() {
 }
 
 function AppLayout() {
-  const [sidebarOpen, setSidebarOpen]   = useState(false);
-  const [playingMovie, setPlayingMovie] = useState<Movie | null>(null);
-  const [detailMovie, setDetailMovie]   = useState<Movie | null>(null);
   const location = useLocation();
   const { colors } = useTheme();
+
+  // ── UI store ──────────────────────────────────────────────────────────────
+  const { sidebarOpen, openSidebar, closeSidebar } = useUIStore();
+
+  // ── Player store ──────────────────────────────────────────────────────────
+  const {
+    playingMovie, closePlayer,
+    detailMovie,  closeDetail,
+    playFromDetail,
+  } = usePlayerStore();
 
   const isAuthPage =
     location.pathname === '/login' || location.pathname === '/signup';
@@ -57,8 +65,8 @@ function AppLayout() {
 
   return (
     <Layout style={{ minHeight: '100vh', background: colors.bgBase }}>
-      <Nav onMenuOpen={() => setSidebarOpen(true)} />
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Nav onMenuOpen={openSidebar} />
+      <Sidebar open={sidebarOpen} onClose={closeSidebar} />
 
       <Content
         style={{
@@ -71,24 +79,8 @@ function AppLayout() {
       >
         <Suspense fallback={<PageLoader />}>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <Home
-                  onPlay={(m) => setPlayingMovie(m)}
-                  onDetail={(m) => setDetailMovie(m)}
-                />
-              }
-            />
-            <Route
-              path="/browse"
-              element={
-                <Browse
-                  onPlay={(m) => setPlayingMovie(m)}
-                  onDetail={(m) => setDetailMovie(m)}
-                />
-              }
-            />
+            <Route path="/"       element={<Home />} />
+            <Route path="/browse" element={<Browse />} />
           </Routes>
         </Suspense>
       </Content>
@@ -128,26 +120,22 @@ function AppLayout() {
         </div>
       </Footer>
 
-      {/* Global modals */}
+      {/* Global modals — driven by playerStore, no prop-drilling */}
       <VideoPlayer
         movie={playingMovie}
         open={!!playingMovie}
-        onClose={() => setPlayingMovie(null)}
+        onClose={closePlayer}
       />
       <MovieDetailDrawer
         movie={detailMovie}
         open={!!detailMovie}
-        onClose={() => setDetailMovie(null)}
-        onPlay={(m) => {
-          setDetailMovie(null);
-          setPlayingMovie(m);
-        }}
+        onClose={closeDetail}
+        onPlay={playFromDetail}
       />
     </Layout>
   );
 }
 
-// Inner component so useTheme() can access the provider
 function ThemedApp() {
   const { isDark, colors } = useTheme();
 
@@ -160,8 +148,7 @@ function ThemedApp() {
           colorBgBase: colors.bgBase,
           colorTextBase: colors.textPrimary,
           borderRadius: 8,
-          fontFamily:
-            "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         },
         components: {
           Layout: {
@@ -191,25 +178,27 @@ function ThemedApp() {
             colorBorder: colors.border,
             colorText: colors.textPrimary,
           },
-          Drawer: {
-            colorBgElevated: colors.bgBase,
-          },
-          Modal: {
-            contentBg: colors.bgBase,
-            headerBg: colors.bgBase,
-          },
-          Card: {
-            colorBgContainer: colors.bgCard,
-          },
-          Slider: {
-            colorPrimaryBorder: '#e50914',
-            colorPrimary: '#e50914',
-          },
+          Drawer:  { colorBgElevated: colors.bgBase },
+          Modal:   { contentBg: colors.bgBase, headerBg: colors.bgBase },
+          Card:    { colorBgContainer: colors.bgCard },
+          Slider:  { colorPrimaryBorder: '#e50914', colorPrimary: '#e50914' },
         },
       }}
     >
       <BrowserRouter>
-        <AppLayout />
+        <Routes>
+          {/* ── Standalone full-page player — no nav/footer shell ── */}
+          <Route
+            path="/player/:id"
+            element={
+              <Suspense fallback={<div style={{ background: '#000', minHeight: '100vh' }} />}>
+                <PlayerPage />
+              </Suspense>
+            }
+          />
+          {/* ── Main app shell ── */}
+          <Route path="*" element={<AppLayout />} />
+        </Routes>
       </BrowserRouter>
     </ConfigProvider>
   );

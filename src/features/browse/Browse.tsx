@@ -1,31 +1,37 @@
-import { useState, useRef, useEffect } from 'react';
-import { Typography, Row, Col, Input, Select, Space, Empty, Segmented, Pagination } from 'antd';
+import { useRef, useEffect } from 'react';
+import { Typography, Row, Col, Input, Select, Space, Empty, Segmented, Pagination, Skeleton } from 'antd';
 import { SearchOutlined, AppstoreOutlined, BarsOutlined, CalendarOutlined } from '@ant-design/icons';
 import MovieCard from '../../components/ui/movie-card/MovieCard';
-import { useBrowse } from '../../hooks/useBrowse';
-import { GENRES, YEAR_RANGES } from '../../constants';
-import { PAGE_SIZE_OPTIONS, DEFAULT_PAGE_SIZE } from '../../constants';
+import { useBrowseStore }  from '../../store/browseStore';
+import { usePlayerStore }  from '../../store/playerStore';
+import { useBrowseQuery }  from '../../api/useBrowseQuery';
+import { GENRES, YEAR_RANGES, PAGE_SIZE_OPTIONS } from '../../constants';
 import { useTheme } from '../../context/ThemeContext';
-import type { Movie } from '../../models/movie';
 import './Browse.css';
 
 const { Title, Text } = Typography;
 
-interface BrowseProps {
-  onPlay: (movie: Movie) => void;
-  onDetail: (movie: Movie) => void;
-}
+export default function Browse() {
+  const { colors } = useTheme();
 
-export default function Browse({ onPlay, onDetail }: BrowseProps) {
-  const { movies, selectedGenre, setSelectedGenre, selectedYear, setSelectedYear, searchQuery, setSearchQuery } = useBrowse();
-  const [layout, setLayout]     = useState<'grid' | 'list'>('grid');
-  const [page, setPage]         = useState(1);
-  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
-  const { colors }              = useTheme();
+  // ── Store ─────────────────────────────────────────────────────────────────
+  const {
+    selectedGenre, setGenre,
+    selectedYear,  setYear,
+    searchQuery,   setSearch,
+    page,          setPage,
+    pageSize,      setPageSize,
+    layout,        setLayout,
+  } = useBrowseStore();
 
-  // Detect when pagination is stuck (scrolled past its natural position)
-  const sentinelRef    = useRef<HTMLDivElement>(null);
-  const paginationRef  = useRef<HTMLDivElement>(null);
+  const { playMovie, openDetail } = usePlayerStore();
+
+  // ── Data ──────────────────────────────────────────────────────────────────
+  const { data: movies = [], isLoading, isFetching } = useBrowseQuery();
+
+  // ── Sticky pagination sentinel ────────────────────────────────────────────
+  const sentinelRef   = useRef<HTMLDivElement>(null);
+  const paginationRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -34,31 +40,23 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
       ([entry]) => {
         paginationRef.current?.classList.toggle('is-stuck', !entry.isIntersecting);
       },
-      { threshold: 0, rootMargin: '-65px 0px 0px 0px' } // 64px nav + 1px buffer
+      { threshold: 0, rootMargin: '-65px 0px 0px 0px' }
     );
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, []);
 
-  // Reset to page 1 whenever filters change
-  const handleGenreChange = (genre: string) => {
-    setSelectedGenre(genre);
-    setPage(1);
+  // ── Pagination ────────────────────────────────────────────────────────────
+  const totalMovies = movies.length;
+  const pagedMovies = movies.slice((page - 1) * pageSize, page * pageSize);
+
+  const handlePageChange = (p: number, ps: number) => {
+    setPage(p);
+    if (ps !== pageSize) setPageSize(ps);
   };
 
-  const handleYearChange = (year: string) => {
-    setSelectedYear(year);
-    setPage(1);
-  };
-
-  const handleSearch = (value: string) => {
-    setSearchQuery(value);
-    setPage(1);
-  };
-
-  // Slice movies for current page
-  const totalMovies   = movies.length;
-  const pagedMovies   = movies.slice((page - 1) * pageSize, page * pageSize);
+  // ── Skeleton placeholder rows ─────────────────────────────────────────────
+  const skeletonCols = Array.from({ length: pageSize > 8 ? 8 : pageSize });
 
   return (
     <div>
@@ -81,7 +79,7 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
               placeholder="Search movies, genres..."
               prefix={<SearchOutlined style={{ color: colors.textMuted }} />}
               value={searchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
               allowClear
               style={{ borderRadius: 8 }}
             />
@@ -89,7 +87,7 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
           <Col xs={24} sm={12} md={7} lg={7}>
             <Select
               value={selectedGenre}
-              onChange={handleGenreChange}
+              onChange={setGenre}
               style={{ width: '100%' }}
               options={GENRES}
               placeholder="Select genre"
@@ -98,7 +96,7 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
           <Col xs={24} sm={12} md={5} lg={5}>
             <Select
               value={selectedYear}
-              onChange={handleYearChange}
+              onChange={setYear}
               style={{ width: '100%' }}
               placeholder="Year"
               suffixIcon={<CalendarOutlined style={{ color: colors.textMuted }} />}
@@ -124,7 +122,7 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
           <button
             key={g.value}
             className="browse-genre-pill"
-            onClick={() => handleGenreChange(g.value)}
+            onClick={() => setGenre(g.value)}
             style={{
               border: `1px solid ${selectedGenre === g.value ? '#e50914' : colors.border}`,
               background: selectedGenre === g.value ? '#e50914' : 'transparent',
@@ -137,16 +135,16 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
         ))}
       </Space>
 
-      {/* ── Sentinel — triggers is-stuck class when scrolled past ── */}
+      {/* ── Sentinel ── */}
       <div ref={sentinelRef} style={{ height: 1, marginBottom: -1 }} />
 
-      {/* ── Pagination (sticky) ── */}
+      {/* ── Sticky pagination ── */}
       <div ref={paginationRef} className="browse-pagination">
         <Pagination
           current={page}
           pageSize={pageSize}
           total={totalMovies}
-          onChange={(p, ps) => { setPage(p); if (ps !== pageSize) { setPageSize(ps); setPage(1); } }}
+          onChange={handlePageChange}
           onShowSizeChange={(_, ps) => { setPageSize(ps); setPage(1); }}
           showSizeChanger
           pageSizeOptions={PAGE_SIZE_OPTIONS}
@@ -159,12 +157,21 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
               )}
             </Text>
           )}
-          disabled={totalMovies === 0}
+          disabled={totalMovies === 0 || isFetching}
         />
       </div>
 
       {/* ── Grid / List ── */}
-      {movies.length === 0 ? (
+      {isLoading ? (
+        <Row gutter={[16, 20]}>
+          {skeletonCols.map((_, i) => (
+            <Col key={i} xs={24} sm={12} md={8} lg={6} xl={6}>
+              <Skeleton.Image active style={{ width: '100%', height: 180 }} />
+              <Skeleton active paragraph={{ rows: 2 }} style={{ marginTop: 8 }} />
+            </Col>
+          ))}
+        </Row>
+      ) : movies.length === 0 ? (
         <Empty
           description={
             <Text style={{ color: colors.textMuted }}>
@@ -177,7 +184,7 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
         <Row gutter={[16, 20]}>
           {pagedMovies.map((movie) => (
             <Col key={movie.id} xs={24} sm={12} md={8} lg={6} xl={6}>
-              <MovieCard movie={movie} onPlay={onPlay} onDetail={onDetail} />
+              <MovieCard movie={movie} onPlay={playMovie} onDetail={openDetail} />
             </Col>
           ))}
         </Row>
@@ -187,10 +194,7 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
             <div
               key={movie.id}
               className="browse-list-row"
-              style={{
-                background: colors.bgCard,
-                border: `1px solid ${colors.border}`,
-              }}
+              style={{ background: colors.bgCard, border: `1px solid ${colors.border}` }}
             >
               <img
                 src={movie.thumbnail}
@@ -200,23 +204,16 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
               <div className="browse-list-row__body">
                 <Row justify="space-between" align="top">
                   <Col flex="auto">
-                    <Text strong className="browse-list-row__title">
-                      {movie.title}
-                    </Text>
+                    <Text strong className="browse-list-row__title">{movie.title}</Text>
                     <Space size={6} className="browse-list-row__meta" wrap>
                       {movie.genre.map((g) => (
-                        <Text key={g} style={{ color: colors.textMuted, fontSize: 12 }}>
-                          {g}
-                        </Text>
+                        <Text key={g} style={{ color: colors.textMuted, fontSize: 12 }}>{g}</Text>
                       ))}
                       <Text style={{ color: colors.textMuted, fontSize: 12 }}>
                         · {movie.year} · {movie.duration}
                       </Text>
                     </Space>
-                    <Text
-                      className="browse-list-row__desc"
-                      style={{ color: colors.textMuted }}
-                    >
+                    <Text className="browse-list-row__desc" style={{ color: colors.textMuted }}>
                       {movie.description}
                     </Text>
                   </Col>
@@ -224,19 +221,13 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
                     <Space direction="vertical" size={6} align="end">
                       <Text className="browse-list-row__rating">★ {movie.rating}</Text>
                       <Space size={6}>
-                        <button
-                          className="browse-list-btn-play"
-                          onClick={() => onPlay(movie)}
-                        >
+                        <button className="browse-list-btn-play" onClick={() => playMovie(movie)}>
                           Play
                         </button>
                         <button
                           className="browse-list-btn-info"
-                          onClick={() => onDetail(movie)}
-                          style={{
-                            border: `1px solid ${colors.border}`,
-                            color: colors.textMuted,
-                          }}
+                          onClick={() => openDetail(movie)}
+                          style={{ border: `1px solid ${colors.border}`, color: colors.textMuted }}
                         >
                           Info
                         </button>
@@ -249,7 +240,6 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
           ))}
         </Space>
       )}
-
     </div>
   );
 }

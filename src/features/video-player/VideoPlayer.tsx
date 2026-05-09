@@ -2,6 +2,7 @@ import { Modal, Typography, Space, Tag, Button, Slider } from 'antd';
 import {
   PlayCircleOutlined, PauseCircleOutlined, ExpandOutlined,
   SoundOutlined, StepForwardOutlined, StepBackwardOutlined,
+  LinkOutlined,
 } from '@ant-design/icons';
 import { useState } from 'react';
 import type { Movie } from '../../models/movie';
@@ -116,7 +117,17 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
             ))}
           </div>
 
-          <Button size='small' color="default" variant="solid">Open in new tab</Button>
+          <Button
+            size="small"
+            color="default"
+            variant="solid"
+            icon={<LinkOutlined />}
+            onClick={() =>
+              window.open(`/player/${movie.id}`, '_blank', 'noopener,noreferrer')
+            }
+          >
+            Open in new tab
+          </Button>
         </div>
       </div>
     </Modal>

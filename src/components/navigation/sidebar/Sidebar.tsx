@@ -43,11 +43,11 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       open={open}
       onClose={onClose}
       placement="left"
-      width={260}
       styles={{
-        body:   { background: colors.bgBase, padding: 0 },
-        header: { display: 'none' },
-        mask:   { backdropFilter: 'blur(4px)' },
+        section: { width: 260 },
+        body:    { background: colors.bgBase, padding: 0 },
+        header:  { display: 'none' },
+        mask:    { backdropFilter: 'blur(4px)' },
       }}
     >
       {/* Header */}

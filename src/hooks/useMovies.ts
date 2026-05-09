@@ -1,16 +1,9 @@
-import { useMemo } from 'react';
-import {
-  MOVIES,
-  getFeaturedMovies,
-  getTrendingMovies,
-  getNewReleases,
-} from '../services/movieService';
-
-export const useMovies = () => {
-  const featured = useMemo(() => getFeaturedMovies(), []);
-  const trending = useMemo(() => getTrendingMovies(), []);
-  const newReleases = useMemo(() => getNewReleases(), []);
-  const all = useMemo(() => MOVIES, []);
-
-  return { featured, trending, newReleases, all };
-};
+/**
+ * Convenience re-export of the React Query hooks for home page collections.
+ * Keeps the hook name stable so any future consumers don't need to change.
+ */
+export {
+  useFeaturedMoviesQuery  as useFeaturedMovies,
+  useTrendingMoviesQuery  as useTrendingMovies,
+  useNewReleasesQuery     as useNewReleases,
+} from '../api/useMoviesQuery';

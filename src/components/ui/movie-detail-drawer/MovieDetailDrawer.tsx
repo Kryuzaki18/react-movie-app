@@ -30,11 +30,11 @@ export default function MovieDetailDrawer({ movie, open, onClose, onPlay }: Movi
       open={open}
       onClose={onClose}
       afterOpenChange={handleAfterOpenChange}
-      width="min(520px, 100vw)"
       styles={{
-        body:   { background: colors.bgBase, padding: 0 },
-        header: { background: colors.bgBase, borderBottom: `1px solid ${colors.border}` },
-        mask:   { backdropFilter: 'blur(4px)' },
+        section: { width: 'min(520px, 100vw)' },
+        body:    { background: colors.bgBase, padding: 0 },
+        header:  { background: colors.bgBase, borderBottom: `1px solid ${colors.border}` },
+        mask:    { backdropFilter: 'blur(4px)' },
       }}
       title={<Text strong style={{ fontSize: 16 }}>Movie Details</Text>}
     >
