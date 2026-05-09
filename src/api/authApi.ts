@@ -23,7 +23,6 @@ export async function signin(payload: SigninPayload): Promise<{ message: string 
   return apiPost<{ message: string }>('/signin', {
     email:      payload.email.toLowerCase().trim(),
     password:   payload.password,
-    useTestnet: false,
   });
 }
 

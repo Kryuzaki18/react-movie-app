@@ -10,7 +10,7 @@ import { PLANS, SIGNUP_FEATURES } from '../../../constants';
 import { useSignupMutation } from '../../../api/useAuthQuery';
 import { ApiError } from '../../../services/internalApiClient';
 import AuthShowcase from '../AuthShowcase';
-import '../login/Login.css';   // shared auth-layout / auth-panel / auth-showcase styles
+import '../login/Login.css';
 import './Signup.css';
 
 const { Title, Text } = Typography;
@@ -40,7 +40,8 @@ export default function Signup() {
     } catch { /* validation failed — Ant Design shows inline errors */ }
   };
 
-  const handleSubmit = (values: SignupForm) => {
+  const handleSubmit = () => {
+    const values = form.getFieldsValue(true) as SignupForm;
     setError('');
     signupMutation.mutate(
       { name: values.name, email: values.email, password: values.password },
@@ -65,17 +66,14 @@ export default function Signup() {
       className="auth-layout"
       style={{ background: isDark ? '#0d0d1a' : '#f0f2f5' }}
     >
-      {/* ── Left: animated showcase ── */}
       <AuthShowcase />
 
-      {/* ── Right: form panel ── */}
       <div
         className="auth-panel"
         style={{ background: isDark ? '#0d0d1a' : '#f0f2f5' }}
       >
         <div className="auth-panel__inner">
 
-          {/* Mobile-only logo */}
           <div className="auth-panel__logo">
             <Space align="center">
               <span style={{ fontSize: 28, color: '#e50914' }}>▶</span>
@@ -109,8 +107,8 @@ export default function Signup() {
                 ]}
               />
 
-              <Form form={form} layout="vertical" onFinish={handleSubmit}>
-                {/* Step 0 — Account */}
+              <Form form={form} layout="vertical">
+
                 {step === 0 && (
                   <>
                     <Form.Item
@@ -150,7 +148,6 @@ export default function Signup() {
                   </>
                 )}
 
-                {/* Step 1 — Password */}
                 {step === 1 && (
                   <>
                     <Form.Item
@@ -210,7 +207,6 @@ export default function Signup() {
                   </>
                 )}
 
-                {/* Step 2 — Plan */}
                 {step === 2 && (
                   <>
                     <Form.Item
@@ -244,11 +240,11 @@ export default function Signup() {
                       </Button>
                       <Button
                         type="primary"
-                        htmlType="submit"
                         size="large"
                         loading={signupMutation.isPending}
                         className="auth-panel__submit-btn"
                         style={{ flex: 2 }}
+                        onClick={handleSubmit}
                       >
                         Create Account
                       </Button>
@@ -258,7 +254,6 @@ export default function Signup() {
               </Form>
             </>
           ) : (
-            /* ── Success state ── */
             <div className="auth-panel__success">
               <CheckCircleOutlined className="auth-panel__success-icon" />
               <Title level={3} className="auth-panel__success-title" style={{ color: colors.textPrimary }}>
