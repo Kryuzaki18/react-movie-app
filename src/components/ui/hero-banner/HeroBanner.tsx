@@ -3,6 +3,7 @@ import { Button, Typography, Space, Tag, Rate, Skeleton } from 'antd';
 import { PlayCircleOutlined, InfoCircleOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import type { Movie } from '../../../models/movie';
 import { useTheme } from '../../../context/ThemeContext';
+import { GENRE_COLORS } from '../../../constants/genres';
 import './HeroBanner.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -12,17 +13,6 @@ interface HeroBannerProps {
   onPlay: (movie: Movie) => void;
   onDetail: (movie: Movie) => void;
 }
-
-const genreColors: Record<string, string> = {
-  Action: 'red',
-  Drama: 'blue',
-  Comedy: 'gold',
-  Thriller: 'purple',
-  'Sci-Fi': 'cyan',
-  Horror: 'volcano',
-  Romance: 'pink',
-  Animation: 'green',
-};
 
 export default function HeroBanner({ movies, onPlay, onDetail }: HeroBannerProps) {
   const [current, setCurrent]   = useState(0);
@@ -81,7 +71,7 @@ export default function HeroBanner({ movies, onPlay, onDetail }: HeroBannerProps
         <div className="hero-banner__content">
           <Space size={6} wrap className="hero-banner__tags">
             {movie.genre.map((g) => (
-              <Tag key={g} color={genreColors[g] || 'default'}>{g}</Tag>
+              <Tag key={g} color={GENRE_COLORS[g] || 'default'}>{g}</Tag>
             ))}
             {movie.newRelease && <Tag color="gold">New Release</Tag>}
             {movie.trending   && <Tag color="red">Trending</Tag>}

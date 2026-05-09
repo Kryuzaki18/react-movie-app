@@ -17,10 +17,10 @@ interface VideoPlayerProps {
 }
 
 export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) {
-  const [playing, setPlaying]   = useState(false);
+  const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [volume, setVolume]     = useState(80);
-  const { colors }              = useTheme();
+  const [volume, setVolume] = useState(80);
+  const { colors } = useTheme();
 
   if (!movie) return null;
 
@@ -85,7 +85,7 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
               type="text"
               icon={playing
                 ? <PauseCircleOutlined style={{ fontSize: 28 }} />
-                : <PlayCircleOutlined  style={{ fontSize: 28 }} />}
+                : <PlayCircleOutlined style={{ fontSize: 28 }} />}
               onClick={() => setPlaying((p) => !p)}
               className="player__btn-play-pause"
             />
@@ -108,10 +108,15 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
         </div>
 
         <div className="player__info-row">
-          {movie.genre.map((g) => (
-            <Tag key={g} className="player__genre-tag">{g}</Tag>
-          ))}
-          <Text className="player__meta-text">{movie.year} · {movie.duration}</Text>
+          <div className="player__info">
+            <Text className="player__meta-text">{movie.year}</Text>
+
+            {movie.genre.map((g) => (
+              <Tag key={g} className="player__genre-tag">{g}</Tag>
+            ))}
+          </div>
+
+          <Button size='small' color="default" variant="solid">Open in new tab</Button>
         </div>
       </div>
     </Modal>

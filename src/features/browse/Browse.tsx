@@ -1,17 +1,15 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Typography, Row, Col, Input, Select, Space, Empty, Segmented, Pagination } from 'antd';
-import { SearchOutlined, AppstoreOutlined, BarsOutlined } from '@ant-design/icons';
+import { SearchOutlined, AppstoreOutlined, BarsOutlined, CalendarOutlined } from '@ant-design/icons';
 import MovieCard from '../../components/ui/movie-card/MovieCard';
 import { useBrowse } from '../../hooks/useBrowse';
-import { GENRES } from '../../services/movieService';
+import { GENRES, YEAR_RANGES } from '../../constants';
+import { PAGE_SIZE_OPTIONS, DEFAULT_PAGE_SIZE } from '../../constants';
 import { useTheme } from '../../context/ThemeContext';
 import type { Movie } from '../../models/movie';
 import './Browse.css';
 
 const { Title, Text } = Typography;
-
-const PAGE_SIZE_OPTIONS = ['8', '12', '16', '24'];
-const DEFAULT_PAGE_SIZE = 12;
 
 interface BrowseProps {
   onPlay: (movie: Movie) => void;
@@ -19,15 +17,37 @@ interface BrowseProps {
 }
 
 export default function Browse({ onPlay, onDetail }: BrowseProps) {
-  const { movies, selectedGenre, setSelectedGenre, searchQuery, setSearchQuery } = useBrowse();
+  const { movies, selectedGenre, setSelectedGenre, selectedYear, setSelectedYear, searchQuery, setSearchQuery } = useBrowse();
   const [layout, setLayout]     = useState<'grid' | 'list'>('grid');
   const [page, setPage]         = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const { colors }              = useTheme();
 
+  // Detect when pagination is stuck (scrolled past its natural position)
+  const sentinelRef    = useRef<HTMLDivElement>(null);
+  const paginationRef  = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        paginationRef.current?.classList.toggle('is-stuck', !entry.isIntersecting);
+      },
+      { threshold: 0, rootMargin: '-65px 0px 0px 0px' } // 64px nav + 1px buffer
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
+
   // Reset to page 1 whenever filters change
   const handleGenreChange = (genre: string) => {
     setSelectedGenre(genre);
+    setPage(1);
+  };
+
+  const handleYearChange = (year: string) => {
+    setSelectedYear(year);
     setPage(1);
   };
 
@@ -66,7 +86,7 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
               style={{ borderRadius: 8 }}
             />
           </Col>
-          <Col xs={24} sm={16} md={10} lg={12}>
+          <Col xs={24} sm={12} md={7} lg={7}>
             <Select
               value={selectedGenre}
               onChange={handleGenreChange}
@@ -75,7 +95,17 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
               placeholder="Select genre"
             />
           </Col>
-          <Col xs={24} sm={8} md={4} lg={4}>
+          <Col xs={24} sm={12} md={5} lg={5}>
+            <Select
+              value={selectedYear}
+              onChange={handleYearChange}
+              style={{ width: '100%' }}
+              placeholder="Year"
+              suffixIcon={<CalendarOutlined style={{ color: colors.textMuted }} />}
+              options={YEAR_RANGES.map((r) => ({ label: r.label, value: r.value }))}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={2} lg={4} className="browse-filters__layout-col">
             <Segmented
               value={layout}
               onChange={(v) => setLayout(v as 'grid' | 'list')}
@@ -107,8 +137,11 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
         ))}
       </Space>
 
-      {/* ── Pagination (top) ── */}
-      <div className="browse-pagination">
+      {/* ── Sentinel — triggers is-stuck class when scrolled past ── */}
+      <div ref={sentinelRef} style={{ height: 1, marginBottom: -1 }} />
+
+      {/* ── Pagination (sticky) ── */}
+      <div ref={paginationRef} className="browse-pagination">
         <Pagination
           current={page}
           pageSize={pageSize}
@@ -217,20 +250,6 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
         </Space>
       )}
 
-      {/* ── Pagination (bottom) ── */}
-      {totalMovies > 0 && (
-        <div className="browse-pagination" style={{ marginTop: 32 }}>
-          <Pagination
-            current={page}
-            pageSize={pageSize}
-            total={totalMovies}
-            onChange={(p, ps) => { setPage(p); if (ps !== pageSize) { setPageSize(ps); setPage(1); } }}
-            onShowSizeChange={(_, ps) => { setPageSize(ps); setPage(1); }}
-            showSizeChanger
-            pageSizeOptions={PAGE_SIZE_OPTIONS}
-          />
-        </div>
-      )}
     </div>
   );
 }

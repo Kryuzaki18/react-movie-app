@@ -117,13 +117,24 @@
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.player__info {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .player__genre-tag {
-  font-size: 11px !important;
+  height: 22px;
+  font-size: 11px;
 }
 
 .player__meta-text {
-  color: #666 !important;
-  font-size: 12px !important;
+  height: 22px;
+  color: #757575;
+  font-size: 12px;
+  line-height: 2;
+
 }

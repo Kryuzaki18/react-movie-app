@@ -6,6 +6,7 @@ import {
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../../../context/ThemeContext';
+import { PLANS, SIGNUP_FEATURES } from '../../../constants';
 import './Signup.css';
 
 const { Title, Text } = Typography;
@@ -17,19 +18,6 @@ interface SignupForm {
   confirm: string;
   plan: string;
 }
-
-const PLANS = [
-  { value: 'basic',    label: 'Basic — Lorem ipsum (Free)' },
-  { value: 'standard', label: 'Standard — Dolor sit amet ($9.99/mo)' },
-  { value: 'premium',  label: 'Premium — Consectetur ($14.99/mo)' },
-];
-
-const FEATURES = [
-  'Unlimited lorem ipsum streaming',
-  'Dolor sit amet in HD & 4K',
-  'Consectetur adipiscing on all devices',
-  'Sed do eiusmod offline downloads',
-];
 
 export default function Signup() {
   const [step, setStep]       = useState(0);
@@ -143,7 +131,7 @@ export default function Signup() {
                     className="signup-card__features"
                     style={{ background: colors.bgBase, border: `1px solid ${colors.border}` }}
                   >
-                    {FEATURES.map((feature) => (
+                    {SIGNUP_FEATURES.map((feature) => (
                       <div key={feature} className="signup-card__feature-row">
                         <CheckCircleOutlined className="signup-card__feature-icon" />
                         <Text style={{ color: colors.textSecondary, fontSize: 13 }}>{feature}</Text>

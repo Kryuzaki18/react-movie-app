@@ -3,6 +3,7 @@ import { Card, Tag, Rate, Typography, Space, Button, Tooltip, Skeleton } from 'a
 import { PlayCircleOutlined, InfoCircleOutlined, StarFilled } from '@ant-design/icons';
 import type { Movie } from '../../../models/movie';
 import { useTheme } from '../../../context/ThemeContext';
+import { GENRE_COLORS } from '../../../constants/genres';
 import './MovieCard.css';
 
 const { Text, Paragraph } = Typography;
@@ -12,17 +13,6 @@ interface MovieCardProps {
   onPlay: (movie: Movie) => void;
   onDetail: (movie: Movie) => void;
 }
-
-const genreColors: Record<string, string> = {
-  Action: 'red',
-  Drama: 'blue',
-  Comedy: 'gold',
-  Thriller: 'purple',
-  'Sci-Fi': 'cyan',
-  Horror: 'volcano',
-  Romance: 'pink',
-  Animation: 'green',
-};
 
 export default function MovieCard({ movie, onPlay, onDetail }: MovieCardProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -105,7 +95,7 @@ export default function MovieCard({ movie, onPlay, onDetail }: MovieCardProps) {
                 {movie.genre.slice(0, 2).map((g) => (
                   <Tag
                     key={g}
-                    color={genreColors[g] || 'default'}
+                    color={GENRE_COLORS[g] || 'default'}
                     className="movie-card__tag"
                   >
                     {g}

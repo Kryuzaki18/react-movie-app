@@ -14,6 +14,14 @@
   margin-bottom: 28px;
 }
 
+/* Right-align the layout toggle column on md+ */
+@media (min-width: 768px) {
+  .browse-filters__layout-col {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
 /* Genre pill buttons */
 .browse-genre-pills {
   margin-bottom: 24px;
@@ -38,14 +46,33 @@
   margin-bottom: 20px;
 }
 
-/* ── Pagination ───────────────────────────────────────────────────────────── */
+/* ── Pagination — sticky below the nav ───────────────────────────────────── */
 .browse-pagination {
+  position: sticky;
+  top: 64px;          /* sits flush under the 64px nav header */
+  z-index: 50;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 0;
-  margin-bottom: 8px;
+  padding: 12px 20px;
+  margin-bottom: 20px;
+
+  /* Frosted-glass backdrop so content scrolls behind it */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  border-radius: 0 0 12px 12px;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
+
+/* Subtle shadow once the user has scrolled past the top */
+.browse-pagination.is-stuck {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Theme-aware background set via CSS custom property injected by ThemeContext */
+[data-theme='dark']  .browse-pagination { background: rgba(13,  13,  26,  0.88); border-color: rgba(255,255,255,0.06); }
+[data-theme='light'] .browse-pagination { background: rgba(240, 242, 245, 0.92); border-color: rgba(0,  0,   0,   0.06); }
 
 .browse-pagination .ant-pagination {
   display: flex;

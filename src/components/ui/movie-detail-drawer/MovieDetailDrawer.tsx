@@ -3,6 +3,7 @@ import { Drawer, Button, Tag, Rate, Typography, Space, Divider, Row, Col, Skelet
 import { PlayCircleOutlined, CalendarOutlined, ClockCircleOutlined, StarFilled } from '@ant-design/icons';
 import type { Movie } from '../../../models/movie';
 import { useTheme } from '../../../context/ThemeContext';
+import { GENRE_COLORS } from '../../../constants/genres';
 import './MovieDetailDrawer.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -13,17 +14,6 @@ interface MovieDetailDrawerProps {
   onClose: () => void;
   onPlay: (movie: Movie) => void;
 }
-
-const genreColors: Record<string, string> = {
-  Action: 'red',
-  Drama: 'blue',
-  Comedy: 'gold',
-  Thriller: 'purple',
-  'Sci-Fi': 'cyan',
-  Horror: 'volcano',
-  Romance: 'pink',
-  Animation: 'green',
-};
 
 export default function MovieDetailDrawer({ movie, open, onClose, onPlay }: MovieDetailDrawerProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -88,7 +78,7 @@ export default function MovieDetailDrawer({ movie, open, onClose, onPlay }: Movi
 
             <Space size={8} wrap className="detail-drawer__tags">
               {movie.genre.map((g) => (
-                <Tag key={g} color={genreColors[g] || 'default'}>{g}</Tag>
+                <Tag key={g} color={GENRE_COLORS[g] || 'default'}>{g}</Tag>
               ))}
               {movie.newRelease && <Tag color="gold">New Release</Tag>}
               {movie.trending   && <Tag color="red">Trending</Tag>}
