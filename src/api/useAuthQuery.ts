@@ -1,16 +1,18 @@
 /**
  * React Query hooks for authentication.
  *
- * useSessionQuery — verifies the session on app load via GET /me.
- * useSigninMutation — calls POST /signin.
- * useSignupMutation — calls POST /signup.
- * useSignoutMutation — calls POST /signout.
+ * useSessionQuery          — verifies the session on app load via GET /me.
+ * useSigninMutation        — calls POST /signin.
+ * useSignupMutation        — calls POST /signup.
+ * useSignoutMutation       — calls POST /signout.
+ * useForgotPasswordMutation — calls POST /forgot-password.
+ * useResetPasswordMutation  — calls POST /reset-password.
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { signin, signup, signout, getMe } from './authApi';
+import { signin, signup, signout, getMe, forgotPassword, resetPassword } from './authApi';
 import { useAuthStore } from '../store/authStore';
-import type { SigninPayload, SignupPayload } from './authApi';
+import type { SigninPayload, SignupPayload, ForgotPasswordPayload, ResetPasswordPayload } from './authApi';
 
 export const authKeys = {
   session: ['auth', 'session'] as const,
@@ -78,5 +80,19 @@ export function useSignoutMutation() {
       logout();
       queryClient.clear();
     },
+  });
+}
+
+/** Request a password reset email for the given address. */
+export function useForgotPasswordMutation() {
+  return useMutation({
+    mutationFn: (payload: ForgotPasswordPayload) => forgotPassword(payload),
+  });
+}
+
+/** Complete a password reset using the token from the reset link. */
+export function useResetPasswordMutation() {
+  return useMutation({
+    mutationFn: (payload: ResetPasswordPayload) => resetPassword(payload),
   });
 }

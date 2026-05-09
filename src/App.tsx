@@ -14,11 +14,13 @@ import MovieDetailDrawer from './components/ui/movie-detail-drawer/MovieDetailDr
 import { ErrorBoundary } from './components/ErrorBoundary';
 
 // ─── Lazy-loaded routes ───────────────────────────────────────────────────────
-const Home       = lazy(() => import('./features/home/Home'));
-const Browse     = lazy(() => import('./features/browse/Browse'));
-const Login      = lazy(() => import('./features/auth/login/Login'));
-const Signup     = lazy(() => import('./features/auth/signup/Signup'));
-const PlayerPage = lazy(() => import('./features/player/Player'));
+const Home           = lazy(() => import('./features/home/Home'));
+const Browse         = lazy(() => import('./features/browse/Browse'));
+const Login          = lazy(() => import('./features/auth/login/Login'));
+const Signup         = lazy(() => import('./features/auth/signup/Signup'));
+const ForgotPassword = lazy(() => import('./features/auth/forgot-password/ForgotPassword'));
+const ResetPassword  = lazy(() => import('./features/auth/reset-password/ResetPassword'));
+const PlayerPage     = lazy(() => import('./features/player/Player'));
 
 const { Content, Footer } = Layout;
 
@@ -148,14 +150,19 @@ function AppLayout() {
   } = usePlayerStore();
 
   const isAuthPage =
-    location.pathname === '/login' || location.pathname === '/signup';
+    location.pathname === '/login'           ||
+    location.pathname === '/signup'          ||
+    location.pathname === '/forgot-password' ||
+    location.pathname === '/reset-password';
 
   if (isAuthPage) {
     return (
       <Suspense fallback={<AppSplash visible />}>
         <Routes>
-          <Route path="/login"  element={<GuestRoute><Login /></GuestRoute>} />
-          <Route path="/signup" element={<GuestRoute><Signup /></GuestRoute>} />
+          <Route path="/login"           element={<GuestRoute><Login /></GuestRoute>} />
+          <Route path="/signup"          element={<GuestRoute><Signup /></GuestRoute>} />
+          <Route path="/forgot-password" element={<GuestRoute><ForgotPassword /></GuestRoute>} />
+          <Route path="/reset-password"  element={<GuestRoute><ResetPassword /></GuestRoute>} />
         </Routes>
       </Suspense>
     );

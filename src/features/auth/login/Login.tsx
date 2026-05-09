@@ -7,7 +7,6 @@ import { useSigninMutation } from '../../../api/useAuthQuery';
 import { ApiError } from '../../../services/internalApiClient';
 import AuthShowcase from '../AuthShowcase';
 import './Login.css';
-
 const { Title, Text } = Typography;
 
 interface LoginForm {
@@ -114,7 +113,7 @@ export default function Login() {
                 <Form.Item name="remember" valuePropName="checked" noStyle>
                   <Checkbox>Remember me</Checkbox>
                 </Form.Item>
-                <a href="#" className="auth-panel__forgot">Forgot password?</a>
+                <Link to="/forgot-password" className="auth-panel__forgot">Forgot password?</Link>
               </div>
             </Form.Item>
 

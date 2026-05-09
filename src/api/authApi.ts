@@ -44,3 +44,27 @@ export async function signout(): Promise<{ message: string }> {
 export async function getMe(): Promise<boolean> {
   return apiGet<boolean>('/me');
 }
+
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
+export interface ResetPasswordPayload {
+  token:    string;
+  password: string;
+}
+
+/** POST /api/v1/forgot-password — requests a password reset link */
+export async function forgotPassword(payload: ForgotPasswordPayload): Promise<{ message: string }> {
+  return apiPost<{ message: string }>('/forgot-password', {
+    email: payload.email.toLowerCase().trim(),
+  });
+}
+
+/** POST /api/v1/reset-password — resets the password using a token */
+export async function resetPassword(payload: ResetPasswordPayload): Promise<{ message: string }> {
+  return apiPost<{ message: string }>('/reset-password', {
+    token:    payload.token,
+    password: payload.password,
+  });
+}
