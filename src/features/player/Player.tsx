@@ -167,18 +167,16 @@ export default function Player() {
                 </Text>
               </Space>
             </div>
+
             <iframe
-              ref={iframeRef}
-              src={youtubeUrl}
-              title={`${movie.title} trailer`}
+              src={`https://ezvidapi.com/embed/movie/${movie.id}?provider=vidsrc`}
               className="player-page__iframe"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+              allow="autoplay; fullscreen; picture-in-picture"
               allowFullScreen
-            />
+            ></iframe>
           </div>
         )}
 
-        {/* ── No trailer fallback ── */}
         {playing && !youtubeUrl && (
           <div className="player-page__video-clickzone">
             <img
@@ -201,7 +199,6 @@ export default function Player() {
           </div>
         )}
 
-        {/* ── Controls bar (fullscreen toggle) ── */}
         <div
           className="player-page__controls"
           style={{ background: isDark ? '#0d0d0d' : '#111' }}
@@ -223,7 +220,6 @@ export default function Player() {
         </div>
       </div>
 
-      {/* ── Movie info panel ── */}
       <div
         className="player-page__info"
         style={{ background: colors.bgBase, borderTop: `1px solid ${isDark ? '#1a1a2e' : '#e0e0e8'}` }}

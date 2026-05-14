@@ -100,19 +100,15 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
             </div>
           )}
 
-          {/* YouTube iframe — mounted only after user clicks play */}
           {playing && youtubeUrl && (
             <iframe
-              ref={iframeRef}
-              src={youtubeUrl}
-              title={`${movie.title} trailer`}
+              src={`https://ezvidapi.com/embed/movie/${movie.id}?provider=vidsrc`}
               className="player__iframe"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+              allow="autoplay; fullscreen; picture-in-picture"
               allowFullScreen
-            />
+            ></iframe>
           )}
 
-          {/* No trailer fallback — show backdrop with message */}
           {playing && !youtubeUrl && (
             <div className="player__no-trailer-full">
               <img
