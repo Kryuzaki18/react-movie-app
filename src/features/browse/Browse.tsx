@@ -221,12 +221,15 @@ export default function Browse() {
                   <Col flex="auto">
                     <Text strong className="browse-list-row__title">{movie.title}</Text>
                     <Space size={6} className="browse-list-row__meta" wrap>
-                      {movie.genre.map((g) => (
-                        <Text key={g} style={{ color: colors.textMuted, fontSize: 12 }}>{g}</Text>
-                      ))}
-                      <Text style={{ color: colors.textMuted, fontSize: 12 }}>
-                        · {movie.year} · {movie.duration}
-                      </Text>
+                      <Space size={16} wrap>
+                        <Text style={{ color: colors.textSecondary }}>{movie.year}</Text>
+                        {movie.duration && movie.duration !== 'N/A' && (
+                          <Text style={{ color: colors.textSecondary }}>{movie.duration}</Text>
+                        )}
+                        {movie.genre.slice(0, 3).map((g) => (
+                          <Text key={g} style={{ color: colors.textMuted, fontSize: 12 }}>{g}</Text>
+                        ))}
+                      </Space>
                     </Space>
                     <Text className="browse-list-row__desc" style={{ color: colors.textMuted }}>
                       {movie.description}

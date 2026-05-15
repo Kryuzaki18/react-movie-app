@@ -134,7 +134,9 @@ export default function AuthShowcase() {
               {active.rating.toFixed(1)}
             </span>
             <span className="auth-showcase__info-year">{active.year}</span>
-            <span className="auth-showcase__info-duration">{active.duration}</span>
+            {active.duration && active.duration !== 'N/A' && (
+              <span className="auth-showcase__info-duration">{active.duration}</span>
+            )}
             {active.genre.slice(0, 2).map((g) => (
               <span key={g} className="auth-showcase__info-genre">{g}</span>
             ))}

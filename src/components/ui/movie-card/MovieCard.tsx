@@ -128,7 +128,7 @@ function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
                   className="movie-card__meta"
                   style={{ color: colors.textMuted }}
                 >
-                  {movie.year} · {movie.duration}
+                  {movie.year}{movie.duration && movie.duration !== 'N/A' ? ` · ${movie.duration}` : ''}
                 </Text>
               </Space>
 

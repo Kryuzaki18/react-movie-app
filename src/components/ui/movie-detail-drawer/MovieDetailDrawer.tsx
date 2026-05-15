@@ -157,17 +157,19 @@ function MovieDetailDrawerInner({
                   </Text>
                 </Space>
               </Col>
-              <Col span={12}>
-                <Space>
-                  <ClockCircleOutlined
-                    style={{ color: colors.textMuted }}
-                    aria-hidden="true"
-                  />
-                  <Text style={{ color: colors.textSecondary }}>
-                    {movie.duration}
-                  </Text>
-                </Space>
-              </Col>
+              {movie.duration && movie.duration !== 'N/A' && (
+                <Col span={12}>
+                  <Space>
+                    <ClockCircleOutlined
+                      style={{ color: colors.textMuted }}
+                      aria-hidden="true"
+                    />
+                    <Text style={{ color: colors.textSecondary }}>
+                      {movie.duration}
+                    </Text>
+                  </Space>
+                </Col>
+              )}
             </Row>
 
             <Rate

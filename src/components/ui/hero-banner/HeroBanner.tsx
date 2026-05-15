@@ -1,28 +1,35 @@
-import { useState, useEffect, useCallback, memo } from 'react';
-import { Button, Typography, Space, Tag, Rate, Skeleton } from 'antd';
-import { PlayCircleOutlined, InfoCircleOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
-import type { Movie } from '../../../models/movie';
-import { useTheme } from '../../../context/ThemeContext';
-import { GENRE_COLORS } from '../../../constants/genres';
-import './HeroBanner.css';
+import { useState, useEffect, useCallback, memo } from "react";
+import { Button, Typography, Space, Tag, Rate, Skeleton } from "antd";
+import {
+  PlayCircleOutlined,
+  InfoCircleOutlined,
+  LeftOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
+
+import type { Movie } from "../../../models/movie";
+import { useTheme } from "../../../context/ThemeContext";
+import { GENRE_COLORS } from "../../../constants/genres";
+import "./HeroBanner.css";
 
 const { Title, Paragraph, Text } = Typography;
 
 const SLIDE_INTERVAL_MS = 6000;
 
 interface HeroBannerProps {
-  movies:   Movie[];
-  onPlay:   (movie: Movie) => void;
+  movies: Movie[];
+  onPlay: (movie: Movie) => void;
   onDetail: (movie: Movie) => void;
 }
 
 function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
-  const [current, setCurrent]     = useState(0);
+  const [current, setCurrent] = useState(0);
   const [imgLoaded, setImgLoaded] = useState(false);
-  const { colors }                = useTheme();
+  const { colors } = useTheme();
 
-  // Reset image loaded state when slide changes
-  useEffect(() => { setImgLoaded(false); }, [current]);
+  useEffect(() => {
+    setImgLoaded(false);
+  }, [current]);
 
   const prev = useCallback(
     () => setCurrent((c) => (c - 1 + movies.length) % movies.length),
@@ -33,7 +40,6 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
     [movies.length],
   );
 
-  // Auto-advance — pauses when the tab is hidden (Page Visibility API)
   useEffect(() => {
     if (movies.length <= 1) return;
 
@@ -43,7 +49,10 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
       timer = setInterval(next, SLIDE_INTERVAL_MS);
     };
     const stop = () => {
-      if (timer) { clearInterval(timer); timer = null; }
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
     };
 
     const handleVisibility = () => {
@@ -51,11 +60,11 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
     };
 
     start();
-    document.addEventListener('visibilitychange', handleVisibility);
+    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       stop();
-      document.removeEventListener('visibilitychange', handleVisibility);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, [movies.length, next]);
 
@@ -70,13 +79,19 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
       aria-label={`Featured movies — currently showing: ${movie.title}`}
       aria-roledescription="carousel"
     >
-      {/* Skeleton while loading */}
       {!imgLoaded && (
         <div className="hero-banner__skeleton" aria-hidden="true">
-          <Skeleton.Button active style={{ width: 160, height: 28, borderRadius: 20 }} />
-          <Skeleton.Input active style={{ width: '55%', height: 48 }} />
-          <Skeleton.Input active style={{ width: '35%', height: 20 }} />
-          <Skeleton active paragraph={{ rows: 2, width: ['90%', '70%'] }} title={false} />
+          <Skeleton.Button
+            active
+            style={{ width: 160, height: 28, borderRadius: 20 }}
+          />
+          <Skeleton.Input active style={{ width: "55%", height: 48 }} />
+          <Skeleton.Input active style={{ width: "35%", height: 20 }} />
+          <Skeleton
+            active
+            paragraph={{ rows: 2, width: ["90%", "70%"] }}
+            title={false}
+          />
           <Space>
             <Skeleton.Button active style={{ width: 120, height: 44 }} />
             <Skeleton.Button active style={{ width: 120, height: 44 }} />
@@ -84,7 +99,6 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
         </div>
       )}
 
-      {/* Backdrop */}
       <img
         key={movie.id}
         src={movie.backdrop}
@@ -95,18 +109,24 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
         style={{ opacity: imgLoaded ? 1 : 0 }}
       />
 
-      {/* Gradient overlay */}
-      {imgLoaded && <div className="hero-banner__gradient" aria-hidden="true" />}
-
-      {/* Content */}
       {imgLoaded && (
-        <div className="hero-banner__content" aria-live="polite" aria-atomic="true">
+        <div className="hero-banner__gradient" aria-hidden="true" />
+      )}
+
+      {imgLoaded && (
+        <div
+          className="hero-banner__content"
+          aria-live="polite"
+          aria-atomic="true"
+        >
           <Space size={6} wrap className="hero-banner__tags">
             {movie.genre.map((g) => (
-              <Tag key={g} color={GENRE_COLORS[g] || 'default'}>{g}</Tag>
+              <Tag key={g} color={GENRE_COLORS[g] || "default"}>
+                {g}
+              </Tag>
             ))}
             {movie.newRelease && <Tag color="gold">New Release</Tag>}
-            {movie.trending   && <Tag color="red">Trending</Tag>}
+            {movie.trending && <Tag color="red">Trending</Tag>}
           </Space>
 
           <Title level={1} className="hero-banner__title">
@@ -118,12 +138,14 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
               disabled
               allowHalf
               defaultValue={movie.rating / 2}
-              style={{ fontSize: 14, color: '#fadb14' }}
+              style={{ fontSize: 14, color: "#fadb14" }}
               aria-label={`Rating: ${movie.rating} out of 10`}
             />
             <Text className="hero-banner__rating-value">{movie.rating}/10</Text>
             <Text className="hero-banner__meta-text">{movie.year}</Text>
-            <Text className="hero-banner__meta-text">{movie.duration}</Text>
+            {movie.duration && movie.duration !== "N/A" && (
+              <Text className="hero-banner__meta-text">{movie.duration}</Text>
+            )}
           </Space>
 
           <Paragraph className="hero-banner__desc" ellipsis={{ rows: 3 }}>
@@ -154,7 +176,6 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
         </div>
       )}
 
-      {/* Prev / Next arrows */}
       <Button
         shape="circle"
         icon={<LeftOutlined />}
@@ -170,8 +191,11 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
         aria-label="Next movie"
       />
 
-      {/* Slide indicator dots */}
-      <div className="hero-banner__dots" role="tablist" aria-label="Movie slides">
+      <div
+        className="hero-banner__dots"
+        role="tablist"
+        aria-label="Movie slides"
+      >
         {movies.map((m, i) => (
           <button
             key={m.id}
@@ -179,7 +203,7 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
             aria-selected={i === current}
             aria-label={`Go to slide ${i + 1}: ${m.title}`}
             onClick={() => setCurrent(i)}
-            className={`hero-banner__dot ${i === current ? 'hero-banner__dot--active' : 'hero-banner__dot--inactive'}`}
+            className={`hero-banner__dot ${i === current ? "hero-banner__dot--active" : "hero-banner__dot--inactive"}`}
           />
         ))}
       </div>
