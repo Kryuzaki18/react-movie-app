@@ -8,18 +8,46 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { StarFilled, FireFilled } from '@ant-design/icons';
-import { Skeleton } from 'antd';
+import { Skeleton, Tag } from 'antd';
 import { useTheme } from '../../context/ThemeContext';
+import { GENRE_COLORS } from '../../constants/genres';
 import type { Movie } from '../../models/movie';
 import type { TmdbMovieListItem } from '../../models/tmdb';
 import { tmdbMovieListItemToMovie } from '../../utils/tmdbAdapter';
 
-const SLIDE_INTERVAL = 5000; // ms
-const SHOWCASE_COUNT = 5;
+const SLIDE_INTERVAL  = 5000; // ms
+const SHOWCASE_COUNT  = 5;
 
-// Base URL without /api/v1 suffix — showcase is a public call, no cookie needed
 const BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined)
   ?? 'http://localhost:4321/api/v1';
+
+/**
+ * Static TMDB genre ID → name map.
+ * Covers all common genres so the showcase works without an authenticated
+ * genres API call. The showcase endpoint is public (no auth), but
+ * /tmdb/genres/movie requires a session cookie — so we resolve locally.
+ */
+const STATIC_GENRE_MAP = new Map<number, string>([
+  [28,    'Action'],
+  [12,    'Adventure'],
+  [16,    'Animation'],
+  [35,    'Comedy'],
+  [80,    'Crime'],
+  [99,    'Documentary'],
+  [18,    'Drama'],
+  [10751, 'Family'],
+  [14,    'Fantasy'],
+  [36,    'History'],
+  [27,    'Horror'],
+  [10402, 'Music'],
+  [9648,  'Mystery'],
+  [10749, 'Romance'],
+  [878,   'Science Fiction'],
+  [10770, 'TV Movie'],
+  [53,    'Thriller'],
+  [10752, 'War'],
+  [37,    'Western'],
+]);
 
 async function fetchShowcaseMovies(): Promise<Movie[]> {
   const res = await fetch(`${BASE_URL}/tmdb/showcase`, {
@@ -29,7 +57,7 @@ async function fetchShowcaseMovies(): Promise<Movie[]> {
   const data = await res.json() as { results: TmdbMovieListItem[] };
   return data.results
     .slice(0, SHOWCASE_COUNT)
-    .map((item) => tmdbMovieListItemToMovie(item));
+    .map((item) => tmdbMovieListItemToMovie(item, STATIC_GENRE_MAP));
 }
 
 export default function AuthShowcase() {
@@ -138,7 +166,13 @@ export default function AuthShowcase() {
               <span className="auth-showcase__info-duration">{active.duration}</span>
             )}
             {active.genre.slice(0, 2).map((g) => (
-              <span key={g} className="auth-showcase__info-genre">{g}</span>
+              <Tag
+                key={g}
+                color={GENRE_COLORS[g] ?? 'default'}
+                style={{ margin: 0, fontSize: 11, fontWeight: 600 }}
+              >
+                {g}
+              </Tag>
             ))}
           </div>
         </div>

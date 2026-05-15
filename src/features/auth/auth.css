@@ -176,15 +176,6 @@
   font-size: 13px;
 }
 
-.auth-showcase__info-genre {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 20px;
-  backdrop-filter: blur(4px);
-}
-
 /* Slide indicator dots */
 .auth-showcase__dots {
   position: absolute;
