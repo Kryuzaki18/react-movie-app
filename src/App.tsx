@@ -34,7 +34,7 @@ const { Content, Footer } = Layout;
 
 const FADE_DURATION = 350;
 
-function AppSplash({ visible }: { visible: boolean }) {
+function AppSplash({ visible, slowStart = false }: { visible: boolean; slowStart?: boolean }) {
   const [mounted, setMounted] = useState(true);
 
   useEffect(() => {
@@ -95,6 +95,12 @@ function AppSplash({ visible }: { visible: boolean }) {
           100% { left: 110%; }
         }
       `}</style>
+
+      {slowStart && (
+        <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, marginTop: 8, textAlign: 'center' }}>
+          Server is waking up, please wait…
+        </div>
+      )}
     </div>
   );
 }
@@ -277,17 +283,23 @@ function AppLayout() {
 }
 
 // ─── Bootstrap: fires the session check BEFORE any route renders ──────────────
-// The splash is an overlay — children always render underneath it.
-// This means the router resolves and redirects happen during the fade,
-// so by the time the splash is fully gone the correct page is already mounted.
 function AppBootstrap({ children }: { children: React.ReactNode }) {
   const { isCheckingAuth } = useAuthStore();
+  const [slowStart, setSlowStart] = useState(false);
   useSessionQuery();
+
+  // If the session check takes > 8s (Render free-tier cold start),
+  // show a hint so the user knows the server is waking up.
+  useEffect(() => {
+    if (!isCheckingAuth) { setSlowStart(false); return; }
+    const t = setTimeout(() => setSlowStart(true), 8000);
+    return () => clearTimeout(t);
+  }, [isCheckingAuth]);
 
   return (
     <>
       <ErrorBoundary>{children}</ErrorBoundary>
-      <AppSplash visible={isCheckingAuth} />
+      <AppSplash visible={isCheckingAuth} slowStart={slowStart} />
     </>
   );
 }

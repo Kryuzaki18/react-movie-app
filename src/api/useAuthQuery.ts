@@ -21,6 +21,9 @@ export const authKeys = {
 /**
  * Verifies the current session on mount.
  * Syncs result into authStore so the rest of the app can read it.
+ *
+ * retry: 2 — retries twice on failure to handle Render cold-start latency
+ * (free tier can take 30–60s to wake up on first request).
  */
 export function useSessionQuery() {
   const { setAuthenticated } = useAuthStore();
@@ -37,9 +40,10 @@ export function useSessionQuery() {
         return false;
       }
     },
-    staleTime:            5 * 60 * 1000, // re-check every 5 min
+    staleTime:            5 * 60 * 1000,
     refetchOnWindowFocus: true,
-    retry:                false,
+    retry:                2,
+    retryDelay:           (attempt) => Math.min(1000 * 2 ** attempt, 10000), // 2s, 4s
   });
 }
 
