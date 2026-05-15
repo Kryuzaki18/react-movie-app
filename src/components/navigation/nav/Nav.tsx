@@ -171,7 +171,7 @@ function NavInner({ onMenuOpen }: NavProps) {
           <Button
             type="text"
             onClick={toggle}
-            className={`nav-theme-toggle ${isDark ? "nav-theme-toggle--dark" : "nav-theme-toggle--light"}`}
+            className="nav-theme-toggle"
             aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
             icon={
               isDark ? (
