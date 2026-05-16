@@ -1,8 +1,9 @@
 /**
  * Internal API client — HTTP wrapper for the i99flix backend (api-movie).
  *
- * Mirrors the pattern of tmdbClient.ts but targets our own Fastify API.
  * Uses httpOnly cookies for auth (credentials: 'include' on every request).
+ * SameSite=None; Secure works on all browsers when both frontend (Vercel)
+ * and backend (Render) are served over HTTPS.
  *
  * ── Security ──────────────────────────────────────────────────────────────────
  * • credentials: 'include' sends the session cookie automatically.
@@ -77,7 +78,7 @@ async function request<T>(
   const response = await fetch(url.toString(), {
     method,
     headers,
-    credentials: 'include', // send session cookie
+    credentials: 'include', // send session cookie on every request
     body: method !== 'GET' && options.body !== undefined
       ? JSON.stringify(options.body)
       : undefined,

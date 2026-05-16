@@ -18,11 +18,11 @@ export interface SignupPayload {
   password: string;
 }
 
-/** POST /api/v1/signin — returns a session cookie on success */
+/** POST /api/v1/signin — server sets an httpOnly session cookie on success */
 export async function signin(payload: SigninPayload): Promise<{ message: string }> {
   return apiPost<{ message: string }>('/signin', {
-    email:      payload.email.toLowerCase().trim(),
-    password:   payload.password,
+    email:    payload.email.toLowerCase().trim(),
+    password: payload.password,
   });
 }
 
@@ -40,7 +40,7 @@ export async function signout(): Promise<{ message: string }> {
   return apiPost<{ message: string }>('/signout', {});
 }
 
-/** GET /api/v1/me — returns true if the session is valid */
+/** GET /api/v1/me — returns true if the session cookie is valid */
 export async function getMe(): Promise<boolean> {
   return apiGet<boolean>('/me');
 }

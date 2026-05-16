@@ -5,8 +5,6 @@
  * This store only holds the client-side reflection of that state.
  *
  * NOT persisted — session validity is verified via /me on app load.
- * Storing auth state in localStorage would be misleading since the
- * cookie could be expired or cleared independently.
  */
 
 import { create } from 'zustand';
@@ -17,7 +15,6 @@ interface AuthState {
   isAuthenticated: boolean | null;
   isCheckingAuth:  boolean;
 
-  // Actions
   setAuthenticated: (value: boolean) => void;
   setCheckingAuth:  (value: boolean) => void;
   logout:           () => void;
