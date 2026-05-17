@@ -1,4 +1,4 @@
-import { Form, Input, Button, Typography, Divider, Space, Steps, Select, Alert } from 'antd';
+import { Form, Input, Button, Typography, Divider, Space, Steps, Alert } from 'antd';
 import {
   UserOutlined, LockOutlined, MailOutlined,
   CheckCircleOutlined,
@@ -6,7 +6,6 @@ import {
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../../context/ThemeContext';
-import { PLANS, SIGNUP_FEATURES } from '../../../constants';
 import { useSignupMutation } from '../../../api/useAuthQuery';
 import { ApiError } from '../../../services/internalApiClient';
 import AuthLayout from '../AuthLayout';
@@ -26,7 +25,7 @@ export default function Signup() {
   const [done, setDone]    = useState(false);
   const [error, setError]  = useState('');
   const [form]             = Form.useForm<SignupForm>();
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
   const navigate           = useNavigate();
   const signupMutation     = useSignupMutation();
 
@@ -79,7 +78,6 @@ export default function Signup() {
             items={[
               { title: <Text style={{ fontSize: 12 }}>Account</Text> },
               { title: <Text style={{ fontSize: 12 }}>Security</Text> },
-              { title: <Text style={{ fontSize: 12 }}>Plan</Text> },
             ]}
           />
 
@@ -168,52 +166,11 @@ export default function Signup() {
                   <Button
                     type="primary"
                     size="large"
-                    onClick={handleNext}
+                    onClick={handleSubmit}
                     className="auth-panel__submit-btn"
                     style={{ flex: 2 }}
                   >
                     Continue
-                  </Button>
-                </Space>
-              </>
-            )}
-
-            {step === 2 && (
-              <>
-                <Form.Item
-                  name="plan"
-                  initialValue="standard"
-                  rules={[{ required: true, message: 'Please select a plan' }]}
-                >
-                  <Select size="large" options={PLANS} style={{ width: '100%' }} />
-                </Form.Item>
-                <div
-                  className="auth-panel__features"
-                  style={{
-                    background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)',
-                    border: `1px solid ${colors.border}`,
-                  }}
-                >
-                  {SIGNUP_FEATURES.map((feature) => (
-                    <div key={feature} className="auth-panel__feature-row">
-                      <CheckCircleOutlined className="auth-panel__feature-icon" />
-                      <Text style={{ color: colors.textSecondary, fontSize: 13 }}>{feature}</Text>
-                    </div>
-                  ))}
-                </div>
-                <Space style={{ width: '100%' }} size={12}>
-                  <Button size="large" onClick={() => setStep(1)} className="auth-panel__btn-back">
-                    Back
-                  </Button>
-                  <Button
-                    type="primary"
-                    size="large"
-                    loading={signupMutation.isPending}
-                    className="auth-panel__submit-btn"
-                    style={{ flex: 2 }}
-                    onClick={handleSubmit}
-                  >
-                    Create Account
                   </Button>
                 </Space>
               </>
