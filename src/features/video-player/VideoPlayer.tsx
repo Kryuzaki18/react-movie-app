@@ -145,6 +145,7 @@ export default function VideoPlayer({
           gap="medium"
           align="center"
           justify="space-between"
+          wrap={true}
           style={{ background: colors.playerControls, padding: "0.5rem" }}
         >
           <ServerSelector activeServer={servers} onServerChange={setServers} />
@@ -180,19 +181,28 @@ export default function VideoPlayer({
           </Space>
         </Flex>
 
-        {/* ── Controls bar ── */}
-
         <Flex
           gap="small"
           align="center"
+          wrap={true}
           style={{ background: colors.playerControls, padding: "0.5rem" }}
         >
-          <Text>{movie.title} ({movie.year}) • {movie.duration}</Text>
+          <Text>{movie.title} ({movie.year})</Text>
           {movie.genre.map((g) => (
             <Tag key={g} className="player__genre-tag">
               {g}
             </Tag>
           ))}
+        </Flex>
+
+
+        <Flex
+          gap="small"
+          vertical
+          style={{ background: colors.playerControls, padding: "0.5rem" }}
+        >
+          <Text strong >Synopsis</Text>
+          <Text type="secondary">{movie.description}</Text>
         </Flex>
       </div>
     </Modal>
