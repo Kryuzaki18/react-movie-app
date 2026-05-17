@@ -64,10 +64,6 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         className="sidebar__header"
         style={{ borderBottom: `1px solid ${colors.border}` }}
       >
-        <Space align="center" size={8} className="sidebar__logo-wrap">
-          <PlayCircleFilled className="sidebar__logo-icon" />
-        </Space>
-       
         <Space align="center" size={10}>
           <Avatar className="sidebar__avatar" icon={<UserOutlined />} size={40} />
           <div>
@@ -97,10 +93,6 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         <Divider className="sidebar__footer-divider" />
         <Text className="sidebar__footer-text" style={{ color: colors.textMuted }}>
           © 2026 i99flix. All rights reserved.
-        </Text>
-        <br />
-        <Text className="sidebar__footer-text" style={{ color: colors.textMuted }}>
-          Lorem ipsum dolor sit amet.
         </Text>
       </div>
     </Drawer>
