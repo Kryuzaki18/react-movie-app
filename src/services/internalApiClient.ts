@@ -104,13 +104,13 @@ async function request<T>(
 // ── Public helpers ────────────────────────────────────────────────────────────
 
 export const apiGet = <T>(path: string, options?: Omit<RequestOptions, 'body'>) =>
-  request<T>('GET', path, options);
+  request<T>('GET', '/api' + path, options);
 
 export const apiPost = <T>(path: string, body: unknown, options?: RequestOptions) =>
-  request<T>('POST', path, { ...options, body });
+  request<T>('POST', '/api' + path, { ...options, body });
 
 export const apiPut = <T>(path: string, body: unknown, options?: RequestOptions) =>
-  request<T>('PUT', path, { ...options, body });
+  request<T>('PUT', '/api' + path, { ...options, body });
 
 export const apiDelete = <T>(path: string, options?: RequestOptions) =>
-  request<T>('DELETE', path, options);
+  request<T>('DELETE', '/api' + path, options);

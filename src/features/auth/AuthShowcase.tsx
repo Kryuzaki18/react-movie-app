@@ -47,7 +47,7 @@ const STATIC_GENRE_MAP = new Map<number, string>([
 ]);
 
 async function fetchShowcaseMovies(): Promise<Movie[]> {
-  const res = await fetch(`tmdb/showcase`, {
+  const res = await fetch(`api/tmdb/showcase`, {
     headers: { Accept: 'application/json' },
   });
   if (!res.ok) throw new Error(`Showcase fetch failed: ${res.status}`);
