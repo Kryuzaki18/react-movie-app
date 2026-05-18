@@ -39,8 +39,8 @@ function BrowseListRow({ movie, onPlay, onDetail }: ListRowProps) {
     >
       <img src={movie.thumbnail} alt={movie.title} className="browse-list-row__thumb" />
       <div className="browse-list-row__body">
-        <Row justify="space-between" align="top">
-          <Col flex="auto">
+        <Row justify="space-between" align="top" wrap={false}>
+          <Col flex="auto" style={{ minWidth: 0, paddingRight: 16 }}>
             <Text strong className="browse-list-row__title">{movie.title}</Text>
             <Space size={8} className="browse-list-row__meta" wrap>
               <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{movie.year}</Text>

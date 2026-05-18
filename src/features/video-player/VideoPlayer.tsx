@@ -1,4 +1,4 @@
-import { Modal, Typography, Space, Tag, Button, Tooltip, Flex } from "antd";
+import { Modal, Typography, Space, Tag, Button, Tooltip, Flex, Spin } from "antd";
 import {
   PlayCircleOutlined,
   ExpandOutlined,
@@ -35,7 +35,7 @@ export default function VideoPlayer({
   const { colors } = useTheme();
   const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
 
-  const { data: tvDetail } = useTmdbTvDetailQuery(
+  const { data: tvDetail, isLoading: isTvLoading } = useTmdbTvDetailQuery(
     movie?.mediaType === "tv" ? Number(movie.id) : null
   );
 
@@ -166,15 +166,20 @@ export default function VideoPlayer({
         {movie.mediaType === "tv" && (
           <Flex
             style={{ background: colors.playerControls, padding: "0 0.5rem 0.5rem" }}
+            justify="center"
           >
-            <TvEpisodeSelector
-              season={season}
-              episode={episode}
-              onSeasonChange={setSeason}
-              onEpisodeChange={setEpisode}
-              totalSeasons={tvDetail?.number_of_seasons || 20}
-              totalEpisodes={totalEpisodesForSeason}
-            />
+            {isTvLoading ? (
+              <Spin size="small" style={{ margin: "1rem 0" }} />
+            ) : (
+              <TvEpisodeSelector
+                season={season}
+                episode={episode}
+                onSeasonChange={setSeason}
+                onEpisodeChange={setEpisode}
+                totalSeasons={tvDetail?.number_of_seasons || 20}
+                totalEpisodes={totalEpisodesForSeason}
+              />
+            )}
           </Flex>
         )}
 
