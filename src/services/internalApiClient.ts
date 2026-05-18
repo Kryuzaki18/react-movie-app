@@ -54,7 +54,7 @@ async function request<T>(
   path:   string,
   options: RequestOptions = {},
 ): Promise<T> {
-  const url = new URL(path);
+  const url = new URL(path, window.location.origin);
 
   if (options.params) {
     for (const [key, value] of Object.entries(options.params)) {

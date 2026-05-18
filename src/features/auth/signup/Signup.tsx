@@ -68,7 +68,7 @@ export default function Signup() {
           </Text>
 
           {error && (
-            <Alert message={error} type="error" showIcon style={{ marginBottom: 16 }} />
+            <Alert title={error} type="error" showIcon style={{ marginBottom: 16 }} />
           )}
 
           <Steps

@@ -108,7 +108,7 @@ export default function ForgotPassword() {
           </Text>
 
           {error && (
-            <Alert message={error} type="error" showIcon style={{ marginBottom: 20 }} />
+            <Alert title={error} type="error" showIcon style={{ marginBottom: 20 }} />
           )}
 
           <Form form={form} layout="vertical" onFinish={handleSubmit}>
