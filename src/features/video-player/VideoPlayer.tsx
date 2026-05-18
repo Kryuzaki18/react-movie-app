@@ -12,6 +12,7 @@ import { useFullscreen } from "../../hooks/useFullscreen";
 import ServerSelector from "../../components/ui/server-selector/ServerSelector";
 import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
 import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
+import CastSection from "../../components/ui/cast-section/CastSection";
 import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
 import "./VideoPlayer.css";
 
@@ -206,6 +207,15 @@ export default function VideoPlayer({
           <Text strong >Synopsis</Text>
           <Text type="secondary">{movie.description}</Text>
         </Flex>
+
+        {typeof movie.id === "number" && (
+          <Flex
+            vertical
+            style={{ background: colors.playerControls, padding: "0.5rem 0.75rem 0.75rem" }}
+          >
+            <CastSection tmdbId={movie.id} mediaType={movie.mediaType} />
+          </Flex>
+        )}
       </div>
     </Modal>
   );

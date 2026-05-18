@@ -21,6 +21,7 @@ import { useMovieDetailQuery } from "../../api/useMoviesQuery";
 import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
 import { tmdbTvDetailToMovie } from "../../utils/tmdbAdapter";
 import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
+import CastSection from "../../components/ui/cast-section/CastSection";
 import { GENRE_COLORS } from "../../constants/genres";
 import { useTheme } from "../../context/ThemeContext";
 import { useFullscreen } from "../../hooks/useFullscreen";
@@ -285,6 +286,12 @@ export default function Player() {
             >
               {movie.description}
             </Paragraph>
+
+            {safeId && (
+              <div style={{ marginTop: 24 }}>
+                <CastSection tmdbId={safeId} mediaType={movie.mediaType} />
+              </div>
+            )}
           </div>
 
           <div className="player-page__info-meta">
