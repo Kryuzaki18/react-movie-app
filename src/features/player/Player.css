@@ -60,9 +60,15 @@
   pointer-events: all;
 }
 
-/* ── Dim play icon when no trailer ── */
-.player-page__play-icon--dim {
-  opacity: 0.4 !important;
+.player-page__play-icon {
+  font-size: clamp(56px, 8vw, 88px) !important;
+  color: rgba(255,255,255,0.92) !important;
+  filter: drop-shadow(0 2px 12px rgba(0,0,0,0.8));
+  transition: transform 0.15s ease;
+}
+
+.player-page__play-icon:hover {
+  transform: scale(1.08);
 }
 
 /* Vignette overlay */

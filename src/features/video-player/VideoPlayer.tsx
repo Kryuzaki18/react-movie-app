@@ -4,13 +4,11 @@ import {
   ExpandOutlined,
   CompressOutlined,
   LinkOutlined,
-  LoadingOutlined,
 } from "@ant-design/icons";
 import { useState, useEffect, useCallback } from "react";
 import type { Movie } from "../../models/movie";
 import { useTheme } from "../../context/ThemeContext";
 import { useFullscreen } from "../../hooks/useFullscreen";
-import { useTrailerKey } from "../../hooks/useTrailerKey";
 import ServerSelector from "../../components/ui/server-selector/ServerSelector";
 import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
 import "./VideoPlayer.css";
@@ -32,11 +30,6 @@ export default function VideoPlayer({
   const [servers, setServers] = useState(1);
   const { colors } = useTheme();
   const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
-
-  const movieId = typeof movie?.id === "number" ? movie.id : null;
-  const { trailerKey, isLoading: trailerLoading } = useTrailerKey(
-    open ? movieId : null,
-  );
 
   // Reset play state when modal closes or movie changes
   useEffect(() => {
@@ -60,10 +53,6 @@ export default function VideoPlayer({
   const handlePlay = useCallback(() => setPlaying(true), []);
 
   if (!movie) return null;
-
-  const youtubeUrl = trailerKey
-    ? `https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0&modestbranding=1&enablejsapi=1`
-    : null;
 
   return (
     <Modal
@@ -101,18 +90,7 @@ export default function VideoPlayer({
               />
               <div className="player__poster-overlay" />
               <div className="player__overlay">
-                {trailerLoading ? (
-                  <LoadingOutlined className="player__play-icon" />
-                ) : trailerKey ? (
-                  <PlayCircleOutlined className="player__play-icon" />
-                ) : (
-                  <div className="player__no-trailer">
-                    <PlayCircleOutlined className="player__play-icon player__play-icon--dim" />
-                    <Text className="player__no-trailer-text">
-                      No trailer available
-                    </Text>
-                  </div>
-                )}
+                <PlayCircleOutlined className="player__play-icon" />
               </div>
               <div className="player__title-overlay">
                 <Title level={5} className="player__title">
@@ -123,22 +101,6 @@ export default function VideoPlayer({
           )}
 
           {playing && <ServerIframe server={servers} movieId={movie.id} />}
-
-          {playing && !youtubeUrl && (
-            <div className="player__no-trailer-full">
-              <img
-                src={movie.backdrop || movie.thumbnail}
-                alt={movie.title}
-                className="player__backdrop player__backdrop--dim"
-              />
-              <div className="player__poster-overlay" />
-              <div className="player__overlay">
-                <Text className="player__no-trailer-text player__no-trailer-text--lg">
-                  No trailer available for this title
-                </Text>
-              </div>
-            </div>
-          )}
         </div>
 
         <Flex

@@ -16,10 +16,8 @@ import {
   ExpandOutlined,
   CompressOutlined,
   ArrowLeftOutlined,
-  LoadingOutlined,
 } from "@ant-design/icons";
 import { useMovieDetailQuery } from "../../api/useMoviesQuery";
-import { useTrailerKey } from "../../hooks/useTrailerKey";
 import { GENRE_COLORS } from "../../constants/genres";
 import { useTheme } from "../../context/ThemeContext";
 import { useFullscreen } from "../../hooks/useFullscreen";
@@ -38,7 +36,6 @@ export default function Player() {
   const safeId = Number.isFinite(movieId) && movieId! > 0 ? movieId : null;
 
   const { data: movie, isLoading, isError } = useMovieDetailQuery(safeId);
-  const { trailerKey, isLoading: trailerLoading } = useTrailerKey(safeId);
 
   const [playing, setPlaying] = useState(false);
   const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
@@ -119,21 +116,10 @@ export default function Player() {
             </div>
 
             <div className="player-page__overlay">
-              {trailerLoading ? (
-                <LoadingOutlined className="player-page__play-icon" />
-              ) : trailerKey ? (
-                <div className="player-page__play-wrap">
-                  <PlayCircleOutlined className="player-page__play-icon" />
-                  <Text className="player-page__play-hint">Click to watch</Text>
-                </div>
-              ) : (
-                <div className="player-page__play-wrap">
-                  <PlayCircleOutlined className="player-page__play-icon player-page__play-icon--dim" />
-                  <Text className="player-page__play-hint">
-                    No trailer available
-                  </Text>
-                </div>
-              )}
+              <div className="player-page__play-wrap">
+                <PlayCircleOutlined className="player-page__play-icon" />
+                <Text className="player-page__play-hint">Click to watch</Text>
+              </div>
             </div>
 
             <div className="player-page__title-overlay">
