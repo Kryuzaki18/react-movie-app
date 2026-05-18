@@ -25,7 +25,7 @@ export default function Login() {
   const handleSubmit = (values: LoginForm) => {
     setError('');
     signinMutation.mutate(
-      { email: values.email, password: values.password },
+      { email: values.email, password: values.password, rememberMe: values.remember },
       {
         onSuccess: () => navigate('/'),
         onError: (err) => {

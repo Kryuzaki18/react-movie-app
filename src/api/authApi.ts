@@ -8,8 +8,9 @@
 import { apiGet, apiPost } from '../services/internalApiClient';
 
 export interface SigninPayload {
-  email:    string;
-  password: string;
+  email:      string;
+  password:   string;
+  rememberMe?: boolean;
 }
 
 export interface SignupPayload {
@@ -21,8 +22,9 @@ export interface SignupPayload {
 /** POST /api/v1/signin — server sets an httpOnly session cookie on success */
 export async function signin(payload: SigninPayload): Promise<{ message: string }> {
   return apiPost<{ message: string }>('/signin', {
-    email:    payload.email.toLowerCase().trim(),
-    password: payload.password,
+    email:      payload.email.toLowerCase().trim(),
+    password:   payload.password,
+    rememberMe: payload.rememberMe ?? false,
   });
 }
 
