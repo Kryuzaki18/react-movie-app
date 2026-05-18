@@ -2,16 +2,12 @@ import {
   Layout,
   Space,
   Button,
-  Input,
   Avatar,
   Dropdown,
-  Badge,
   Typography,
   Tooltip,
 } from "antd";
 import {
-  SearchOutlined,
-  BellOutlined,
   UserOutlined,
   MenuOutlined,
   HomeOutlined,
@@ -20,7 +16,7 @@ import {
   SunOutlined,
   MoonOutlined,
 } from "@ant-design/icons";
-import { useState, memo } from "react";
+import { memo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { MenuProps } from "antd";
 import { useTheme } from "../../../context/ThemeContext";
@@ -44,7 +40,6 @@ const NAV_LINKS = [
 ] as const;
 
 function NavInner({ onMenuOpen }: NavProps) {
-  const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { isDark, toggle, colors } = useTheme();
@@ -78,7 +73,6 @@ function NavInner({ onMenuOpen }: NavProps) {
         boxShadow: isDark ? "none" : "0 1px 8px rgba(0,0,0,0.08)",
       }}
     >
-      {/* Left */}
       <Space size={24} align="center">
         <Button
           type="text"
@@ -95,11 +89,7 @@ function NavInner({ onMenuOpen }: NavProps) {
         />
 
         <Link to="/" className="nav-logo" aria-label="i99flix home">
-          <img
-            src="/i99flix-logo.png"
-            alt="i99flix logo"
-            width={100}
-          />
+          <img src="/i99flix-logo.png" alt="i99flix logo" width={100} />
         </Link>
 
         <nav aria-label="Main navigation">
@@ -130,41 +120,7 @@ function NavInner({ onMenuOpen }: NavProps) {
         </nav>
       </Space>
 
-      <Space size={4} align="center">
-        {searchOpen ? (
-          <Input
-            autoFocus
-            placeholder="Search movies..."
-            prefix={
-              <SearchOutlined
-                style={{ color: colors.textMuted }}
-                aria-hidden="true"
-              />
-            }
-            onBlur={() => setSearchOpen(false)}
-            className="nav-search-input"
-            style={{
-              background: colors.bgCard,
-              borderColor: colors.border,
-              color: colors.textPrimary,
-            }}
-            allowClear
-            aria-label="Search movies"
-          />
-        ) : (
-          <Button
-            type="text"
-            icon={
-              <SearchOutlined
-                style={{ color: colors.textMuted, fontSize: 18 }}
-                aria-hidden="true"
-              />
-            }
-            onClick={() => setSearchOpen(true)}
-            aria-label="Open search"
-          />
-        )}
-
+      <Space size={10} align="center">
         <Tooltip
           title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
         >
@@ -188,19 +144,6 @@ function NavInner({ onMenuOpen }: NavProps) {
             }
           />
         </Tooltip>
-
-        <Badge count={3} size="small" color="#e50914">
-          <Button
-            type="text"
-            icon={
-              <BellOutlined
-                style={{ color: colors.textMuted, fontSize: 18 }}
-                aria-hidden="true"
-              />
-            }
-            aria-label="Notifications (3 unread)"
-          />
-        </Badge>
 
         <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
           <Avatar
