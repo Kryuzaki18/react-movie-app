@@ -1,5 +1,5 @@
-import { Form, Input, Button, Typography, Divider, Checkbox, Space, Alert } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Typography, Divider, Checkbox, Space, Alert, Tooltip } from 'antd';
+import { UserOutlined, LockOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../../context/ThemeContext';
@@ -84,7 +84,12 @@ export default function Login() {
         <Form.Item>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox>Remember me</Checkbox>
+              <Checkbox>
+                Remember me
+                <Tooltip title="Keeps you signed in for 30 days.">
+                  <InfoCircleOutlined style={{ marginLeft: 6, color: colors.textMuted, fontSize: 13 }} />
+                </Tooltip>
+              </Checkbox>
             </Form.Item>
             <Link to="/forgot-password" className="auth-panel__forgot">Forgot password?</Link>
           </div>
