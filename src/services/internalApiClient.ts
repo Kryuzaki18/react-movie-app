@@ -83,13 +83,13 @@ async function request<T>(
 }
 
 export const apiGet = <T>(path: string, options?: Omit<RequestOptions, 'body'>) =>
-  request<T>('GET', '/api' + path, options);
+  request<T>('GET', path, options);
 
 export const apiPost = <T>(path: string, body: unknown, options?: RequestOptions) =>
-  request<T>('POST', '/api' + path, { ...options, body });
+  request<T>('POST', path, { ...options, body });
 
 export const apiPut = <T>(path: string, body: unknown, options?: RequestOptions) =>
-  request<T>('PUT', '/api' + path, { ...options, body });
+  request<T>('PUT', path, { ...options, body });
 
 export const apiDelete = <T>(path: string, options?: RequestOptions) =>
-  request<T>('DELETE', '/api' + path, options);
+  request<T>('DELETE', path, options);

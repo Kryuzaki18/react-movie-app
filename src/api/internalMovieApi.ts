@@ -1,4 +1,5 @@
 import { apiGet, apiPost, apiPut, apiDelete } from '../services/internalApiClient';
+import { API_ROUTES } from './environments';
 import type { Movie } from '../models/movie';
 
 export interface ApiMovie {
@@ -75,7 +76,7 @@ export async function fetchApiMovies(
   if (filters.sortBy)    params['sortBy'] = filters.sortBy;
   if (filters.order)     params['order']  = filters.order;
 
-  return apiGet<PaginatedMovies>('/movies', { params, signal: options?.signal });
+  return apiGet<PaginatedMovies>(API_ROUTES.MOVIES.BASE, { params, signal: options?.signal });
 }
 
 export async function fetchApiMovieById(
@@ -83,14 +84,14 @@ export async function fetchApiMovieById(
   options?: { signal?: AbortSignal },
 ): Promise<ApiMovie> {
   if (!id?.trim()) throw new Error('Movie id is required');
-  return apiGet<ApiMovie>(`/movies/${encodeURIComponent(id)}`, { signal: options?.signal });
+  return apiGet<ApiMovie>(API_ROUTES.MOVIES.BY_ID(id), { signal: options?.signal });
 }
 
 export async function createApiMovie(
   payload: MoviePayload,
   options?: { signal?: AbortSignal },
 ): Promise<ApiMovie> {
-  return apiPost<ApiMovie>('/movies', payload, { signal: options?.signal });
+  return apiPost<ApiMovie>(API_ROUTES.MOVIES.BASE, payload, { signal: options?.signal });
 }
 
 export async function updateApiMovie(
@@ -99,7 +100,7 @@ export async function updateApiMovie(
   options?: { signal?: AbortSignal },
 ): Promise<ApiMovie> {
   if (!id?.trim()) throw new Error('Movie id is required');
-  return apiPut<ApiMovie>(`/movies/${encodeURIComponent(id)}`, payload, { signal: options?.signal });
+  return apiPut<ApiMovie>(API_ROUTES.MOVIES.BY_ID(id), payload, { signal: options?.signal });
 }
 
 export async function deleteApiMovie(
@@ -107,5 +108,5 @@ export async function deleteApiMovie(
   options?: { signal?: AbortSignal },
 ): Promise<{ message: string }> {
   if (!id?.trim()) throw new Error('Movie id is required');
-  return apiDelete<{ message: string }>(`/movies/${encodeURIComponent(id)}`, { signal: options?.signal });
+  return apiDelete<{ message: string }>(API_ROUTES.MOVIES.BY_ID(id), { signal: options?.signal });
 }
