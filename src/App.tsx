@@ -135,6 +135,7 @@ function AppLayout() {
           <Route path="/forgot-password" element={<GuestRoute><ForgotPassword /></GuestRoute>} />
           <Route path="/reset-password" element={<GuestRoute><ResetPassword /></GuestRoute>} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Suspense>
     );
@@ -157,6 +158,7 @@ function AppLayout() {
           <Routes>
             <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
             <Route path="/browse" element={<ProtectedRoute><Browse /></ProtectedRoute>} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
       </Content>
