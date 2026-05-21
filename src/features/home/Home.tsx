@@ -1,4 +1,4 @@
-import { Typography, Row, Col, Space, Skeleton, Segmented } from "antd";
+import { Typography, Row, Col, Space, Segmented } from "antd";
 import {
   FireOutlined,
   ThunderboltOutlined,
@@ -10,6 +10,7 @@ import {
 import HeroBanner from "../../components/ui/hero-banner/HeroBanner";
 import MovieCard from "../../components/ui/movie-card/MovieCard";
 import MovieListRow from "../../components/ui/movie-list-row/MovieListRow";
+import { MovieCardSkeleton, MovieListRowSkeleton } from "../../components/ui/movie-card-skeleton/MovieCardSkeleton";
 import { usePlayerStore } from "../../store/playerStore";
 import { useUIStore } from "../../store/uiStore";
 import {
@@ -24,40 +25,40 @@ import "./Home.css";
 const { Title } = Typography;
 
 interface SectionProps {
-  title:     string;
-  icon:      React.ReactNode;
-  movies:    Movie[];
+  title: string;
+  icon: React.ReactNode;
+  movies: Movie[];
   isLoading: boolean;
-  layout:    'grid' | 'list';
+  layout: 'grid' | 'list';
 }
 
 function MovieSection({ title, icon, movies, isLoading, layout }: SectionProps) {
   const { playMovie, openDetail } = usePlayerStore();
 
   const gridContent = isLoading
-    ? Array.from({ length: 4 }).map((_, i) => (
-        <Col key={i} xs={24} sm={12} md={8} lg={6} xl={6}>
-          <Skeleton.Image active style={{ width: "100%", height: 180 }} />
-        </Col>
-      ))
+    ? Array.from({ length: 8 }).map((_, i) => (
+      <Col key={i} xs={24} sm={12} md={8} lg={6} xl={6}>
+        <MovieCardSkeleton />
+      </Col>
+    ))
     : movies.map((movie) => (
-        <Col key={movie.id} xs={24} sm={12} md={8} lg={6} xl={6}>
-          <MovieCard movie={movie} onPlay={playMovie} onDetail={openDetail} />
-        </Col>
-      ));
+      <Col key={movie.id} xs={24} sm={12} md={8} lg={6} xl={6}>
+        <MovieCard movie={movie} onPlay={playMovie} onDetail={openDetail} />
+      </Col>
+    ));
 
   const listContent = isLoading
-    ? Array.from({ length: 4 }).map((_, i) => (
-        <Skeleton key={i} active paragraph={{ rows: 1 }} />
-      ))
+    ? Array.from({ length: 6 }).map((_, i) => (
+      <MovieListRowSkeleton key={i} />
+    ))
     : movies.map((movie) => (
-        <MovieListRow
-          key={movie.id}
-          movie={movie}
-          onPlay={playMovie}
-          onDetail={openDetail}
-        />
-      ));
+      <MovieListRow
+        key={movie.id}
+        movie={movie}
+        onPlay={playMovie}
+        onDetail={openDetail}
+      />
+    ));
 
   return (
     <section className="home-section">
@@ -85,10 +86,10 @@ export default function Home() {
   const { playMovie, openDetail } = usePlayerStore();
   const { homeLayout, setHomeLayout } = useUIStore();
 
-  const { data: featured = [] }                              = useFeaturedMoviesQuery();
-  const { data: trending = [],     isLoading: loadingTrending     } = useTrendingMoviesQuery();
-  const { data: newReleases = [],  isLoading: loadingNewReleases  } = useNewReleasesQuery();
-  const { data: topRated = [],     isLoading: loadingTopRated     } = useTopRatedMoviesQuery();
+  const { data: featured = [] } = useFeaturedMoviesQuery();
+  const { data: trending = [], isLoading: loadingTrending } = useTrendingMoviesQuery();
+  const { data: newReleases = [], isLoading: loadingNewReleases } = useNewReleasesQuery();
+  const { data: topRated = [], isLoading: loadingTopRated } = useTopRatedMoviesQuery();
 
   return (
     <div>
