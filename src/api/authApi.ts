@@ -54,8 +54,14 @@ export async function socialSignin(payload: SocialSigninPayload): Promise<{ mess
   });
 }
 
-export async function getMe(): Promise<boolean> {
-  return apiGet<boolean>(API_ROUTES.AUTH.ME);
+export interface UserProfile {
+  name:      string;
+  email:     string;
+  avatarUrl?: string;
+}
+
+export async function getMe(): Promise<UserProfile> {
+  return apiGet<UserProfile>(API_ROUTES.AUTH.ME);
 }
 
 export async function forgotPassword(payload: ForgotPasswordPayload): Promise<{ message: string }> {

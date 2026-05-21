@@ -14,12 +14,12 @@ export function useSessionQuery() {
     queryKey: authKeys.session,
     queryFn:  async () => {
       try {
-        const valid = await getMe();
-        setAuthenticated(valid);
-        return valid;
+        const user = await getMe();
+        setAuthenticated(true, user);
+        return user;
       } catch {
-        setAuthenticated(false);
-        return false;
+        setAuthenticated(false, null);
+        return null;
       }
     },
     staleTime:            5 * 60 * 1000,

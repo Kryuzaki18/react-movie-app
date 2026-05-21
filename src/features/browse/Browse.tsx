@@ -8,9 +8,9 @@ import {
   CalendarOutlined, VideoCameraOutlined, PlaySquareOutlined,
 } from '@ant-design/icons';
 import MovieCard from '../../components/ui/movie-card/MovieCard';
-import { useBrowseStore }  from '../../store/browseStore';
-import { usePlayerStore }  from '../../store/playerStore';
-import { useBrowseQuery }  from '../../api/useBrowseQuery';
+import { useBrowseStore } from '../../store/browseStore';
+import { usePlayerStore } from '../../store/playerStore';
+import { useBrowseQuery } from '../../api/useBrowseQuery';
 import { GENRES, TV_GENRES, GENRE_COLORS, YEAR_RANGES, PAGE_SIZE_OPTIONS } from '../../constants';
 import { useTheme } from '../../context/ThemeContext';
 import type { MediaType } from '../../store/browseStore';
@@ -25,8 +25,8 @@ const TMDB_PAGE_SIZE = 20;
 // ── List row item ─────────────────────────────────────────────────────────────
 
 interface ListRowProps {
-  movie:    Movie;
-  onPlay:   (m: Movie) => void;
+  movie: Movie;
+  onPlay: (m: Movie) => void;
   onDetail: (m: Movie) => void;
 }
 
@@ -78,29 +78,29 @@ export default function Browse() {
   const { colors } = useTheme();
 
   const {
-    mediaType,     setMediaType,
+    mediaType, setMediaType,
     selectedGenre, setGenre,
-    selectedYear,  setYear,
-    searchQuery,   setSearch,
-    page,          setPage,
-    pageSize,      setPageSize,
-    layout,        setLayout,
+    selectedYear, setYear,
+    searchQuery, setSearch,
+    page, setPage,
+    pageSize, setPageSize,
+    layout, setLayout,
   } = useBrowseStore();
 
   const { playMovie, openDetail } = usePlayerStore();
 
-  const result     = useBrowseQuery();
-  const items      = result.data?.movies     ?? [];
-  const total      = result.data?.total      ?? 0;
+  const result = useBrowseQuery();
+  const items = result.data?.movies ?? [];
+  const total = result.data?.total ?? 0;
   const totalPages = result.data?.totalPages ?? 1;
-  const isLoading  = result.isLoading;
+  const isLoading = result.isLoading;
   const isFetching = result.isFetching;
 
   // Genre list depends on active tab
   const genres = mediaType === 'movie' ? GENRES : TV_GENRES;
 
   // ── Sticky pagination sentinel ────────────────────────────────────────────
-  const sentinelRef   = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
   const paginationRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -116,10 +116,10 @@ export default function Browse() {
     return () => observer.disconnect();
   }, []);
 
-  const displayItems  = pageSize < TMDB_PAGE_SIZE ? items.slice(0, pageSize) : items;
-  const cappedTotal   = Math.min(total, totalPages * TMDB_PAGE_SIZE);
-  const skeletonCols  = Array.from({ length: Math.min(pageSize, 8) });
-  const isMovie       = mediaType === 'movie';
+  const displayItems = pageSize < TMDB_PAGE_SIZE ? items.slice(0, pageSize) : items;
+  const cappedTotal = Math.min(total, totalPages * TMDB_PAGE_SIZE);
+  const skeletonCols = Array.from({ length: Math.min(pageSize, 8) });
+  const isMovie = mediaType === 'movie';
 
   const handlePageChange = (p: number, ps: number) => {
     setPage(p);
@@ -190,9 +190,9 @@ export default function Browse() {
           className="browse-genre-pill"
           onClick={() => { setGenre(g.value); setPage(1); }}
           style={{
-            border:     `1px solid ${selectedGenre === g.value ? '#e50914' : colors.border}`,
+            border: `1px solid ${selectedGenre === g.value ? '#e50914' : colors.border}`,
             background: selectedGenre === g.value ? '#e50914' : 'transparent',
-            color:      selectedGenre === g.value ? '#fff' : colors.textMuted,
+            color: selectedGenre === g.value ? '#fff' : colors.textMuted,
             fontWeight: selectedGenre === g.value ? 600 : 400,
           }}
         >
@@ -273,7 +273,7 @@ export default function Browse() {
       <div className="browse-header">
         <Title level={2} style={{ marginBottom: 4 }}>Browse</Title>
         <Text style={{ color: colors.textMuted }}>
-          Discover movies and TV series from TMDB — search, filter by genre or year.
+          Discover movies and TV series — search, filter by genre or year.
         </Text>
       </div>
 
@@ -283,7 +283,7 @@ export default function Browse() {
         className="browse-tabs"
         items={[
           {
-            key:   'movie',
+            key: 'movie',
             label: (
               <Space size={6}>
                 <VideoCameraOutlined />
@@ -300,7 +300,7 @@ export default function Browse() {
             ),
           },
           {
-            key:   'tv',
+            key: 'tv',
             label: (
               <Space size={6}>
                 <PlaySquareOutlined />

@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
 import { useTheme } from '../../../context/ThemeContext';
 import { useSignoutMutation } from '../../../api/useAuthQuery';
+import { useAuthStore } from '../../../store/authStore';
 import './Sidebar.css';
 
 const { Text } = Typography;
@@ -22,6 +23,12 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
   const navigate              = useNavigate();
   const { colors, isDark }    = useTheme();
   const signoutMutation       = useSignoutMutation();
+  const { user }              = useAuthStore();
+
+  // Derive initials for the avatar fallback
+  const initials = user?.name
+    ? user.name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase()
+    : undefined;
 
   const handleSignout = () => {
     signoutMutation.mutate(undefined, {
@@ -64,11 +71,18 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         style={{ borderBottom: `1px solid ${colors.border}` }}
       >
         <Space align="center" size={10}>
-          <Avatar className="sidebar__avatar" icon={<UserOutlined />} size={40} />
+          <Avatar
+            className="sidebar__avatar"
+            src={user?.avatarUrl}
+            icon={!user?.avatarUrl && !initials ? <UserOutlined /> : undefined}
+            size={40}
+          >
+            {!user?.avatarUrl && initials}
+          </Avatar>
           <div>
-            <Text strong className="sidebar__user-name">Lorem Ipsum</Text>
+            <Text strong className="sidebar__user-name">{user?.name ?? '—'}</Text>
             <Text className="sidebar__user-email" style={{ color: colors.textMuted }}>
-              lorem@ipsum.com
+              {user?.email ?? '—'}
             </Text>
           </div>
         </Space>
