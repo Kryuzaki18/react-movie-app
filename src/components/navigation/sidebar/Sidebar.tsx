@@ -19,13 +19,12 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ open, onClose }: SidebarProps) {
-  const location              = useLocation();
-  const navigate              = useNavigate();
-  const { colors, isDark }    = useTheme();
-  const signoutMutation       = useSignoutMutation();
-  const { user }              = useAuthStore();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { colors, isDark } = useTheme();
+  const signoutMutation = useSignoutMutation();
+  const { user } = useAuthStore();
 
-  // Derive initials for the avatar fallback
   const initials = user?.name
     ? user.name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase()
     : undefined;
@@ -37,16 +36,16 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
   };
 
   const menuItems: MenuProps['items'] = [
-    { key: '/',         icon: <HomeOutlined />,      label: 'Home' },
-    { key: '/browse',   icon: <AppstoreOutlined />,  label: 'Browse' },
+    { key: '/', icon: <HomeOutlined />, label: 'Home' },
+    { key: '/browse', icon: <AppstoreOutlined />, label: 'Browse' },
     { type: 'divider' },
-    { key: 'trending',  icon: <FireOutlined />,      label: 'Trending' },
-    { key: 'top-rated', icon: <StarOutlined />,      label: 'Top Rated' },
-    { key: 'watchlist', icon: <HeartOutlined />,     label: 'My Watchlist' },
-    { key: 'history',   icon: <HistoryOutlined />,   label: 'Watch History' },
+    { key: 'trending', icon: <FireOutlined />, label: 'Trending' },
+    { key: 'top-rated', icon: <StarOutlined />, label: 'Top Rated' },
+    { key: 'watchlist', icon: <HeartOutlined />, label: 'My Watchlist' },
+    { key: 'history', icon: <HistoryOutlined />, label: 'Watch History' },
     { type: 'divider' },
-    { key: 'settings',  icon: <SettingOutlined />,   label: 'Settings' },
-    { key: 'signout',   icon: <LoginOutlined />,     label: 'Sign Out', danger: true },
+    { key: 'settings', icon: <SettingOutlined />, label: 'Settings' },
+    { key: 'signout', icon: <LoginOutlined />, label: 'Sign Out', danger: true },
   ];
 
   const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
@@ -59,11 +58,11 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       open={open}
       onClose={onClose}
       placement="left"
+      width={260}
+      mask={{ blur: true }}
+      closable={false}
       styles={{
-        section: { width: 260 },
-        body:    { background: colors.bgBase, padding: 0 },
-        header:  { display: 'none' },
-        mask:    { backdropFilter: 'blur(4px)' },
+        body: { background: colors.bgBase, padding: 0 },
       }}
     >
       <div
@@ -99,7 +98,6 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
 
       <div
         className="sidebar__footer"
-        style={{ borderTop: `1px solid ${colors.border}` }}
       >
         <Divider className="sidebar__footer-divider" />
         <Text className="sidebar__footer-text" style={{ color: colors.textMuted }}>
