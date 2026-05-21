@@ -35,18 +35,21 @@ const { Title, Text } = Typography;
 function PlayerHeader() {
   const { colors } = useTheme();
   return (
-    <header className="player-page__header" style={{ background: colors.bgBase, borderBottom: `1px solid ${colors.border}` }}>
+    <header
+      className="player-page__header"
+      style={{ background: colors.bgBase, borderBottom: `1px solid ${colors.border}` }}
+    >
       <Link to="/" className="player-page__back-link">
         <Button
           type="text"
           icon={<ArrowLeftOutlined />}
         >
-          Back
+          <span className="player-page__back-label">Back</span>
         </Button>
       </Link>
 
       <Link to="/" className="player-page__header-logo-link">
-        <img src="/i99flix-logo.png" alt="i99flix" width={100} />
+        <img src="/i99flix-logo.png" alt="i99flix" className="player-page__header-logo" />
       </Link>
     </header>
   );
@@ -142,39 +145,35 @@ export default function Player() {
             </div>
 
             <div className="player-page__title-overlay">
-              <Space size={6} wrap>
-                {movie.genre.map((g) => (
+              <div className="player-page__title-genres">
+                {movie.genre.slice(0, 3).map((g) => (
                   <Tag
                     key={g}
                     color={GENRE_COLORS[g] || "default"}
-                    style={{ fontSize: 11 }}
+                    style={{ fontSize: 11, margin: 0 }}
                   >
                     {g}
                   </Tag>
                 ))}
-              </Space>
+              </div>
               <Title level={2} className="player-page__title">
                 {movie.title}
               </Title>
-              <Space size={12}>
+              <div className="player-page__title-meta">
                 <Rate
                   disabled
                   allowHalf
                   defaultValue={movie.rating / 2}
-                  style={{ fontSize: 13, color: "#fadb14" }}
+                  className="player-page__title-rate"
                 />
-                <Text
-                  style={{ color: "#fadb14", fontWeight: 700, fontSize: 13 }}
-                >
+                <Text className="player-page__title-rating">
                   {movie.rating}/10
                 </Text>
-                <Text style={{ color: "#ccc", fontSize: 13 }}>
-                  {movie.year}
-                </Text>
-                <Text style={{ color: "#ccc", fontSize: 13 }}>
-                  {movie.duration}
-                </Text>
-              </Space>
+                <Text className="player-page__title-year">{movie.year}</Text>
+                {movie.duration && movie.duration !== 'N/A' && (
+                  <Text className="player-page__title-duration">{movie.duration}</Text>
+                )}
+              </div>
             </div>
           </div>
         )}
@@ -242,42 +241,6 @@ export default function Player() {
         }}
       >
         <div className="player-page__info-inner">
-          <div className="player-page__info-meta">
-            <div className="player-page__meta-item">
-              <Text
-                className="player-page__meta-label"
-                style={{ color: colors.textMuted }}
-              >
-                Year
-              </Text>
-              <Text strong style={{ color: colors.textPrimary }}>
-                {movie.year}
-              </Text>
-            </div>
-            <div className="player-page__meta-item">
-              <Text
-                className="player-page__meta-label"
-                style={{ color: colors.textMuted }}
-              >
-                Duration
-              </Text>
-              <Text strong style={{ color: colors.textPrimary }}>
-                {movie.duration}
-              </Text>
-            </div>
-            <div className="player-page__meta-item">
-              <Text
-                className="player-page__meta-label"
-                style={{ color: colors.textMuted }}
-              >
-                Rating
-              </Text>
-              <Text strong style={{ color: "#fadb14" }}>
-                ★ {movie.rating}
-              </Text>
-            </div>
-          </div>
-
           <div className="player-page__info-main">
             <Title
               level={4}
@@ -285,15 +248,33 @@ export default function Player() {
             >
               {movie.title}
             </Title>
+
+            {/* Meta row — inline on desktop, wraps on mobile */}
+            <div className="player-page__info-meta">
+              <div className="player-page__meta-item">
+                <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>Year</Text>
+                <Text strong style={{ color: colors.textPrimary }}>{movie.year}</Text>
+              </div>
+              {movie.duration && movie.duration !== 'N/A' && (
+                <div className="player-page__meta-item">
+                  <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>Duration</Text>
+                  <Text strong style={{ color: colors.textPrimary }}>{movie.duration}</Text>
+                </div>
+              )}
+              <div className="player-page__meta-item">
+                <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>Rating</Text>
+                <Text strong style={{ color: "#fadb14" }}>★ {movie.rating}</Text>
+              </div>
+            </div>
+
             <Space size={8} wrap style={{ marginBottom: 12 }}>
               {movie.genre.map((g) => (
-                <Tag key={g} color={GENRE_COLORS[g] || "default"}>
-                  {g}
-                </Tag>
+                <Tag key={g} color={GENRE_COLORS[g] || "default"}>{g}</Tag>
               ))}
               {movie.newRelease && <Tag color="gold">New Release</Tag>}
               {movie.trending && <Tag color="red">Trending</Tag>}
             </Space>
+
             <ExpandableText
               text={movie.description || 'No synopsis available.'}
               collapsedLines={3}
