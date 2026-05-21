@@ -8,7 +8,7 @@ export default function TermsOfService() {
     <LegalLayout
       title="Terms of Service"
       subtitle="Please read these terms carefully before using i99flix."
-      lastUpdated="January 1, 2026"
+      lastUpdated="May 22, 2026"
       breadcrumb="Terms of Service"
     >
       <HighlightBox>

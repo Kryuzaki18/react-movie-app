@@ -8,7 +8,7 @@ export default function PrivacyPolicy() {
     <LegalLayout
       title="Privacy Policy"
       subtitle="How i99flix collects, uses, and protects your information."
-      lastUpdated="January 1, 2026"
+      lastUpdated="May 22, 2026"
       breadcrumb="Privacy Policy"
     >
       <HighlightBox>
