@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Space, Alert, Divider, Typography } from 'antd';
-import { GoogleOutlined, FacebookOutlined } from '@ant-design/icons';
+import { GoogleOutlined } from '@ant-design/icons';
 import {
   GoogleAuthProvider,
-  FacebookAuthProvider,
   TwitterAuthProvider,
   signInWithPopup,
   type AuthProvider,
@@ -33,21 +32,15 @@ function XIcon() {
 
 const PROVIDER_CONFIGS = [
   {
-    id:          'google',
-    label:       'Google',
-    icon:        <GoogleOutlined />,
+    id: 'google',
+    label: 'Google',
+    icon: <GoogleOutlined />,
     getProvider: () => new GoogleAuthProvider(),
   },
   {
-    id:          'facebook',
-    label:       'Facebook',
-    icon:        <FacebookOutlined />,
-    getProvider: () => new FacebookAuthProvider(),
-  },
-  {
-    id:          'x',
-    label:       'X',
-    icon:        <XIcon />,
+    id: 'x',
+    label: 'x.com',
+    icon: <XIcon />,
     getProvider: () => new TwitterAuthProvider(),
   },
 ] as const;
@@ -62,9 +55,9 @@ export default function SocialLoginButtons({
   rememberMe = false,
 }: SocialLoginButtonsProps) {
   const [loadingId, setLoadingId] = useState<string | null>(null);
-  const [error, setError]         = useState('');
-  const navigate                  = useNavigate();
-  const socialMutation            = useSocialSigninMutation();
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const socialMutation = useSocialSigninMutation();
 
   const handleSocialLogin = async (
     providerId: string,
@@ -74,7 +67,7 @@ export default function SocialLoginButtons({
     setLoadingId(providerId);
 
     try {
-      const result  = await signInWithPopup(auth, getProvider());
+      const result = await signInWithPopup(auth, getProvider());
       const idToken = await result.user.getIdToken();
 
       socialMutation.mutate(
@@ -92,7 +85,7 @@ export default function SocialLoginButtons({
     } catch (err: unknown) {
       setLoadingId(null);
 
-      const code    = (err as { code?: string }).code ?? '';
+      const code = (err as { code?: string }).code ?? '';
       const message = (err as { message?: string }).message ?? '';
 
       // Silently ignore user-dismissed popup — no error shown, no console noise
