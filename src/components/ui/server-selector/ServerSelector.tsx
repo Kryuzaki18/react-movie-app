@@ -2,7 +2,7 @@ import { Button, Flex } from 'antd';
 import { EMBED_SERVERS } from '../../../api/environments';
 
 interface ServerSelectorProps {
-  activeServer:   number;
+  activeServer: number;
   onServerChange: (server: number) => void;
 }
 

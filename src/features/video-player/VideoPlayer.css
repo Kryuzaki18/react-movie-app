@@ -1,3 +1,17 @@
+.player__close-icon {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.ant-modal-close {
+  border-radius: 50%;
+}
+
 .player__video-area {
   position: relative;
   width: 100%;
@@ -26,6 +40,7 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.35);
   pointer-events: none;
+  border-radius: 12px;
 }
 
 .player__backdrop {
@@ -33,6 +48,7 @@
   height: 100%;
   object-fit: cover;
   transition: opacity 0.2s ease;
+  border-radius: 12px;
 }
 
 .player__overlay {
@@ -74,7 +90,6 @@
 .player__fullscreen-root {
   display: flex;
   flex-direction: column;
-  background: #000;
 }
 
 /* ── Fullscreen mode ─────────────────────────────────────────────────────── */

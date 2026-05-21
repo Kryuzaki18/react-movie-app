@@ -14,6 +14,8 @@ export interface ThemeColors {
   authBg:         string;
   authCard:       string;
   playerControls: string;
+  playerText:     string;
+  playerTextMuted: string;
   skeletonBg:     string;
 }
 
@@ -33,6 +35,8 @@ export const darkColors: ThemeColors = {
   authBg:         'linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 50%, #0d0d1a 100%)',
   authCard:       'rgba(26,26,46,0.95)',
   playerControls: '#111111',
+  playerText:     '#ffffff',
+  playerTextMuted: '#aaaaaa',
   skeletonBg:     '#1a1a2e',
 };
 
@@ -52,5 +56,7 @@ export const lightColors: ThemeColors = {
   authBg:         'linear-gradient(135deg, #f0f2f5 0%, #e8e0f5 50%, #f0f2f5 100%)',
   authCard:       'rgba(255,255,255,0.97)',
   playerControls: '#1a1a1a',
+  playerText:     '#ffffff',
+  playerTextMuted: '#aaaaaa',
   skeletonBg:     '#e8eaf0',
 };

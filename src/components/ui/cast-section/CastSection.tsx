@@ -10,20 +10,24 @@ const TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/w185";
 const MAX_CAST = 20;
 
 interface CastSectionProps {
-  tmdbId:    number | null | undefined;
+  tmdbId: number | null | undefined;
   mediaType: "movie" | "tv" | undefined;
-  label?:    string;
+  label?: string;
+  /** Override text colors — useful when rendered on a dark background in light mode */
+  labelColor?: string;
+  nameColor?: string;
+  charColor?: string;
 }
 
-export default function CastSection({ tmdbId, mediaType, label = "Cast" }: CastSectionProps) {
+export default function CastSection({ tmdbId, mediaType, label = "Cast", labelColor, nameColor, charColor }: CastSectionProps) {
   const { colors } = useTheme();
   const isTV = mediaType === "tv";
 
   const movieCredits = useTmdbMovieCreditsQuery(!isTV && tmdbId ? tmdbId : null);
-  const tvCredits    = useTmdbTvCreditsQuery(isTV && tmdbId ? tmdbId : null);
+  const tvCredits = useTmdbTvCreditsQuery(isTV && tmdbId ? tmdbId : null);
 
   const credits = isTV ? tvCredits : movieCredits;
-  const cast    = (credits.data?.cast ?? []).slice(0, MAX_CAST);
+  const cast = (credits.data?.cast ?? []).slice(0, MAX_CAST);
 
   if (!tmdbId) return null;
 
@@ -32,7 +36,7 @@ export default function CastSection({ tmdbId, mediaType, label = "Cast" }: CastS
       <Text
         strong
         className="cast-section__label"
-        style={{ color: colors.textMuted }}
+        style={{ color: labelColor ?? colors.textMuted }}
       >
         {label}
       </Text>
@@ -72,15 +76,16 @@ export default function CastSection({ tmdbId, mediaType, label = "Cast" }: CastS
                 />
                 <Text
                   className="cast-section__name"
-                  style={{ color: colors.textSecondary }}
+                  style={{ color: nameColor ?? colors.textSecondary }}
                   ellipsis
+
                 >
                   {member.name}
                 </Text>
                 {member.character && (
                   <Text
                     className="cast-section__character"
-                    style={{ color: colors.textMuted }}
+                    style={{ color: charColor ?? colors.textMuted }}
                     ellipsis
                   >
                     {member.character}

@@ -1,15 +1,15 @@
 import { Select, Button, Flex } from 'antd';
 
-const MAX_SEASONS             = 20;
+const MAX_SEASONS = 20;
 const MAX_EPISODES_PER_SEASON = 30;
 
 interface TvEpisodeSelectorProps {
-  season:          number;
-  episode:         number;
-  onSeasonChange:  (s: number) => void;
+  season: number;
+  episode: number;
+  onSeasonChange: (s: number) => void;
   onEpisodeChange: (e: number) => void;
-  totalSeasons?:   number;
-  totalEpisodes?:  number;
+  totalSeasons?: number;
+  totalEpisodes?: number;
 }
 
 export default function TvEpisodeSelector({
@@ -17,7 +17,7 @@ export default function TvEpisodeSelector({
   episode,
   onSeasonChange,
   onEpisodeChange,
-  totalSeasons  = MAX_SEASONS,
+  totalSeasons = MAX_SEASONS,
   totalEpisodes = MAX_EPISODES_PER_SEASON,
 }: TvEpisodeSelectorProps) {
   const seasonOptions = Array.from({ length: totalSeasons }, (_, i) => ({
@@ -28,8 +28,7 @@ export default function TvEpisodeSelector({
   const episodeCount = Math.min(totalEpisodes, MAX_EPISODES_PER_SEASON);
 
   return (
-    <div style={{ width: '100%', padding: '0.75rem 0' }}>
-      {/* Season selector */}
+    <div style={{ width: '100%' }}>
       <div style={{ marginBottom: 8 }}>
         <Select
           value={season}
@@ -41,18 +40,17 @@ export default function TvEpisodeSelector({
         />
       </div>
 
-      {/* Episode buttons — scrollable row on mobile */}
       <div
         style={{
-          overflowX:     'auto',
-          overflowY:     'hidden',
+          overflowX: 'auto',
+          overflowY: 'hidden',
           WebkitOverflowScrolling: 'touch' as React.CSSProperties['WebkitOverflowScrolling'],
-          paddingBottom: 4,   // room for scrollbar
+          paddingBottom: 4,
         }}
       >
-        <Flex gap={6} style={{ flexWrap: 'nowrap', width: 'max-content' }}>
+        <Flex gap={6} style={{ flexWrap: 'nowrap', width: 'max-content', padding: "0.5rem 0" }}>
           {Array.from({ length: episodeCount }, (_, i) => {
-            const ep       = i + 1;
+            const ep = i + 1;
             const isActive = ep === episode;
             return (
               <Button
@@ -61,7 +59,7 @@ export default function TvEpisodeSelector({
                 type={isActive ? 'primary' : 'default'}
                 onClick={() => onEpisodeChange(ep)}
                 style={{
-                  minWidth:   36,
+                  minWidth: 36,
                   fontWeight: isActive ? 700 : 400,
                   flexShrink: 0,
                 }}
