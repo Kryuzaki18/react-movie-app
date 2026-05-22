@@ -2,7 +2,7 @@ import { lazy, Suspense, useState, useEffect } from "react";
 import { Link, BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Layout, ConfigProvider, theme } from "antd";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
-import { useUIStore } from "./store/uiStore";
+import { useHomeStore } from "./store/homeStore";
 import { usePlayerStore } from "./store/playerStore";
 import { useAuthStore } from "./store/authStore";
 import { useSessionQuery } from "./api/useAuthQuery";
@@ -113,7 +113,7 @@ function GuestRoute({ children }: { children: React.ReactNode }) {
 function AppLayout() {
   const location = useLocation();
   const { colors } = useTheme();
-  const { sidebarOpen, openSidebar, closeSidebar } = useUIStore();
+  const { sidebarOpen, openSidebar, closeSidebar } = useHomeStore();
   const { playingMovie, closePlayer, detailMovie, closeDetail, playFromDetail } = usePlayerStore();
 
   const isAuthPage =
@@ -147,8 +147,8 @@ function AppLayout() {
     return (
       <Suspense fallback={<AppSplash visible />}>
         <Routes>
-          <Route path="/about"           element={<About />} />
-          <Route path="/privacy-policy"  element={<PrivacyPolicy />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
         </Routes>
       </Suspense>
@@ -187,8 +187,8 @@ function AppLayout() {
       >
         <div style={{ marginBottom: 12, display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap" }}>
           {[
-            { label: "About",            to: "/about" },
-            { label: "Privacy Policy",   to: "/privacy-policy" },
+            { label: "About", to: "/about" },
+            { label: "Privacy Policy", to: "/privacy-policy" },
             { label: "Terms of Service", to: "/terms-of-service" },
           ].map(({ label, to }) => (
             <Link key={to} to={to} style={{ color: colors.textMuted, fontSize: 13, textDecoration: "none" }}>
@@ -247,15 +247,15 @@ function ThemedApp() {
           },
           Menu: isDark
             ? {
-                darkItemBg: "transparent",
-                darkSubMenuItemBg: "transparent",
-                darkItemSelectedBg: "rgba(229,9,20,0.15)",
-                darkItemSelectedColor: "#fff",
-              }
+              darkItemBg: "transparent",
+              darkSubMenuItemBg: "transparent",
+              darkItemSelectedBg: "rgba(229,9,20,0.15)",
+              darkItemSelectedColor: "#fff",
+            }
             : {
-                itemSelectedBg: "rgba(229,9,20,0.08)",
-                itemSelectedColor: "#e50914",
-              },
+              itemSelectedBg: "rgba(229,9,20,0.08)",
+              itemSelectedColor: "#e50914",
+            },
           Input: {
             colorBgContainer: colors.inputBg,
             colorBorder: colors.border,

@@ -1,4 +1,4 @@
 export { usePlayerStore } from './playerStore';
-export { useUIStore }    from './uiStore';
+export { useHomeStore } from './homeStore';
 export { useBrowseStore } from './browseStore';
-export { useAuthStore }  from './authStore';
+export { useAuthStore } from './authStore';

@@ -12,7 +12,7 @@ import MovieCard from "../../components/ui/movie-card/MovieCard";
 import MovieListRow from "../../components/ui/movie-list-row/MovieListRow";
 import { MovieCardSkeleton, MovieListRowSkeleton } from "../../components/ui/movie-card-skeleton/MovieCardSkeleton";
 import { usePlayerStore } from "../../store/playerStore";
-import { useUIStore } from "../../store/uiStore";
+import { useHomeStore } from "../../store/homeStore";
 import {
   useFeaturedMoviesQuery,
   useTrendingMoviesQuery,
@@ -84,7 +84,7 @@ function MovieSection({ title, icon, movies, isLoading, layout }: SectionProps) 
 
 export default function Home() {
   const { playMovie, openDetail } = usePlayerStore();
-  const { homeLayout, setHomeLayout } = useUIStore();
+  const { homeLayout, setHomeLayout } = useHomeStore();
 
   const { data: featured = [] } = useFeaturedMoviesQuery();
   const { data: trending = [], isLoading: loadingTrending } = useTrendingMoviesQuery();
