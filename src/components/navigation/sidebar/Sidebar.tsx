@@ -3,6 +3,7 @@ import {
   HomeOutlined, AppstoreOutlined, HeartOutlined, HistoryOutlined,
   SettingOutlined, LoginOutlined, UserOutlined,
   StarOutlined, FireOutlined,
+  ThunderboltOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
@@ -40,6 +41,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
     { key: '/browse', icon: <AppstoreOutlined />, label: 'Browse' },
     { type: 'divider' },
     { key: 'trending', icon: <FireOutlined />, label: 'Trending' },
+    { key: 'new-releases', icon: <ThunderboltOutlined />, label: 'New Releases' },
     { key: 'top-rated', icon: <StarOutlined />, label: 'Top Rated' },
     { key: 'watchlist', icon: <HeartOutlined />, label: 'My Watchlist' },
     { key: 'history', icon: <HistoryOutlined />, label: 'Watch History' },
@@ -48,8 +50,29 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
     { key: 'signout', icon: <LoginOutlined />, label: 'Sign Out', danger: true },
   ];
 
+  const SECTION_KEYS = ['trending', 'new-releases', 'top-rated'];
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const offset = 70;
+      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
+
   const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
     if (key === 'signout') { handleSignout(); return; }
+    if (SECTION_KEYS.includes(key)) {
+      onClose();
+      if (location.pathname === '/') {
+        scrollToSection(key);
+      } else {
+        navigate('/');
+        setTimeout(() => scrollToSection(key), 300);
+      }
+      return;
+    }
     if (key.startsWith('/')) { navigate(key); onClose(); }
   };
 

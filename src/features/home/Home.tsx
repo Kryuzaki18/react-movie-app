@@ -25,6 +25,7 @@ import "./Home.css";
 const { Title } = Typography;
 
 interface SectionProps {
+  id: string;
   title: string;
   icon: React.ReactNode;
   movies: Movie[];
@@ -32,7 +33,7 @@ interface SectionProps {
   layout: 'grid' | 'list';
 }
 
-function MovieSection({ title, icon, movies, isLoading, layout }: SectionProps) {
+function MovieSection({ id, title, icon, movies, isLoading, layout }: SectionProps) {
   const { playMovie, openDetail } = usePlayerStore();
 
   const gridContent = isLoading
@@ -61,7 +62,7 @@ function MovieSection({ title, icon, movies, isLoading, layout }: SectionProps) 
     ));
 
   return (
-    <section className="home-section">
+    <section id={id} className="home-section">
       <div className="home-section__header">
         <Space align="center">
           <span className="home-section__icon">{icon}</span>
@@ -113,6 +114,7 @@ export default function Home() {
       </div>
 
       <MovieSection
+        id="trending"
         title="Trending Now"
         icon={<FireOutlined />}
         movies={trending}
@@ -120,6 +122,7 @@ export default function Home() {
         layout={homeLayout}
       />
       <MovieSection
+        id="new-releases"
         title="New Releases"
         icon={<ThunderboltOutlined />}
         movies={newReleases}
@@ -127,6 +130,7 @@ export default function Home() {
         layout={homeLayout}
       />
       <MovieSection
+        id="top-rated"
         title="Top Rated"
         icon={<StarOutlined />}
         movies={topRated}
