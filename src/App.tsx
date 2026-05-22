@@ -11,6 +11,7 @@ import Sidebar from "./components/navigation/sidebar/Sidebar";
 import VideoPlayer from "./features/video-player/VideoPlayer";
 import MovieDetailDrawer from "./components/ui/movie-detail-drawer/MovieDetailDrawer";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { useTmdbGenresMovieQuery, useTmdbGenresTvQuery } from "./api/useTmdbQuery";
 
 const Home = lazy(() => import("./features/home/Home"));
 const Browse = lazy(() => import("./features/browse/Browse"));
@@ -214,6 +215,8 @@ function AppBootstrap({ children }: { children: React.ReactNode }) {
   const { isCheckingAuth } = useAuthStore();
   const [slowStart, setSlowStart] = useState(false);
   useSessionQuery();
+  useTmdbGenresMovieQuery();
+  useTmdbGenresTvQuery();
 
   useEffect(() => {
     if (!isCheckingAuth) { setSlowStart(false); return; }

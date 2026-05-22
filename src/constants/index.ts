@@ -1,4 +1,4 @@
-export { GENRES, TV_GENRES, GENRE_COLORS, MOVIE_GENRE_IDS, TV_GENRE_IDS } from './genres';
+export { GENRE_COLORS } from './genres';
 export { YEAR_RANGES } from './yearRanges';
 export type { YearRange } from './yearRanges';
 export { darkColors, lightColors } from './theme';

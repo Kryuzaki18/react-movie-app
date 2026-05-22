@@ -12,7 +12,8 @@ import MovieListRow from '../../components/ui/movie-list-row/MovieListRow';
 import { useBrowseStore } from '../../store/browseStore';
 import { usePlayerStore } from '../../store/playerStore';
 import { useBrowseQuery } from '../../api/useBrowseQuery';
-import { GENRES, TV_GENRES, YEAR_RANGES, PAGE_SIZE_OPTIONS } from '../../constants';
+import { useTmdbGenresMovieQuery, useTmdbGenresTvQuery } from '../../api/useTmdbQuery';
+import { YEAR_RANGES, PAGE_SIZE_OPTIONS } from '../../constants';
 import { useTheme } from '../../context/ThemeContext';
 import type { MediaType } from '../../store/browseStore';
 import './Browse.css';
@@ -46,8 +47,17 @@ export default function Browse() {
   const isLoading = result.isLoading;
   const isFetching = result.isFetching;
 
-  // Genre list depends on active tab
-  const genres = mediaType === 'movie' ? GENRES : TV_GENRES;
+  const movieGenresQuery = useTmdbGenresMovieQuery();
+  const tvGenresQuery = useTmdbGenresTvQuery();
+
+  const movieGenres = movieGenresQuery.data?.genres ?? [];
+  const tvGenres = tvGenresQuery.data?.genres ?? [];
+  const activeGenres = mediaType === 'movie' ? movieGenres : tvGenres;
+
+  const genres = [
+    { label: 'All', value: 'all' },
+    ...activeGenres.map((g) => ({ label: g.name, value: g.name })),
+  ];
 
   // ── Sticky pagination sentinel ────────────────────────────────────────────
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -222,7 +232,7 @@ export default function Browse() {
   return (
     <div>
       <div className="browse-header">
-        <Title level={2} style={{ marginBottom: 4 }}>Browse</Title>
+        <Title level={2} style={{ marginBottom: 4, marginTop: 0 }}>Browse</Title>
         <Text style={{ color: colors.textMuted }}>
           Discover movies and TV series — search, filter by genre or year.
         </Text>
