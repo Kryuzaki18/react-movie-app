@@ -213,7 +213,7 @@ function AppLayout() {
 }
 
 function AppBootstrap({ children }: { children: React.ReactNode }) {
-  const { isCheckingAuth } = useAuthStore();
+  const { isCheckingAuth, isAuthenticated } = useAuthStore();
   const [slowStart, setSlowStart] = useState(false);
   useSessionQuery();
 
@@ -227,7 +227,7 @@ function AppBootstrap({ children }: { children: React.ReactNode }) {
       fetchTmdbGenresTv({ signal: ac.signal }).catch(() => {});
     }
     return () => ac.abort();
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (!isCheckingAuth) { setSlowStart(false); return; }

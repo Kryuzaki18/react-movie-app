@@ -22,7 +22,7 @@ import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
 import { tmdbTvDetailToMovie } from "../../utils/tmdbAdapter";
 import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
 import CastSection from "../../components/ui/cast-section/CastSection";
-import { GENRE_COLORS } from "../../constants/genres";
+import useResolvedGenres from '../../hooks/useResolvedGenres';
 import { useTheme } from "../../context/ThemeContext";
 import ServerSelector from "../../components/ui/server-selector/ServerSelector";
 import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
@@ -88,6 +88,8 @@ export default function Player() {
   const movie = isTv ? (tvDetail ? tmdbTvDetailToMovie(tvDetail) : null) : movieData;
   const isLoading = isTv ? isTvLoading : isMovieLoading;
   const isError = isTv ? isTvError : isMovieError;
+
+  const resolvedGenres = useResolvedGenres(movie?.genre);
 
   const selectedSeasonData = tvDetail?.seasons?.find(
     (s) => s.season_number === season
@@ -155,13 +157,13 @@ export default function Player() {
 
             <div className="player-page__title-overlay">
               <div className="player-page__title-genres">
-                {movie.genre.slice(0, 3).map((g) => (
+                {resolvedGenres.slice(0, 3).map((rg) => (
                   <Tag
-                    key={g}
-                    color={GENRE_COLORS[g] || "default"}
+                    key={rg.key}
+                    color={rg.color || "default"}
                     style={{ fontSize: 11, margin: 0 }}
                   >
-                    {g}
+                    {rg.label}
                   </Tag>
                 ))}
               </div>
@@ -257,8 +259,8 @@ export default function Player() {
             </div>
 
             <Space size={8} wrap style={{ marginBottom: 12 }}>
-              {movie.genre.map((g) => (
-                <Tag key={g} color={GENRE_COLORS[g] || "default"}>{g}</Tag>
+              {resolvedGenres.map((rg) => (
+                <Tag key={rg.key} color={rg.color || "default"}>{rg.label}</Tag>
               ))}
               {movie.newRelease && <Tag color="gold">New Release</Tag>}
               {movie.trending && <Tag color="red">Trending</Tag>}

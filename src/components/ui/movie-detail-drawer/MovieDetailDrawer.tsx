@@ -20,7 +20,7 @@ import {
 
 import type { Movie } from "../../../models/movie";
 import { useTheme } from "../../../context/ThemeContext";
-import { GENRE_COLORS } from "../../../constants/genres";
+import useResolvedGenres from '../../../hooks/useResolvedGenres';
 import CastSection from "../cast-section/CastSection";
 import ExpandableText from "../expandable-text/ExpandableText";
 import "./MovieDetailDrawer.css";
@@ -42,6 +42,8 @@ function MovieDetailDrawerInner({
 }: MovieDetailDrawerProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const { colors, isDark } = useTheme();
+
+  const resolvedGenres = useResolvedGenres(movie?.genre);
 
   const backdropSrc = movie?.backdrop || movie?.thumbnail || "";
 
@@ -140,9 +142,9 @@ function MovieDetailDrawerInner({
             </Title>
 
             <Space size={8} wrap className="detail-drawer__tags">
-              {movie.genre.map((g) => (
-                <Tag key={g} color={GENRE_COLORS[g] ?? "default"}>
-                  {g}
+              {resolvedGenres.map((rg) => (
+                <Tag key={rg.key} color={rg.color ?? "default"}>
+                  {rg.label}
                 </Tag>
               ))}
               {movie.newRelease && <Tag color="gold">New Release</Tag>}

@@ -17,7 +17,7 @@ import {
 
 import type { Movie } from "../../../models/movie";
 import { useTheme } from "../../../context/ThemeContext";
-import { GENRE_COLORS } from "../../../constants/genres";
+import useResolvedGenres from '../../../hooks/useResolvedGenres';
 import "./MovieCard.css";
 
 const { Text, Paragraph } = Typography;
@@ -31,6 +31,7 @@ interface MovieCardProps {
 function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const { colors, isDark } = useTheme();
+  const resolvedGenres = useResolvedGenres(movie.genre);
 
   return (
     <Card
@@ -115,13 +116,13 @@ function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
               </Text>
 
               <Space size={4} wrap>
-                {movie.genre.slice(0, 2).map((g) => (
+                {resolvedGenres.slice(0, 2).map((rg) => (
                   <Tag
-                    key={g}
-                    color={GENRE_COLORS[g] || "default"}
+                    key={rg.key}
+                    color={rg.color || "default"}
                     className="movie-card__tag"
                   >
-                    {g}
+                    {rg.label}
                   </Tag>
                 ))}
                 <Text

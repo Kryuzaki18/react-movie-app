@@ -2,7 +2,7 @@ import { Row, Col, Space, Tag, Typography, Button } from 'antd';
 import { memo } from 'react';
 import type { Movie } from '../../../models/movie';
 import { useTheme } from '../../../context/ThemeContext';
-import { GENRE_COLORS } from '../../../constants/genres';
+import useResolvedGenres from '../../../hooks/useResolvedGenres';
 import './MovieListRow.css';
 
 const { Text } = Typography;
@@ -15,6 +15,7 @@ interface MovieListRowProps {
 
 function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
   const { colors } = useTheme();
+  const resolvedGenres = useResolvedGenres(movie.genre);
 
   return (
     <div
@@ -41,13 +42,13 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
                   {movie.duration}
                 </Text>
               )}
-              {movie.genre.slice(0, 3).map((g) => (
+              {resolvedGenres.slice(0, 3).map((rg) => (
                 <Tag
-                  key={g}
-                  color={GENRE_COLORS[g] ?? 'default'}
+                  key={rg.key}
+                  color={rg.color ?? 'default'}
                   style={{ margin: 0, fontSize: 11 }}
                 >
-                  {g}
+                  {rg.label}
                 </Tag>
               ))}
             </Space>

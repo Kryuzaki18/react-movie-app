@@ -12,7 +12,7 @@ import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
 import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
 import CastSection from "../../components/ui/cast-section/CastSection";
 import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
-import { GENRE_COLORS } from "../../constants/genres";
+import useResolvedGenres from '../../hooks/useResolvedGenres';
 import ExpandableText from "../../components/ui/expandable-text/ExpandableText";
 import "./VideoPlayer.css";
 
@@ -34,6 +34,8 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
   const { data: tvDetail, isLoading: isTvLoading } = useTmdbTvDetailQuery(
     movie?.mediaType === "tv" ? Number(movie.id) : null
   );
+
+  const resolvedGenres = useResolvedGenres(movie?.genre);
 
   const totalEpisodesForSeason =
     tvDetail?.seasons?.find((s) => s.season_number === season)?.episode_count ?? 30;
@@ -88,13 +90,13 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
               </div>
               <div className="player__title-overlay">
                 <div className="player__title-genres">
-                  {movie.genre.slice(0, 3).map((g) => (
+                  {resolvedGenres.slice(0, 3).map((rg) => (
                     <Tag
-                      key={g}
-                      color={GENRE_COLORS[g] || "default"}
+                      key={rg.key}
+                      color={rg.color || "default"}
                       style={{ fontSize: 11, margin: 0 }}
                     >
-                      {g}
+                      {rg.label}
                     </Tag>
                   ))}
                 </div>

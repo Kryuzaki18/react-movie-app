@@ -9,7 +9,7 @@ import {
 
 import type { Movie } from "../../../models/movie";
 import { useTheme } from "../../../context/ThemeContext";
-import { GENRE_COLORS } from "../../../constants/genres";
+import useResolvedGenres from '../../../hooks/useResolvedGenres';
 import "./HeroBanner.css";
 
 const { Title, Paragraph, Text } = Typography;
@@ -26,6 +26,7 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
   const [current, setCurrent] = useState(0);
   const [imgLoaded, setImgLoaded] = useState(false);
   const { colors } = useTheme();
+    const resolvedGenres = useResolvedGenres(movies[current]?.genre);
 
   useEffect(() => {
     setImgLoaded(false);
@@ -120,9 +121,9 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
           aria-atomic="true"
         >
           <Space size={6} wrap className="hero-banner__tags">
-            {movie.genre.map((g) => (
-              <Tag key={g} color={GENRE_COLORS[g] || "default"}>
-                {g}
+              {resolvedGenres.map((rg) => (
+              <Tag key={rg.key} color={rg.color || "default"}>
+                {rg.label}
               </Tag>
             ))}
             {movie.newRelease && <Tag color="gold">New Release</Tag>}
