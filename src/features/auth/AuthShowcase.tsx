@@ -4,6 +4,7 @@ import { Tag } from 'antd';
 import { useTheme } from '../../context/ThemeContext';
 import { GENRE_COLORS } from '../../constants/genres';
 import { API_ROUTES } from '../../api/environments';
+import { useTmdbStore } from '../../store/tmdbStore';
 import type { Movie } from '../../models/movie';
 import type { TmdbMovieListItem } from '../../models/tmdb';
 import { fetchTmdbGenresMovie, fetchTmdbGenresTv } from '../../api/tmdbApi';
@@ -13,13 +14,20 @@ const SLIDE_INTERVAL = 5000;
 const SHOWCASE_COUNT = 5;
 
 async function fetchShowcaseMovies(): Promise<Movie[]> {
-  const [res, movieRes, tvRes] = await Promise.all([
-    fetch(API_ROUTES.TMDB.SHOWCASE, {
-      headers: { Accept: 'application/json' },
-    }),
-    fetchTmdbGenresMovie().catch(() => ({ genres: [] })),
-    fetchTmdbGenresTv().catch(() => ({ genres: [] })),
-  ]);
+  const resPromise = fetch(API_ROUTES.TMDB.SHOWCASE, {
+    headers: { Accept: 'application/json' },
+  });
+
+  const s = useTmdbStore.getState();
+  const movieGenresPromise = (s.movieGenres && s.movieGenres.length > 0)
+    ? Promise.resolve({ genres: s.movieGenres })
+    : fetchTmdbGenresMovie().catch(() => ({ genres: [] }));
+
+  const tvGenresPromise = (s.tvGenres && s.tvGenres.length > 0)
+    ? Promise.resolve({ genres: s.tvGenres })
+    : fetchTmdbGenresTv().catch(() => ({ genres: [] }));
+
+  const [res, movieRes, tvRes] = await Promise.all([resPromise, movieGenresPromise, tvGenresPromise]);
 
   if (!res.ok) throw new Error(`Showcase fetch failed: ${res.status}`);
   const data = await res.json() as { results: TmdbMovieListItem[] };

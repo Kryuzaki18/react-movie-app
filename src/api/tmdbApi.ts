@@ -10,6 +10,9 @@ import type {
   TmdbGenre,
 } from '../models/tmdb';
 
+let movieGenresPromise: Promise<{ genres: TmdbGenre[] }> | null = null;
+let tvGenresPromise: Promise<{ genres: TmdbGenre[] }> | null = null;
+
 export interface TmdbTvListItem {
   id: number;
   name: string;
@@ -341,9 +344,20 @@ export async function fetchTmdbGenresMovie(
     return { genres: store.movieGenres };
   }
 
-  const res = await apiGet<{ genres: TmdbGenre[] }>(API_ROUTES.TMDB.GENRES_MOVIE, { signal: options?.signal });
-  store.setMovieGenres(res.genres);
-  return res;
+  if (movieGenresPromise) return movieGenresPromise;
+
+  movieGenresPromise = apiGet<{ genres: TmdbGenre[] }>(API_ROUTES.TMDB.GENRES_MOVIE, { signal: options?.signal })
+    .then((res) => {
+      store.setMovieGenres(res.genres);
+      movieGenresPromise = null;
+      return res;
+    })
+    .catch((err) => {
+      movieGenresPromise = null;
+      throw err;
+    });
+
+  return movieGenresPromise;
 }
 
 export async function fetchTmdbGenresTv(
@@ -354,7 +368,18 @@ export async function fetchTmdbGenresTv(
     return { genres: store.tvGenres };
   }
 
-  const res = await apiGet<{ genres: TmdbGenre[] }>(API_ROUTES.TMDB.GENRES_TV, { signal: options?.signal });
-  store.setTvGenres(res.genres);
-  return res;
+  if (tvGenresPromise) return tvGenresPromise;
+
+  tvGenresPromise = apiGet<{ genres: TmdbGenre[] }>(API_ROUTES.TMDB.GENRES_TV, { signal: options?.signal })
+    .then((res) => {
+      store.setTvGenres(res.genres);
+      tvGenresPromise = null;
+      return res;
+    })
+    .catch((err) => {
+      tvGenresPromise = null;
+      throw err;
+    });
+
+  return tvGenresPromise;
 }
