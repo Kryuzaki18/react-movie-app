@@ -46,9 +46,9 @@ export function useBrowseQuery() {
     queryKey: isMovie
       ? tmdbKeys.movies.search({ query: debouncedSearch, page })
       : tmdbKeys.tv.search({ query: debouncedSearch, page }),
-    queryFn: async ({ signal }) => {
+    queryFn: async () => {
       if (isMovie) {
-        const res = await fetchTmdbMoviesSearch({ query: debouncedSearch, page }, { signal });
+        const res = await fetchTmdbMoviesSearch({ query: debouncedSearch, page });
         return {
           movies: res.results.map((m) => tmdbMovieListItemToMovie(m, genreMap)),
           total: res.total_results,
@@ -56,7 +56,7 @@ export function useBrowseQuery() {
           totalPages: res.total_pages,
         };
       } else {
-        const res = await fetchTmdbTvSearch({ query: debouncedSearch, page }, { signal });
+        const res = await fetchTmdbTvSearch({ query: debouncedSearch, page });
         return {
           movies: res.results.map((m) => tmdbTvListItemToMovie(m, genreMap)),
           total: res.total_results,
@@ -90,9 +90,9 @@ export function useBrowseQuery() {
     queryKey: isMovie
       ? tmdbKeys.movies.discover(movieDiscoverParams)
       : tmdbKeys.tv.discover(tvDiscoverParams),
-    queryFn: async ({ signal }) => {
+    queryFn: async () => {
       if (isMovie) {
-        const res = await fetchTmdbMoviesDiscover(movieDiscoverParams, { signal });
+        const res = await fetchTmdbMoviesDiscover(movieDiscoverParams);
         return {
           movies: res.results.map((m) => tmdbMovieListItemToMovie(m, genreMap)),
           total: res.total_results,
@@ -100,7 +100,7 @@ export function useBrowseQuery() {
           totalPages: res.total_pages,
         };
       } else {
-        const res = await fetchTmdbTvDiscover(tvDiscoverParams, { signal });
+        const res = await fetchTmdbTvDiscover(tvDiscoverParams);
         return {
           movies: res.results.map((m) => tmdbTvListItemToMovie(m, genreMap)),
           total: res.total_results,

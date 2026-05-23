@@ -20,7 +20,7 @@ export const internalMovieKeys = {
 export function useApiMoviesQuery(filters: MovieFiltersApi = {}) {
   return useQuery({
     queryKey: internalMovieKeys.list(filters),
-    queryFn:  ({ signal }) => fetchApiMovies(filters, { signal }),
+    queryFn:  () => fetchApiMovies(filters),
     staleTime: 60 * 1000,
     placeholderData: (prev) => prev,
   });
@@ -29,7 +29,7 @@ export function useApiMoviesQuery(filters: MovieFiltersApi = {}) {
 export function useApiMovieQuery(id: string | null) {
   return useQuery({
     queryKey: internalMovieKeys.detail(id ?? ''),
-    queryFn:  ({ signal }) => fetchApiMovieById(id!, { signal }),
+    queryFn:  () => fetchApiMovieById(id!),
     enabled:  !!id,
     staleTime: 60 * 1000,
   });

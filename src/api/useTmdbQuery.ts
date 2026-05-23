@@ -38,7 +38,7 @@ const DETAIL_STALE_TIME = 10 * 60 * 1000;
 export function useTmdbMoviesPopularQuery(params: PageParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.movies.popular(params),
-    queryFn:  ({ signal }) => fetchTmdbMoviesPopular(params, { signal }),
+    queryFn:  () => fetchTmdbMoviesPopular(params),
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
   });
@@ -47,7 +47,7 @@ export function useTmdbMoviesPopularQuery(params: PageParams = {}) {
 export function useTmdbMoviesTopRatedQuery(params: PageParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.movies.topRated(params),
-    queryFn:  ({ signal }) => fetchTmdbMoviesTopRated(params, { signal }),
+    queryFn:  () => fetchTmdbMoviesTopRated(params),
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
   });
@@ -56,7 +56,7 @@ export function useTmdbMoviesTopRatedQuery(params: PageParams = {}) {
 export function useTmdbMoviesNowPlayingQuery(params: PageParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.movies.nowPlaying(params),
-    queryFn:  ({ signal }) => fetchTmdbMoviesNowPlaying(params, { signal }),
+    queryFn:  () => fetchTmdbMoviesNowPlaying(params),
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
   });
@@ -65,7 +65,7 @@ export function useTmdbMoviesNowPlayingQuery(params: PageParams = {}) {
 export function useTmdbMoviesUpcomingQuery(params: PageParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.movies.upcoming(params),
-    queryFn:  ({ signal }) => fetchTmdbMoviesUpcoming(params, { signal }),
+    queryFn:  () => fetchTmdbMoviesUpcoming(params),
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
   });
@@ -74,7 +74,7 @@ export function useTmdbMoviesUpcomingQuery(params: PageParams = {}) {
 export function useTmdbMoviesTrendingQuery(params: PageParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.movies.trending(params),
-    queryFn:  ({ signal }) => fetchTmdbMoviesTrending(params, { signal }),
+    queryFn:  () => fetchTmdbMoviesTrending(params),
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
   });
@@ -83,7 +83,7 @@ export function useTmdbMoviesTrendingQuery(params: PageParams = {}) {
 export function useTmdbMoviesDiscoverQuery(params: DiscoverMovieParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.movies.discover(params),
-    queryFn:  ({ signal }) => fetchTmdbMoviesDiscover(params, { signal }),
+    queryFn:  () => fetchTmdbMoviesDiscover(params),
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
   });
@@ -93,7 +93,7 @@ export function useTmdbMoviesSearchQuery(params: SearchParams) {
   const enabled = params.query.trim().length > 0;
   return useQuery({
     queryKey: tmdbKeys.movies.search(params),
-    queryFn:  ({ signal }) => fetchTmdbMoviesSearch(params, { signal }),
+    queryFn:  () => fetchTmdbMoviesSearch(params),
     enabled,
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
@@ -103,7 +103,7 @@ export function useTmdbMoviesSearchQuery(params: SearchParams) {
 export function useTmdbMovieDetailQuery(id: number | null) {
   return useQuery({
     queryKey: tmdbKeys.movies.detail(id ?? 0),
-    queryFn:  ({ signal }) => fetchTmdbMovieDetail(id!, { signal }),
+    queryFn:  () => fetchTmdbMovieDetail(id!),
     enabled:  id !== null && id > 0,
     staleTime: DETAIL_STALE_TIME,
   });
@@ -112,7 +112,7 @@ export function useTmdbMovieDetailQuery(id: number | null) {
 export function useTmdbMovieVideosQuery(id: number | null) {
   return useQuery({
     queryKey: tmdbKeys.movies.videos(id ?? 0),
-    queryFn:  ({ signal }) => fetchTmdbMovieVideos(id!, { signal }),
+    queryFn:  () => fetchTmdbMovieVideos(id!),
     enabled:  id !== null && id > 0,
     staleTime: DETAIL_STALE_TIME,
   });
@@ -121,7 +121,7 @@ export function useTmdbMovieVideosQuery(id: number | null) {
 export function useTmdbMovieCreditsQuery(id: number | null) {
   return useQuery({
     queryKey: tmdbKeys.movies.credits(id ?? 0),
-    queryFn:  ({ signal }) => fetchTmdbMovieCredits(id!, { signal }),
+    queryFn:  () => fetchTmdbMovieCredits(id!),
     enabled:  id !== null && id > 0,
     staleTime: DETAIL_STALE_TIME,
   });
@@ -130,7 +130,7 @@ export function useTmdbMovieCreditsQuery(id: number | null) {
 export function useTmdbMovieSimilarQuery(id: number | null, params: PageParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.movies.similar(id ?? 0, params),
-    queryFn:  ({ signal }) => fetchTmdbMovieSimilar(id!, params, { signal }),
+    queryFn:  () => fetchTmdbMovieSimilar(id!, params),
     enabled:  id !== null && id > 0,
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
@@ -140,7 +140,7 @@ export function useTmdbMovieSimilarQuery(id: number | null, params: PageParams =
 export function useTmdbMovieRecommendationsQuery(id: number | null, params: PageParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.movies.recommendations(id ?? 0, params),
-    queryFn:  ({ signal }) => fetchTmdbMovieRecommendations(id!, params, { signal }),
+    queryFn:  () => fetchTmdbMovieRecommendations(id!, params),
     enabled:  id !== null && id > 0,
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
@@ -150,7 +150,7 @@ export function useTmdbMovieRecommendationsQuery(id: number | null, params: Page
 export function useTmdbTvPopularQuery(params: PageParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.tv.popular(params),
-    queryFn:  ({ signal }) => fetchTmdbTvPopular(params, { signal }),
+    queryFn:  () => fetchTmdbTvPopular(params),
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
   });
@@ -159,7 +159,7 @@ export function useTmdbTvPopularQuery(params: PageParams = {}) {
 export function useTmdbTvTopRatedQuery(params: PageParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.tv.topRated(params),
-    queryFn:  ({ signal }) => fetchTmdbTvTopRated(params, { signal }),
+    queryFn:  () => fetchTmdbTvTopRated(params),
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
   });
@@ -168,7 +168,7 @@ export function useTmdbTvTopRatedQuery(params: PageParams = {}) {
 export function useTmdbTvOnTheAirQuery(params: PageParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.tv.onTheAir(params),
-    queryFn:  ({ signal }) => fetchTmdbTvOnTheAir(params, { signal }),
+    queryFn:  () => fetchTmdbTvOnTheAir(params),
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
   });
@@ -177,7 +177,7 @@ export function useTmdbTvOnTheAirQuery(params: PageParams = {}) {
 export function useTmdbTvAiringTodayQuery(params: PageParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.tv.airingToday(params),
-    queryFn:  ({ signal }) => fetchTmdbTvAiringToday(params, { signal }),
+    queryFn:  () => fetchTmdbTvAiringToday(params),
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
   });
@@ -186,7 +186,7 @@ export function useTmdbTvAiringTodayQuery(params: PageParams = {}) {
 export function useTmdbTvTrendingQuery(params: PageParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.tv.trending(params),
-    queryFn:  ({ signal }) => fetchTmdbTvTrending(params, { signal }),
+    queryFn:  () => fetchTmdbTvTrending(params),
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
   });
@@ -195,7 +195,7 @@ export function useTmdbTvTrendingQuery(params: PageParams = {}) {
 export function useTmdbTvDiscoverQuery(params: DiscoverTvParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.tv.discover(params),
-    queryFn:  ({ signal }) => fetchTmdbTvDiscover(params, { signal }),
+    queryFn:  () => fetchTmdbTvDiscover(params),
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
   });
@@ -205,7 +205,7 @@ export function useTmdbTvSearchQuery(params: SearchParams) {
   const enabled = params.query.trim().length > 0;
   return useQuery({
     queryKey: tmdbKeys.tv.search(params),
-    queryFn:  ({ signal }) => fetchTmdbTvSearch(params, { signal }),
+    queryFn:  () => fetchTmdbTvSearch(params),
     enabled,
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
@@ -215,7 +215,7 @@ export function useTmdbTvSearchQuery(params: SearchParams) {
 export function useTmdbTvDetailQuery(id: number | null) {
   return useQuery({
     queryKey: tmdbKeys.tv.detail(id ?? 0),
-    queryFn:  ({ signal }) => fetchTmdbTvDetail(id!, { signal }),
+    queryFn:  () => fetchTmdbTvDetail(id!),
     enabled:  id !== null && id > 0,
     staleTime: DETAIL_STALE_TIME,
   });
@@ -224,7 +224,7 @@ export function useTmdbTvDetailQuery(id: number | null) {
 export function useTmdbTvVideosQuery(id: number | null) {
   return useQuery({
     queryKey: tmdbKeys.tv.videos(id ?? 0),
-    queryFn:  ({ signal }) => fetchTmdbTvVideos(id!, { signal }),
+    queryFn:  () => fetchTmdbTvVideos(id!),
     enabled:  id !== null && id > 0,
     staleTime: DETAIL_STALE_TIME,
   });
@@ -233,7 +233,7 @@ export function useTmdbTvVideosQuery(id: number | null) {
 export function useTmdbTvCreditsQuery(id: number | null) {
   return useQuery({
     queryKey: tmdbKeys.tv.credits(id ?? 0),
-    queryFn:  ({ signal }) => fetchTmdbTvCredits(id!, { signal }),
+    queryFn:  () => fetchTmdbTvCredits(id!),
     enabled:  id !== null && id > 0,
     staleTime: DETAIL_STALE_TIME,
   });
@@ -242,7 +242,7 @@ export function useTmdbTvCreditsQuery(id: number | null) {
 export function useTmdbTvSimilarQuery(id: number | null, params: PageParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.tv.similar(id ?? 0, params),
-    queryFn:  ({ signal }) => fetchTmdbTvSimilar(id!, params, { signal }),
+    queryFn:  () => fetchTmdbTvSimilar(id!, params),
     enabled:  id !== null && id > 0,
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
@@ -252,7 +252,7 @@ export function useTmdbTvSimilarQuery(id: number | null, params: PageParams = {}
 export function useTmdbTvRecommendationsQuery(id: number | null, params: PageParams = {}) {
   return useQuery({
     queryKey: tmdbKeys.tv.recommendations(id ?? 0, params),
-    queryFn:  ({ signal }) => fetchTmdbTvRecommendations(id!, params, { signal }),
+    queryFn:  () => fetchTmdbTvRecommendations(id!, params),
     enabled:  id !== null && id > 0,
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
@@ -263,7 +263,7 @@ export function useTmdbSearchMultiQuery(params: SearchParams) {
   const enabled = params.query.trim().length > 0;
   return useQuery({
     queryKey: tmdbKeys.searchMulti(params),
-    queryFn:  ({ signal }) => fetchTmdbSearchMulti(params, { signal }),
+    queryFn:  () => fetchTmdbSearchMulti(params),
     enabled,
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,

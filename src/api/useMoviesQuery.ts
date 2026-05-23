@@ -22,8 +22,8 @@ export function useFeaturedMoviesQuery() {
 
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.popular({}),
-    queryFn:  async ({ signal }) => {
-      const res = await fetchTmdbMoviesPopular({ page: 1 }, { signal });
+    queryFn:  async () => {
+      const res = await fetchTmdbMoviesPopular({ page: 1 });
       return res.results.slice(0, 8).map((m) => tmdbMovieListItemToMovie(m, genreMap));
     },
     staleTime: STALE_TIME,
@@ -36,8 +36,8 @@ export function useTrendingMoviesQuery() {
 
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.trending({}),
-    queryFn:  async ({ signal }) => {
-      const res = await fetchTmdbMoviesTrending({ page: 1 }, { signal });
+    queryFn:  async () => {
+      const res = await fetchTmdbMoviesTrending({ page: 1 });
       return res.results.slice(0, 8).map((m) => tmdbMovieListItemToMovie(m, genreMap));
     },
     staleTime: STALE_TIME,
@@ -50,8 +50,8 @@ export function useNewReleasesQuery() {
 
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.nowPlaying({}),
-    queryFn:  async ({ signal }) => {
-      const res = await fetchTmdbMoviesNowPlaying({ page: 1 }, { signal });
+    queryFn:  async () => {
+      const res = await fetchTmdbMoviesNowPlaying({ page: 1 });
       return res.results.slice(0, 8).map((m) => tmdbMovieListItemToMovie(m, genreMap));
     },
     staleTime: STALE_TIME,
@@ -64,8 +64,8 @@ export function useTopRatedMoviesQuery() {
 
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.topRated({}),
-    queryFn:  async ({ signal }) => {
-      const res = await fetchTmdbMoviesTopRated({ page: 1 }, { signal });
+    queryFn:  async () => {
+      const res = await fetchTmdbMoviesTopRated({ page: 1 });
       return res.results.slice(0, 8).map((m) => tmdbMovieListItemToMovie(m, genreMap));
     },
     staleTime: STALE_TIME,
@@ -75,8 +75,8 @@ export function useTopRatedMoviesQuery() {
 export function useMovieDetailQuery(id: number | null) {
   return useQuery<Movie>({
     queryKey: tmdbKeys.movies.detail(id ?? 0),
-    queryFn:  async ({ signal }) => {
-      const detail = await fetchTmdbMovieDetail(id!, { signal });
+    queryFn:  async () => {
+      const detail = await fetchTmdbMovieDetail(id!);
       return tmdbMovieDetailToMovie(detail);
     },
     enabled:   id !== null && id > 0,
