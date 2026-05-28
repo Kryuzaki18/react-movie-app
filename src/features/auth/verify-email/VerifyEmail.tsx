@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Button, Typography, Spin, Result } from 'antd';
 import {
@@ -7,7 +6,7 @@ import {
   ArrowLeftOutlined,
 } from '@ant-design/icons';
 import { useTheme } from '../../../context/ThemeContext';
-import { useVerifyEmailMutation } from '../../../api/useAuthQuery';
+import { useVerifyEmailQuery } from '../../../api/useAuthQuery';
 import { ApiError } from '../../../services/apiService';
 import AuthLayout from '../AuthLayout';
 
@@ -37,16 +36,9 @@ const btnStyle: React.CSSProperties = {
 export default function VerifyEmail() {
   const { colors } = useTheme();
   const [searchParams] = useSearchParams();
-  const verifyMutation = useVerifyEmailMutation();
-  const hasVerified = useRef(false);
-
   const token = searchParams.get('token') ?? '';
 
-  useEffect(() => {
-    if (!token || hasVerified.current) return;
-    hasVerified.current = true;
-    verifyMutation.mutate(token);
-  }, [token]);
+  const { isPending, isSuccess, error } = useVerifyEmailQuery(token);
 
   if (!token) {
     return (
@@ -79,7 +71,7 @@ export default function VerifyEmail() {
     );
   }
 
-  if (verifyMutation.isPending) {
+  if (isPending) {
     return (
       <AuthLayout>
         <div style={{ textAlign: 'center', padding: '40px 0' }}>
@@ -93,7 +85,7 @@ export default function VerifyEmail() {
     );
   }
 
-  if (verifyMutation.isSuccess) {
+  if (isSuccess) {
     return (
       <AuthLayout>
         <Result
@@ -125,8 +117,8 @@ export default function VerifyEmail() {
   }
 
   const errorMsg =
-    verifyMutation.error instanceof ApiError
-      ? verifyMutation.error.message
+    error instanceof ApiError
+      ? error.message
       : 'Something went wrong. Please try again.';
 
   return (

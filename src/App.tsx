@@ -216,10 +216,15 @@ function AppLayout() {
   );
 }
 
+const AUTH_PATHS = ['/login', '/signup', '/forgot-password', '/reset-password', '/verify-email'];
+
 function AppBootstrap({ children }: { children: React.ReactNode }) {
   const { isCheckingAuth, isAuthenticated } = useAuthStore();
+  const location = useLocation();
   const [slowStart, setSlowStart] = useState(false);
   useSessionQuery();
+
+  const isAuthPage = AUTH_PATHS.includes(location.pathname);
 
   useEffect(() => {
     const s = useTmdbStore.getState();
@@ -240,7 +245,7 @@ function AppBootstrap({ children }: { children: React.ReactNode }) {
   return (
     <>
       <ErrorBoundary>{children}</ErrorBoundary>
-      <AppSplash visible={isCheckingAuth} slowStart={slowStart} />
+      <AppSplash visible={isCheckingAuth && !isAuthPage} slowStart={slowStart} />
     </>
   );
 }

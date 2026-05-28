@@ -90,9 +90,14 @@ export function useResetPasswordMutation() {
   });
 }
 
-export function useVerifyEmailMutation() {
-  return useMutation({
-    mutationFn: (token: string) => verifyEmail(token),
+export function useVerifyEmailQuery(token: string) {
+  return useQuery({
+    queryKey:  ['verify-email', token],
+    queryFn:   () => verifyEmail(token),
+    enabled:   !!token,
+    retry:     false,
+    staleTime: Infinity,
+    gcTime:    Infinity,
   });
 }
 
