@@ -2,15 +2,11 @@
   margin-bottom: 48px;
 }
 
-/* ── Layout toggle toolbar ───────────────────────────────────────────────── */
-
 .home-toolbar {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 24px;
 }
-
-/* ── Sections ────────────────────────────────────────────────────────────── */
 
 .home-section {
   margin-bottom: 48px;

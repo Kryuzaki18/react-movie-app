@@ -33,10 +33,7 @@ import "./Browse.css";
 
 const { Title, Text } = Typography;
 
-// TMDB returns 20 results per page — pageSize selector controls display only
 const TMDB_PAGE_SIZE = 20;
-
-// ── Main Browse component ─────────────────────────────────────────────────────
 
 export default function Browse() {
   const { colors } = useTheme();
@@ -72,7 +69,6 @@ export default function Browse() {
     ...activeGenres.map((g) => ({ label: g.name, value: g.name })),
   ];
 
-  // ── Sticky pagination sentinel ────────────────────────────────────────────
   const sentinelRef = useRef<HTMLDivElement>(null);
   const paginationRef = useRef<HTMLDivElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);

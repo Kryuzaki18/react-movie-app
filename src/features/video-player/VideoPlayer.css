@@ -79,8 +79,6 @@
   transform: scale(1.08);
 }
 
-/* ── Title overlay ───────────────────────────────────────────────────────── */
-
 .player__title-overlay {
   position: absolute;
   bottom: 0;
