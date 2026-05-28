@@ -1,8 +1,10 @@
-import { Row, Col, Space, Tag, Typography, Button } from 'antd';
+import { Row, Col, Space, Tag, Typography, Button, Tooltip } from 'antd';
 import { memo } from 'react';
+import { PlayCircleOutlined, InfoCircleOutlined, HeartOutlined, HeartFilled } from '@ant-design/icons';
 import type { Movie } from '../../../models/movie';
 import { useTheme } from '../../../context/ThemeContext';
 import useResolvedGenres from '../../../hooks/useResolvedGenres';
+import { useWatchlistQuery, useAddToWatchlistMutation, useRemoveFromWatchlistMutation } from '../../../api/useWatchlistQuery';
 import './MovieListRow.css';
 
 const { Text } = Typography;
@@ -16,6 +18,23 @@ interface MovieListRowProps {
 function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
   const { colors } = useTheme();
   const resolvedGenres = useResolvedGenres(movie.genre);
+
+  const { data: watchlistItems = [] } = useWatchlistQuery();
+  const addMutation    = useAddToWatchlistMutation();
+  const removeMutation = useRemoveFromWatchlistMutation();
+
+  const movieId     = String(movie.id);
+  const inWatchlist = watchlistItems.some((w) => w.movieId === movieId);
+  const isPending   = addMutation.isPending || removeMutation.isPending;
+
+  const handleWatchlistToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (inWatchlist) {
+      removeMutation.mutate(movieId);
+    } else {
+      addMutation.mutate(movie);
+    }
+  };
 
   return (
     <div
@@ -62,13 +81,38 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
           <Col className="movie-list-row__actions">
             <Space direction="vertical" size={6} align="end">
               <Text className="movie-list-row__rating">★ {movie.rating}</Text>
-              <Space size={6}>
-                <Button size="small" type="primary" onClick={() => onPlay(movie)}>
-                  Play
-                </Button>
-                <Button size="small" onClick={() => onDetail(movie)}>
-                  Info
-                </Button>
+              <Space size={12}>
+                <Tooltip title="Play">
+                  <Button
+                    size="medium"
+                    type="primary"
+                    icon={<PlayCircleOutlined />}
+                    onClick={() => onPlay(movie)}
+                    aria-label={`Play ${movie.title}`}
+                    style={{ background: '#e50914', borderColor: '#e50914' }}
+                  />
+                </Tooltip>
+                <Tooltip title="More Info">
+                  <Button
+                    size="medium"
+                    icon={<InfoCircleOutlined />}
+                    onClick={() => onDetail(movie)}
+                    aria-label={`More info about ${movie.title}`}
+                  />
+                </Tooltip>
+                <Tooltip title={inWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}>
+                  <Button
+                    size="medium"
+                    loading={isPending}
+                    icon={inWatchlist
+                      ? <HeartFilled style={{ color: '#e50914' }} />
+                      : <HeartOutlined />}
+                    onClick={handleWatchlistToggle}
+                    aria-label={inWatchlist
+                      ? `Remove ${movie.title} from watchlist`
+                      : `Add ${movie.title} to watchlist`}
+                  />
+                </Tooltip>
               </Space>
             </Space>
           </Col>

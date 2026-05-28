@@ -15,13 +15,12 @@ import {
   BarsOutlined,
   SearchOutlined,
   HeartOutlined,
-  DeleteOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 import MovieCard from "../../components/ui/movie-card/MovieCard";
 import MovieListRow from "../../components/ui/movie-list-row/MovieListRow";
-import { useWatchlistQuery, useRemoveFromWatchlistMutation } from "../../api/useWatchlistQuery";
+import { useWatchlistQuery } from "../../api/useWatchlistQuery";
 import { watchlistItemToMovie } from "../../api/watchlistApi";
 import { useWatchlistStore } from "../../store/watchlistStore";
 import { usePlayerStore } from "../../store/playerStore";
@@ -38,7 +37,6 @@ export default function Watchlist() {
   const { search, sortBy, layout, setSearch, setSortBy, setLayout } = useWatchlistStore();
 
   const { data: watchlistItems = [], isLoading } = useWatchlistQuery();
-  const removeMutation = useRemoveFromWatchlistMutation();
 
   const filtered = watchlistItems
     .filter((item) => item.title.toLowerCase().includes(search.toLowerCase()))
@@ -145,51 +143,22 @@ export default function Watchlist() {
         />
       ) : layout === "grid" ? (
         <Row gutter={[16, 20]} className="watchlist__grid">
-          {filtered.map((item) => {
-            const movie = watchlistItemToMovie(item);
-            return (
-              <Col key={item.movieId} xs={24} sm={12} md={8} lg={6} className="watchlist__card-col">
-                <div className="watchlist__card-wrapper">
-                  <MovieCard movie={movie} onPlay={playMovie} onDetail={openDetail} />
-                  <Button
-                    danger
-                    type="text"
-                    size="small"
-                    icon={<DeleteOutlined />}
-                    loading={removeMutation.isPending && removeMutation.variables === item.movieId}
-                    onClick={() => removeMutation.mutate(item.movieId)}
-                    className="watchlist__remove-btn"
-                    aria-label={`Remove ${item.title} from watchlist`}
-                  >
-                    Remove
-                  </Button>
-                </div>
-              </Col>
-            );
-          })}
+          {filtered.map((item) => (
+            <Col key={item.movieId} xs={24} sm={12} md={8} lg={6}>
+              <MovieCard movie={watchlistItemToMovie(item)} onPlay={playMovie} onDetail={openDetail} />
+            </Col>
+          ))}
         </Row>
       ) : (
         <Space direction="vertical" size={12} style={{ width: "100%" }} className="watchlist__list">
-          {filtered.map((item) => {
-            const movie = watchlistItemToMovie(item);
-            return (
-              <div key={item.movieId} className="watchlist__list-row">
-                <MovieListRow movie={movie} onPlay={playMovie} onDetail={openDetail} />
-                <Button
-                  danger
-                  type="text"
-                  size="small"
-                  icon={<DeleteOutlined />}
-                  loading={removeMutation.isPending && removeMutation.variables === item.movieId}
-                  onClick={() => removeMutation.mutate(item.movieId)}
-                  className="watchlist__remove-btn watchlist__remove-btn--list"
-                  aria-label={`Remove ${item.title} from watchlist`}
-                >
-                  Remove
-                </Button>
-              </div>
-            );
-          })}
+          {filtered.map((item) => (
+            <MovieListRow
+              key={item.movieId}
+              movie={watchlistItemToMovie(item)}
+              onPlay={playMovie}
+              onDetail={openDetail}
+            />
+          ))}
         </Space>
       )}
     </div>
