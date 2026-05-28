@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Typography,
   Row,
@@ -24,6 +23,7 @@ import MovieCard from "../../components/ui/movie-card/MovieCard";
 import MovieListRow from "../../components/ui/movie-list-row/MovieListRow";
 import { useWatchlistQuery, useRemoveFromWatchlistMutation } from "../../api/useWatchlistQuery";
 import { watchlistItemToMovie } from "../../api/watchlistApi";
+import { useWatchlistStore } from "../../store/watchlistStore";
 import { usePlayerStore } from "../../store/playerStore";
 import { useTheme } from "../../context/ThemeContext";
 import "./Watchlist.css";
@@ -35,17 +35,13 @@ export default function Watchlist() {
   const navigate = useNavigate();
   const { playMovie, openDetail } = usePlayerStore();
 
-  const [layout, setLayout] = useState<"grid" | "list">("grid");
-  const [search, setSearch]   = useState("");
-  const [sortBy, setSortBy]   = useState<"newest" | "oldest" | "az" | "rating">("newest");
+  const { search, sortBy, layout, setSearch, setSortBy, setLayout } = useWatchlistStore();
 
   const { data: watchlistItems = [], isLoading } = useWatchlistQuery();
   const removeMutation = useRemoveFromWatchlistMutation();
 
   const filtered = watchlistItems
-    .filter((item) =>
-      item.title.toLowerCase().includes(search.toLowerCase()),
-    )
+    .filter((item) => item.title.toLowerCase().includes(search.toLowerCase()))
     .sort((a, b) => {
       if (sortBy === "newest") return new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime();
       if (sortBy === "oldest") return new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime();
