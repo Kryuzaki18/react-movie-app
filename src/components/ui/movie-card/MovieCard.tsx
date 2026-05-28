@@ -13,11 +13,14 @@ import {
   PlayCircleOutlined,
   InfoCircleOutlined,
   StarFilled,
+  HeartOutlined,
+  HeartFilled,
 } from "@ant-design/icons";
 
 import type { Movie } from "../../../models/movie";
 import { useTheme } from "../../../context/ThemeContext";
 import useResolvedGenres from '../../../hooks/useResolvedGenres';
+import { useWatchlistQuery, useAddToWatchlistMutation, useRemoveFromWatchlistMutation } from '../../../api/useWatchlistQuery';
 import "./MovieCard.css";
 
 const { Text, Paragraph } = Typography;
@@ -32,6 +35,23 @@ function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const { colors, isDark } = useTheme();
   const resolvedGenres = useResolvedGenres(movie.genre);
+
+  const { data: watchlistItems = [] } = useWatchlistQuery();
+  const addMutation    = useAddToWatchlistMutation();
+  const removeMutation = useRemoveFromWatchlistMutation();
+
+  const movieId   = String(movie.id);
+  const inWatchlist = watchlistItems.some((w) => w.movieId === movieId);
+  const isPending   = addMutation.isPending || removeMutation.isPending;
+
+  const handleWatchlistToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (inWatchlist) {
+      removeMutation.mutate(movieId);
+    } else {
+      addMutation.mutate(movie);
+    }
+  };
 
   return (
     <Card
@@ -80,6 +100,17 @@ function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
                   size="large"
                   aria-label={`More info about ${movie.title}`}
                   onClick={() => onDetail(movie)}
+                  className="movie-card__overlay-btn-info"
+                />
+              </Tooltip>
+              <Tooltip title={inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}>
+                <Button
+                  shape="circle"
+                  icon={inWatchlist ? <HeartFilled style={{ color: "#e50914" }} /> : <HeartOutlined />}
+                  size="large"
+                  loading={isPending}
+                  aria-label={inWatchlist ? `Remove ${movie.title} from watchlist` : `Add ${movie.title} to watchlist`}
+                  onClick={handleWatchlistToggle}
                   className="movie-card__overlay-btn-info"
                 />
               </Tooltip>

@@ -15,6 +15,7 @@ import {
   LoginOutlined,
   SunOutlined,
   MoonOutlined,
+  HeartOutlined,
 } from "@ant-design/icons";
 import { memo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -53,7 +54,12 @@ function NavInner({ onMenuOpen }: NavProps) {
 
   const userMenuItems: MenuProps["items"] = [
     { key: "profile", label: <Text>My Profile</Text>, icon: <UserOutlined /> },
-    { key: "watchlist", label: <Text>My Watchlist</Text> },
+    {
+      key: "watchlist",
+      label: <Text>My Watchlist</Text>,
+      icon: <HeartOutlined />,
+      onClick: () => navigate("/watchlist"),
+    },
     { type: "divider" },
     {
       key: "logout",

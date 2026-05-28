@@ -10,6 +10,11 @@ export const movieKeys = {
   detail:  (id: number) => [...movieKeys.details(), id] as const,
 } as const;
 
+export const watchlistKeys = {
+  all:  ['watchlist'] as const,
+  list: () => [...watchlistKeys.all, 'list'] as const,
+} as const;
+
 export const tmdbKeys = {
   all: ['tmdb'] as const,
 

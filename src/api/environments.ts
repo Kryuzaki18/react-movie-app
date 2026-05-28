@@ -19,6 +19,11 @@ export const API_ROUTES = {
     BY_ID: (id: string) => `${API_BASE}/movies/${encodeURIComponent(id)}`,
   },
 
+  WATCHLIST: {
+    BASE:      `${API_BASE}/watchlist`,
+    ITEM:      (movieId: string | number) => `${API_BASE}/watchlist/${encodeURIComponent(String(movieId))}`,
+  },
+
   TMDB: {
     SHOWCASE: `${API_BASE}/tmdb/showcase`,
     MOVIES: {

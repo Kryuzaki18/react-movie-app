@@ -43,7 +43,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
     { key: 'trending', icon: <FireOutlined />, label: 'Trending' },
     { key: 'new-releases', icon: <ThunderboltOutlined />, label: 'New Releases' },
     { key: 'top-rated', icon: <StarOutlined />, label: 'Top Rated' },
-    { key: 'watchlist', icon: <HeartOutlined />, label: 'My Watchlist' },
+    { key: '/watchlist', icon: <HeartOutlined />, label: 'My Watchlist' },
     { key: 'history', icon: <HistoryOutlined />, label: 'Watch History' },
     { type: 'divider' },
     { key: 'settings', icon: <SettingOutlined />, label: 'Settings' },

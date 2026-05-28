@@ -10,12 +10,15 @@ import {
   Row,
   Col,
   Skeleton,
+  Tooltip,
 } from "antd";
 import {
   PlayCircleOutlined,
   CalendarOutlined,
   ClockCircleOutlined,
   StarFilled,
+  HeartOutlined,
+  HeartFilled,
 } from "@ant-design/icons";
 
 import type { Movie } from "../../../models/movie";
@@ -23,6 +26,7 @@ import { useTheme } from "../../../context/ThemeContext";
 import useResolvedGenres from '../../../hooks/useResolvedGenres';
 import CastSection from "../cast-section/CastSection";
 import ExpandableText from "../expandable-text/ExpandableText";
+import { useWatchlistQuery, useAddToWatchlistMutation, useRemoveFromWatchlistMutation } from '../../../api/useWatchlistQuery';
 import "./MovieDetailDrawer.css";
 
 const { Title, Text } = Typography;
@@ -44,6 +48,23 @@ function MovieDetailDrawerInner({
   const { colors, isDark } = useTheme();
 
   const resolvedGenres = useResolvedGenres(movie?.genre);
+
+  const { data: watchlistItems = [] } = useWatchlistQuery();
+  const addMutation    = useAddToWatchlistMutation();
+  const removeMutation = useRemoveFromWatchlistMutation();
+
+  const movieId     = movie ? String(movie.id) : "";
+  const inWatchlist = watchlistItems.some((w) => w.movieId === movieId);
+  const isPending   = addMutation.isPending || removeMutation.isPending;
+
+  const handleWatchlistToggle = () => {
+    if (!movie) return;
+    if (inWatchlist) {
+      removeMutation.mutate(movieId);
+    } else {
+      addMutation.mutate(movie);
+    }
+  };
 
   const backdropSrc = movie?.backdrop || movie?.thumbnail || "";
 
@@ -211,20 +232,35 @@ function MovieDetailDrawerInner({
               </>
             )}
 
-            <Button
-              type="primary"
-              size="large"
-              block
-              icon={<PlayCircleOutlined aria-hidden="true" />}
-              className="detail-drawer__play-btn"
-              aria-label={`Play ${movie.title}`}
-              onClick={() => {
-                onPlay(movie);
-                onClose();
-              }}
-            >
-              Play Now
-            </Button>
+            <Space direction="vertical" size={10} style={{ width: "100%" }}>
+              <Button
+                type="primary"
+                size="large"
+                block
+                icon={<PlayCircleOutlined aria-hidden="true" />}
+                className="detail-drawer__play-btn"
+                aria-label={`Play ${movie.title}`}
+                onClick={() => {
+                  onPlay(movie);
+                  onClose();
+                }}
+              >
+                Play Now
+              </Button>
+
+              <Tooltip title={inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}>
+                <Button
+                  size="large"
+                  block
+                  loading={isPending}
+                  icon={inWatchlist ? <HeartFilled style={{ color: "#e50914" }} aria-hidden="true" /> : <HeartOutlined aria-hidden="true" />}
+                  onClick={handleWatchlistToggle}
+                  aria-label={inWatchlist ? `Remove ${movie.title} from watchlist` : `Add ${movie.title} to watchlist`}
+                >
+                  {inWatchlist ? "In Watchlist" : "Add to Watchlist"}
+                </Button>
+              </Tooltip>
+            </Space>
           </>
         )}
       </div>

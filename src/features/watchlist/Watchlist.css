@@ -1,0 +1,89 @@
+.watchlist {
+  padding-bottom: 40px;
+}
+
+.watchlist__header {
+  margin-bottom: 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.watchlist__toolbar {
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+}
+
+.watchlist__toolbar-layout {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.watchlist__grid {
+  margin-top: 0 !important;
+}
+
+.watchlist__card-col {
+  position: relative;
+}
+
+.watchlist__card-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.watchlist__remove-btn {
+  align-self: flex-start;
+  font-size: 12px;
+  padding: 0 6px;
+  height: 24px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.watchlist__card-wrapper:hover .watchlist__remove-btn {
+  opacity: 1;
+}
+
+.watchlist__list {
+  margin-top: 0;
+}
+
+.watchlist__list-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.watchlist__list-row > :first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.watchlist__remove-btn--list {
+  flex-shrink: 0;
+}
+
+.watchlist__empty {
+  padding: 80px 0;
+}
+
+.watchlist__empty-icon {
+  font-size: 64px;
+  color: rgba(229, 9, 20, 0.3);
+}
+
+@media (max-width: 576px) {
+  .watchlist__toolbar-layout {
+    justify-content: flex-start;
+  }
+
+  .watchlist__list-row {
+    flex-wrap: wrap;
+  }
+}
