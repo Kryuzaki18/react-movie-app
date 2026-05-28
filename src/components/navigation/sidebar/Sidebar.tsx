@@ -44,7 +44,6 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
     { key: 'new-releases', icon: <ThunderboltOutlined />, label: 'New Releases' },
     { key: 'top-rated', icon: <StarOutlined />, label: 'Top Rated' },
     { key: '/watchlist', icon: <HeartOutlined />, label: 'My Watchlist' },
-    { key: 'history', icon: <HistoryOutlined />, label: 'Watch History' },
     { type: 'divider' },
     { key: 'settings', icon: <SettingOutlined />, label: 'Settings' },
     { key: 'signout', icon: <LoginOutlined />, label: 'Sign Out', danger: true },
