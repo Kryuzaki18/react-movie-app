@@ -3,7 +3,6 @@ import {
   HomeOutlined,
   AppstoreOutlined,
   HeartOutlined,
-  SettingOutlined,
   LoginOutlined,
   UserOutlined,
   StarOutlined,

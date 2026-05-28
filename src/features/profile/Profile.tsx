@@ -22,7 +22,7 @@ import {
   EyeTwoTone,
   CopyOutlined,
 } from "@ant-design/icons";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import type { MenuProps } from "antd";
 
 import { useAuthStore } from "../../store/authStore";
@@ -30,6 +30,7 @@ import { useTheme } from "../../context/ThemeContext";
 import {
   useChangePasswordMutation,
   useDeleteAccountMutation,
+  useForgotPasswordMutation,
 } from "../../api/useAuthQuery";
 import { ApiError } from "../../services/apiService";
 import messageService from "../../services/messageService";
@@ -64,6 +65,7 @@ export default function Profile() {
 
   const changeMutation = useChangePasswordMutation();
   const deleteMutation = useDeleteAccountMutation();
+  const forgotMutation = useForgotPasswordMutation();
 
   const initials = user?.name
     ? user.name
@@ -247,9 +249,24 @@ export default function Profile() {
 
           <Text style={{ color: colors.textMuted }}>
             Forgot your current password?{" "}
-            <Link to="/forgot-password" style={{ color: "#e50914" }}>
-              Reset it here
-            </Link>
+            <Button
+              type="link"
+              size="small"
+              loading={forgotMutation.isPending}
+              disabled={forgotMutation.isSuccess}
+              style={{ color: "#e50914", padding: 0, height: "auto" }}
+              onClick={() =>
+                forgotMutation.mutate(
+                  { email: user!.email },
+                  {
+                    onSuccess: () => messageService.success("Password reset link sent to your email."),
+                    onError: (err) => messageService.error(err instanceof ApiError ? err.message : "Failed to send reset link."),
+                  },
+                )
+              }
+            >
+              {forgotMutation.isSuccess ? "Reset link sent" : "Reset it here"}
+            </Button>
           </Text>
         </>
       )}
