@@ -1,4 +1,5 @@
 import { Row, Col, Space, Tag, Typography, Button, Tooltip } from 'antd';
+import type { TooltipProps } from 'antd';
 import { memo } from 'react';
 import { PlayCircleOutlined, InfoCircleOutlined, HeartOutlined, HeartFilled } from '@ant-design/icons';
 import type { Movie } from '../../../models/movie';
@@ -8,6 +9,10 @@ import { useWatchlistQuery, useAddToWatchlistMutation, useRemoveFromWatchlistMut
 import './MovieListRow.css';
 
 const { Text } = Typography;
+
+const TOOLTIP_TRIGGER: TooltipProps['trigger'] = window.matchMedia('(hover: none) and (pointer: coarse)').matches
+  ? []
+  : ['hover'];
 
 interface MovieListRowProps {
   movie:    Movie;
@@ -82,9 +87,9 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
             <Space direction="vertical" size={6} align="end">
               <Text className="movie-list-row__rating">★ {movie.rating}</Text>
               <Space size={12}>
-                <Tooltip title="Play">
+                <Tooltip title="Play" trigger={TOOLTIP_TRIGGER}>
                   <Button
-                    size="medium"
+                    size="middle"
                     type="primary"
                     icon={<PlayCircleOutlined />}
                     onClick={() => onPlay(movie)}
@@ -92,17 +97,17 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
                     style={{ background: '#e50914', borderColor: '#e50914' }}
                   />
                 </Tooltip>
-                <Tooltip title="More Info">
+                <Tooltip title="More Info" trigger={TOOLTIP_TRIGGER}>
                   <Button
-                    size="medium"
+                    size="middle"
                     icon={<InfoCircleOutlined />}
                     onClick={() => onDetail(movie)}
                     aria-label={`More info about ${movie.title}`}
                   />
                 </Tooltip>
-                <Tooltip title={inWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}>
+                <Tooltip title={inWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'} trigger={TOOLTIP_TRIGGER}>
                   <Button
-                    size="medium"
+                    size="middle"
                     loading={isPending}
                     icon={inWatchlist
                       ? <HeartFilled style={{ color: '#e50914' }} />
