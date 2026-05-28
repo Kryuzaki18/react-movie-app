@@ -7,7 +7,7 @@ import {
   fetchTmdbTvSearch,
 } from './tmdbApi';
 import { tmdbMovieListItemToMovie, tmdbTvListItemToMovie } from '../utils/tmdbAdapter';
-import { useBrowseStore } from '../store/browseStore';
+import { useBrowseStore, selectActiveFilters } from '../store/browseStore';
 import { useDebounce } from '../hooks/useDebounce';
 import { YEAR_RANGES } from '../constants/yearRanges';
 import { useTmdbStore } from '../store/tmdbStore';
@@ -23,7 +23,8 @@ export interface BrowseResult {
 const STALE_TIME = 5 * 60 * 1000;
 
 export function useBrowseQuery() {
-  const { mediaType, selectedGenre, selectedYear, searchQuery, page } = useBrowseStore();
+  const mediaType = useBrowseStore((s) => s.mediaType);
+  const { selectedGenre, selectedYear, searchQuery, page } = useBrowseStore(selectActiveFilters);
 
   const movieGenres = useTmdbStore((s) => s.movieGenres);
   const tvGenres = useTmdbStore((s) => s.tvGenres);

@@ -13,7 +13,6 @@ interface CastSectionProps {
   tmdbId: number | null | undefined;
   mediaType: "movie" | "tv" | undefined;
   label?: string;
-  /** Override text colors — useful when rendered on a dark background in light mode */
   labelColor?: string;
   nameColor?: string;
   charColor?: string;

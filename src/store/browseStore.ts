@@ -4,14 +4,19 @@ import { DEFAULT_PAGE_SIZE } from '../constants/pagination';
 
 export type MediaType = 'movie' | 'tv';
 
-interface BrowseState {
-  mediaType: MediaType;
+export interface MediaFilters {
+  type: MediaType;
   selectedGenre: string;
   selectedYear: string;
   searchQuery: string;
   page: number;
   pageSize: number;
   layout: 'grid' | 'list';
+}
+
+interface BrowseState {
+  mediaType: MediaType;
+  filters: MediaFilters[];
 
   setMediaType: (type: MediaType) => void;
   setGenre: (genre: string) => void;
@@ -23,15 +28,31 @@ interface BrowseState {
   resetFilters: () => void;
 }
 
-const INITIAL_STATE = {
-  mediaType: 'movie' as MediaType,
+const DEFAULT_FILTERS = (type: MediaType): MediaFilters => ({
+  type,
   selectedGenre: 'all',
   selectedYear: 'all',
   searchQuery: '',
   page: 1,
   pageSize: DEFAULT_PAGE_SIZE,
-  layout: 'grid' as const,
+  layout: 'grid',
+});
+
+const INITIAL_FILTERS: MediaFilters[] = [
+  DEFAULT_FILTERS('movie'),
+  DEFAULT_FILTERS('tv'),
+];
+
+const INITIAL_STATE = {
+  mediaType: 'movie' as MediaType,
+  filters: INITIAL_FILTERS,
 };
+
+const updateActive = (filters: MediaFilters[], mediaType: MediaType, patch: Partial<MediaFilters>): MediaFilters[] =>
+  filters.map((f) => (f.type === mediaType ? { ...f, ...patch } : f));
+
+export const selectActiveFilters = (state: BrowseState): MediaFilters =>
+  state.filters.find((f) => f.type === state.mediaType) ?? DEFAULT_FILTERS(state.mediaType);
 
 export const useBrowseStore = create<BrowseState>()(
   devtools(
@@ -39,13 +60,31 @@ export const useBrowseStore = create<BrowseState>()(
       (set) => ({
         ...INITIAL_STATE,
 
-        setMediaType: (type) => set({ mediaType: type, selectedGenre: 'all', selectedYear: 'all', searchQuery: '', page: 1 }, false, 'browse/setMediaType'),
-        setGenre: (genre) => set({ selectedGenre: genre, page: 1 }, false, 'browse/setGenre'),
-        setYear: (year) => set({ selectedYear: year, page: 1 }, false, 'browse/setYear'),
-        setSearch: (query) => set({ searchQuery: query, page: 1 }, false, 'browse/setSearch'),
-        setPage: (page) => set({ page }, false, 'browse/setPage'),
-        setPageSize: (size) => set({ pageSize: size, page: 1 }, false, 'browse/setPageSize'),
-        setLayout: (layout) => set({ layout }, false, 'browse/setLayout'),
+        setMediaType: (type) => set({ mediaType: type }, false, 'browse/setMediaType'),
+        setGenre: (genre) => set(
+          (s) => ({ filters: updateActive(s.filters, s.mediaType, { selectedGenre: genre, page: 1 }) }),
+          false, 'browse/setGenre'
+        ),
+        setYear: (year) => set(
+          (s) => ({ filters: updateActive(s.filters, s.mediaType, { selectedYear: year, page: 1 }) }),
+          false, 'browse/setYear'
+        ),
+        setSearch: (query) => set(
+          (s) => ({ filters: updateActive(s.filters, s.mediaType, { searchQuery: query, page: 1 }) }),
+          false, 'browse/setSearch'
+        ),
+        setPage: (page) => set(
+          (s) => ({ filters: updateActive(s.filters, s.mediaType, { page }) }),
+          false, 'browse/setPage'
+        ),
+        setPageSize: (size) => set(
+          (s) => ({ filters: updateActive(s.filters, s.mediaType, { pageSize: size, page: 1 }) }),
+          false, 'browse/setPageSize'
+        ),
+        setLayout: (layout) => set(
+          (s) => ({ filters: updateActive(s.filters, s.mediaType, { layout }) }),
+          false, 'browse/setLayout'
+        ),
         resetFilters: () => set(INITIAL_STATE, false, 'browse/reset'),
       }),
       {
@@ -53,10 +92,7 @@ export const useBrowseStore = create<BrowseState>()(
         storage: createJSONStorage(() => localStorage),
         partialize: (state) => ({
           mediaType: state.mediaType,
-          selectedGenre: state.selectedGenre,
-          selectedYear: state.selectedYear,
-          pageSize: state.pageSize,
-          layout: state.layout,
+          filters: state.filters,
         }),
       }
     ),

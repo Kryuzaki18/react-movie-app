@@ -1,22 +1,35 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect } from "react";
 import {
-  Typography, Row, Col, Input, Select, Space, Empty,
-  Segmented, Pagination, Skeleton, Tabs,
-} from 'antd';
+  Typography,
+  Row,
+  Col,
+  Input,
+  Select,
+  Space,
+  Empty,
+  Segmented,
+  Pagination,
+  Skeleton,
+  Tabs,
+} from "antd";
 import {
-  SearchOutlined, AppstoreOutlined, BarsOutlined,
-  CalendarOutlined, VideoCameraOutlined, PlaySquareOutlined,
-} from '@ant-design/icons';
-import MovieCard from '../../components/ui/movie-card/MovieCard';
-import MovieListRow from '../../components/ui/movie-list-row/MovieListRow';
-import { useBrowseStore } from '../../store/browseStore';
-import { usePlayerStore } from '../../store/playerStore';
-import { useBrowseQuery } from '../../api/useBrowseQuery';
-import { useTmdbStore } from '../../store/tmdbStore';
-import { YEAR_RANGES, PAGE_SIZE_OPTIONS } from '../../constants';
-import { useTheme } from '../../context/ThemeContext';
-import type { MediaType } from '../../store/browseStore';
-import './Browse.css';
+  SearchOutlined,
+  AppstoreOutlined,
+  BarsOutlined,
+  CalendarOutlined,
+  VideoCameraOutlined,
+  PlaySquareOutlined,
+} from "@ant-design/icons";
+import MovieCard from "../../components/ui/movie-card/MovieCard";
+import MovieListRow from "../../components/ui/movie-list-row/MovieListRow";
+import { useBrowseStore, selectActiveFilters } from "../../store/browseStore";
+import { usePlayerStore } from "../../store/playerStore";
+import { useBrowseQuery } from "../../api/useBrowseQuery";
+import { useTmdbStore } from "../../store/tmdbStore";
+import { YEAR_RANGES, PAGE_SIZE_OPTIONS } from "../../constants";
+import { useTheme } from "../../context/ThemeContext";
+import type { MediaType } from "../../store/browseStore";
+import "./Browse.css";
 
 const { Title, Text } = Typography;
 
@@ -29,14 +42,17 @@ export default function Browse() {
   const { colors } = useTheme();
 
   const {
-    mediaType, setMediaType,
-    selectedGenre, setGenre,
-    selectedYear, setYear,
-    searchQuery, setSearch,
-    page, setPage,
-    pageSize, setPageSize,
-    layout, setLayout,
+    mediaType,
+    setMediaType,
+    setGenre,
+    setYear,
+    setSearch,
+    setPage,
+    setPageSize,
+    setLayout,
   } = useBrowseStore();
+  const { selectedGenre, selectedYear, searchQuery, page, pageSize, layout } =
+    useBrowseStore(selectActiveFilters);
 
   const { playMovie, openDetail } = usePlayerStore();
 
@@ -49,10 +65,10 @@ export default function Browse() {
 
   const movieGenres = useTmdbStore((s) => s.movieGenres);
   const tvGenres = useTmdbStore((s) => s.tvGenres);
-  const activeGenres = mediaType === 'movie' ? movieGenres : tvGenres;
+  const activeGenres = mediaType === "movie" ? movieGenres : tvGenres;
 
   const genres = [
-    { label: 'All', value: 'all' },
+    { label: "All", value: "all" },
     ...activeGenres.map((g) => ({ label: g.name, value: g.name })),
   ];
 
@@ -66,18 +82,22 @@ export default function Browse() {
     if (!sentinel) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        paginationRef.current?.classList.toggle('is-stuck', !entry.isIntersecting);
+        paginationRef.current?.classList.toggle(
+          "is-stuck",
+          !entry.isIntersecting,
+        );
       },
-      { threshold: 0, rootMargin: '-65px 0px 0px 0px' }
+      { threshold: 0, rootMargin: "-65px 0px 0px 0px" },
     );
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, []);
 
-  const displayItems = pageSize < TMDB_PAGE_SIZE ? items.slice(0, pageSize) : items;
+  const displayItems =
+    pageSize < TMDB_PAGE_SIZE ? items.slice(0, pageSize) : items;
   const cappedTotal = Math.min(total, totalPages * TMDB_PAGE_SIZE);
   const skeletonCols = Array.from({ length: Math.min(pageSize, 8) });
-  const isMovie = mediaType === 'movie';
+  const isMovie = mediaType === "movie";
 
   const handlePageChange = (p: number, ps: number) => {
     setPage(p);
@@ -86,7 +106,7 @@ export default function Browse() {
     if (el) {
       const offset = 170;
       const top = el.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({ top, behavior: 'smooth' });
+      window.scrollTo({ top, behavior: "smooth" });
     }
   };
 
@@ -97,15 +117,21 @@ export default function Browse() {
   const filterBar = (
     <div
       className="browse-filters"
-      style={{ background: colors.bgCard, border: `1px solid ${colors.border}` }}
+      style={{
+        background: colors.bgCard,
+        border: `1px solid ${colors.border}`,
+      }}
     >
       <Row gutter={[16, 16]} align="middle">
         <Col xs={24} sm={12} md={8} lg={8}>
           <Input
-            placeholder={isMovie ? 'Search movies…' : 'Search TV series…'}
+            placeholder={isMovie ? "Search movies…" : "Search TV series…"}
             prefix={<SearchOutlined style={{ color: colors.textMuted }} />}
             value={searchQuery}
-            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
             allowClear
             style={{ borderRadius: 8 }}
           />
@@ -113,8 +139,11 @@ export default function Browse() {
         <Col xs={24} sm={12} md={7} lg={7}>
           <Select
             value={selectedGenre}
-            onChange={(v) => { setGenre(v); setPage(1); }}
-            style={{ width: '100%' }}
+            onChange={(v) => {
+              setGenre(v);
+              setPage(1);
+            }}
+            style={{ width: "100%" }}
             options={genres}
             placeholder="Select genre"
           />
@@ -122,20 +151,34 @@ export default function Browse() {
         <Col xs={24} sm={12} md={6} lg={5}>
           <Select
             value={selectedYear}
-            onChange={(v) => { setYear(v); setPage(1); }}
-            style={{ width: '100%' }}
-            placeholder={isMovie ? 'Release year' : 'Air year'}
-            suffixIcon={<CalendarOutlined style={{ color: colors.textMuted }} />}
-            options={YEAR_RANGES.map((r) => ({ label: r.label, value: r.value }))}
+            onChange={(v) => {
+              setYear(v);
+              setPage(1);
+            }}
+            style={{ width: "100%" }}
+            placeholder={isMovie ? "Release year" : "Air year"}
+            suffixIcon={
+              <CalendarOutlined style={{ color: colors.textMuted }} />
+            }
+            options={YEAR_RANGES.map((r) => ({
+              label: r.label,
+              value: r.value,
+            }))}
           />
         </Col>
-        <Col xs={24} sm={12} md={3} lg={4} className="browse-filters__layout-col">
+        <Col
+          xs={24}
+          sm={12}
+          md={3}
+          lg={4}
+          className="browse-filters__layout-col"
+        >
           <Segmented
             value={layout}
-            onChange={(v) => setLayout(v as 'grid' | 'list')}
+            onChange={(v) => setLayout(v as "grid" | "list")}
             options={[
-              { value: 'grid', icon: <AppstoreOutlined /> },
-              { value: 'list', icon: <BarsOutlined /> },
+              { value: "grid", icon: <AppstoreOutlined /> },
+              { value: "list", icon: <BarsOutlined /> },
             ]}
           />
         </Col>
@@ -149,11 +192,14 @@ export default function Browse() {
         <button
           key={g.value}
           className="browse-genre-pill"
-          onClick={() => { setGenre(g.value); setPage(1); }}
+          onClick={() => {
+            setGenre(g.value);
+            setPage(1);
+          }}
           style={{
-            border: `1px solid ${selectedGenre === g.value ? '#e50914' : colors.border}`,
-            background: selectedGenre === g.value ? '#e50914' : 'transparent',
-            color: selectedGenre === g.value ? '#fff' : colors.textMuted,
+            border: `1px solid ${selectedGenre === g.value ? "#e50914" : colors.border}`,
+            background: selectedGenre === g.value ? "#e50914" : "transparent",
+            color: selectedGenre === g.value ? "#fff" : colors.textMuted,
             fontWeight: selectedGenre === g.value ? 600 : 400,
           }}
         >
@@ -167,7 +213,7 @@ export default function Browse() {
     <Row gutter={[16, 20]}>
       {skeletonCols.map((_, i) => (
         <Col key={i} xs={24} sm={12} md={8} lg={6}>
-          <Skeleton.Image active style={{ width: '100%', height: 180 }} />
+          <Skeleton.Image active style={{ width: "100%", height: 180 }} />
           <Skeleton active paragraph={{ rows: 2 }} style={{ marginTop: 8 }} />
         </Col>
       ))}
@@ -176,12 +222,13 @@ export default function Browse() {
     <Empty
       description={
         <Text style={{ color: colors.textMuted }}>
-          No {isMovie ? 'movies' : 'TV series'} found. Try a different search or filter.
+          No {isMovie ? "movies" : "TV series"} found. Try a different search or
+          filter.
         </Text>
       }
-      style={{ padding: '60px 0' }}
+      style={{ padding: "60px 0" }}
     />
-  ) : layout === 'grid' ? (
+  ) : layout === "grid" ? (
     <Row ref={resultsRef} gutter={[16, 20]}>
       {displayItems.map((item) => (
         <Col key={item.id} xs={24} sm={12} md={8} lg={6}>
@@ -190,9 +237,19 @@ export default function Browse() {
       ))}
     </Row>
   ) : (
-    <Space ref={resultsRef} direction="vertical" size={12} style={{ width: '100%' }}>
+    <Space
+      ref={resultsRef}
+      direction="vertical"
+      size={12}
+      style={{ width: "100%" }}
+    >
       {displayItems.map((item) => (
-        <MovieListRow key={item.id} movie={item} onPlay={playMovie} onDetail={openDetail} />
+        <MovieListRow
+          key={item.id}
+          movie={item}
+          onPlay={playMovie}
+          onDetail={openDetail}
+        />
       ))}
     </Space>
   );
@@ -202,12 +259,21 @@ export default function Browse() {
       <div ref={sentinelRef} style={{ height: 1, marginBottom: -1 }} />
       <div ref={paginationRef} className="browse-pagination">
         {cappedTotal > 0 && (
-          <Text className="browse-pagination__total" style={{ color: colors.textMuted }}>
-            {((page - 1) * pageSize) + 1}–{Math.min(page * pageSize, cappedTotal)} of{' '}
-            <Text strong style={{ color: colors.textPrimary }}>{cappedTotal.toLocaleString()}</Text>
-            {' '}{isMovie ? 'movies' : 'series'}
+          <Text
+            className="browse-pagination__total"
+            style={{ color: colors.textMuted }}
+          >
+            {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, cappedTotal)}{" "}
+            of{" "}
+            <Text strong style={{ color: colors.textPrimary }}>
+              {cappedTotal.toLocaleString()}
+            </Text>{" "}
+            {isMovie ? "movies" : "series"}
             {searchQuery && (
-              <> for "<Text style={{ color: '#e50914' }}>{searchQuery}</Text>"</>
+              <>
+                {" "}
+                for "<Text style={{ color: "#e50914" }}>{searchQuery}</Text>"
+              </>
             )}
           </Text>
         )}
@@ -216,7 +282,10 @@ export default function Browse() {
           pageSize={pageSize}
           total={cappedTotal}
           onChange={handlePageChange}
-          onShowSizeChange={(_, ps) => { setPageSize(ps); setPage(1); }}
+          onShowSizeChange={(_, ps) => {
+            setPageSize(ps);
+            setPage(1);
+          }}
           showSizeChanger
           pageSizeOptions={PAGE_SIZE_OPTIONS}
           disabled={total === 0 || isFetching}
@@ -229,7 +298,9 @@ export default function Browse() {
   return (
     <div>
       <div className="browse-header">
-        <Title level={2} style={{ marginBottom: 4, marginTop: 0 }}>Browse</Title>
+        <Title level={2} style={{ marginBottom: 4, marginTop: 0 }}>
+          Browse
+        </Title>
         <Text style={{ color: colors.textMuted }}>
           Discover movies and TV series — search, filter by genre or year.
         </Text>
@@ -241,7 +312,7 @@ export default function Browse() {
         className="browse-tabs"
         items={[
           {
-            key: 'movie',
+            key: "movie",
             label: (
               <Space size={6}>
                 <VideoCameraOutlined />
@@ -258,7 +329,7 @@ export default function Browse() {
             ),
           },
           {
-            key: 'tv',
+            key: "tv",
             label: (
               <Space size={6}>
                 <PlaySquareOutlined />
