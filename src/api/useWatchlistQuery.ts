@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getWatchlist, addToWatchlist, removeFromWatchlist } from './watchlistApi';
 import { watchlistKeys } from './queryKeys';
 import { useAuthStore } from '../store/authStore';
+import messageService from '../services/messageService';
 import type { Movie } from '../models/movie';
 
 export function useWatchlistQuery() {
@@ -21,8 +22,12 @@ export function useAddToWatchlistMutation() {
 
   return useMutation({
     mutationFn: (movie: Movie) => addToWatchlist(movie),
-    onSuccess: (data) => {
+    onSuccess: (data, movie) => {
       queryClient.setQueryData(watchlistKeys.list(), data);
+      messageService.success(`"${movie.title}" added to your watchlist`);
+    },
+    onError: () => {
+      messageService.error('Failed to add to watchlist. Please try again.');
     },
   });
 }
@@ -34,6 +39,10 @@ export function useRemoveFromWatchlistMutation() {
     mutationFn: (movieId: string | number) => removeFromWatchlist(movieId),
     onSuccess: (data) => {
       queryClient.setQueryData(watchlistKeys.list(), data);
+      messageService.success('Removed from your watchlist');
+    },
+    onError: () => {
+      messageService.error('Failed to remove from watchlist. Please try again.');
     },
   });
 }
