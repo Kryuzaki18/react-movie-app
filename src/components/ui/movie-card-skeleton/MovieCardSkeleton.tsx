@@ -15,20 +15,20 @@ export function MovieCardSkeleton() {
       <div className="mcs__cover mcs__shimmer" />
 
       <div className="mcs__body">
-        <div className="mcs__line mcs__shimmer" style={{ width: "75%", height: 14, marginBottom: 10 }} />
+        <div className="mcs__line mcs__shimmer" style={{ width: "75%", height: 17, marginBottom: 14 }} />
 
-        <div className="mcs__row" style={{ marginBottom: 8 }}>
-          <div className="mcs__pill mcs__shimmer" style={{ width: 52 }} />
-          <div className="mcs__pill mcs__shimmer" style={{ width: 44 }} />
-          <div className="mcs__pill mcs__shimmer" style={{ width: 36 }} />
+        <div className="mcs__row" style={{ marginBottom: 10 }}>
+          <div className="mcs__pill mcs__shimmer" style={{ width: 52, height: 20 }} />
+          <div className="mcs__pill mcs__shimmer" style={{ width: 44, height: 20 }} />
+          <div className="mcs__pill mcs__shimmer" style={{ width: 36, height: 20 }} />
         </div>
 
-        <div className="mcs__line mcs__shimmer" style={{ width: "100%", height: 11, marginBottom: 6 }} />
-        <div className="mcs__line mcs__shimmer" style={{ width: "85%", height: 11, marginBottom: 10 }} />
+        <div className="mcs__line mcs__shimmer" style={{ width: "100%", height: 12, marginBottom: 6 }} />
+        <div className="mcs__line mcs__shimmer" style={{ width: "85%",  height: 12, marginBottom: 14 }} />
 
         <div className="mcs__row">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="mcs__star mcs__shimmer" />
+            <div key={i} className="mcs__star mcs__shimmer" style={{ width: 14, height: 14 }} />
           ))}
         </div>
       </div>
@@ -50,17 +50,17 @@ export function MovieListRowSkeleton() {
       <div className="mlrs__thumb mcs__shimmer" />
 
       <div className="mlrs__body">
-        <div className="mcs__line mcs__shimmer" style={{ width: "55%", height: 14, marginBottom: 8 }} />
-        <div className="mcs__row" style={{ marginBottom: 8 }}>
-          <div className="mcs__pill mcs__shimmer" style={{ width: 36 }} />
-          <div className="mcs__pill mcs__shimmer" style={{ width: 52 }} />
-          <div className="mcs__pill mcs__shimmer" style={{ width: 44 }} />
+        <div className="mcs__row" style={{ marginBottom: 6 }}>
+          <div className="mcs__pill mcs__shimmer" style={{ width: 36, height: 18 }} />
+          <div className="mcs__pill mcs__shimmer" style={{ width: 52, height: 18 }} />
+          <div className="mcs__pill mcs__shimmer" style={{ width: 44, height: 18 }} />
         </div>
-        <div className="mcs__line mcs__shimmer" style={{ width: "80%", height: 11 }} />
+        <div className="mcs__line mcs__shimmer" style={{ width: "55%", height: 14, marginBottom: 6 }} />
+        <div className="mcs__line mcs__shimmer" style={{ width: "80%", height: 12 }} />
       </div>
 
       <div className="mlrs__actions">
-        <div className="mcs__line mcs__shimmer" style={{ width: 32, height: 14, marginBottom: 8 }} />
+        <div className="mcs__line mcs__shimmer" style={{ width: 36, height: 14, marginBottom: 8 }} />
         <div className="mcs__row">
           <div className="mcs__btn mcs__shimmer" />
           <div className="mcs__btn mcs__shimmer" />

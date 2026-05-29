@@ -31,7 +31,7 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
       style={{ background: colors.bgCard, border: `1px solid ${colors.border}` }}
     >
       <div className="movie-list-row__media">
-        <img src={movie.thumbnail} alt={movie.title} className="movie-list-row__thumb" />
+        <img src={movie.thumbnail || undefined} alt={movie.title} className="movie-list-row__thumb" />
 
         <div className="movie-list-row__body">
           <div className="movie-list-row__info">

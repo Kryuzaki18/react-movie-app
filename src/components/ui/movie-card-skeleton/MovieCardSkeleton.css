@@ -2,17 +2,18 @@
   0% {
     background-position: -400px 0;
   }
-
   100% {
     background-position: 400px 0;
   }
 }
 
 .mcs__shimmer {
-  background: linear-gradient(90deg,
-      var(--mcs-base, rgba(128, 128, 128, 0.12)) 25%,
-      var(--mcs-shine, rgba(128, 128, 128, 0.24)) 50%,
-      var(--mcs-base, rgba(128, 128, 128, 0.12)) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--mcs-base, rgba(128, 128, 128, 0.12)) 25%,
+    var(--mcs-shine, rgba(128, 128, 128, 0.24)) 50%,
+    var(--mcs-base, rgba(128, 128, 128, 0.12)) 75%
+  );
   background-size: 800px 100%;
   animation: mcs-shimmer 1.4s ease-in-out infinite;
   border-radius: 4px;
@@ -46,14 +47,11 @@
 }
 
 .mcs__pill {
-  height: 18px;
   border-radius: 9px;
   flex-shrink: 0;
 }
 
 .mcs__star {
-  width: 12px;
-  height: 12px;
   border-radius: 2px;
   flex-shrink: 0;
 }
@@ -62,7 +60,7 @@
   border-radius: 12px;
   overflow: hidden;
   display: flex;
-  align-items: center;
+  align-items: stretch;
 }
 
 .mlrs__thumb {
@@ -72,7 +70,7 @@
   border-radius: 0;
 }
 
-@media (min-width: 480px) {
+@media (min-width: 521px) {
   .mlrs__thumb {
     width: 140px;
     height: 90px;
@@ -83,6 +81,10 @@
   flex: 1;
   min-width: 0;
   padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
 }
 
 .mlrs__actions {
@@ -91,12 +93,13 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  justify-content: center;
   gap: 6px;
 }
 
 .mcs__btn {
-  width: 46px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   border-radius: 6px;
   flex-shrink: 0;
 }

@@ -6,7 +6,6 @@ import {
   Space,
   Segmented,
   Button,
-  Skeleton,
   Input,
   Select,
 } from "antd";
@@ -20,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 
 import MovieCard from "../../components/ui/movie-card/MovieCard";
 import MovieListRow from "../../components/ui/movie-list-row/MovieListRow";
+import { MovieCardSkeleton, MovieListRowSkeleton } from "../../components/ui/movie-card-skeleton/MovieCardSkeleton";
 import { useWatchlistQuery } from "../../api/useWatchlistQuery";
 import { watchlistItemToMovie } from "../../api/watchlistApi";
 import { useWatchlistStore } from "../../store/watchlistStore";
@@ -143,18 +143,21 @@ export default function Watchlist() {
       </div>
 
       {isLoading ? (
-        <Row gutter={[16, 20]} className="watchlist__grid">
-          {skeletonCols.map((_, i) => (
-            <Col key={i} xs={24} sm={12} md={8} lg={6}>
-              <Skeleton.Image active style={{ width: "100%", height: 180 }} />
-              <Skeleton
-                active
-                paragraph={{ rows: 2 }}
-                style={{ marginTop: 8 }}
-              />
-            </Col>
-          ))}
-        </Row>
+        layout === "grid" ? (
+          <Row gutter={[16, 20]} className="watchlist__grid">
+            {skeletonCols.map((_, i) => (
+              <Col key={i} xs={24} sm={12} md={8} lg={6}>
+                <MovieCardSkeleton />
+              </Col>
+            ))}
+          </Row>
+        ) : (
+          <Space orientation="vertical" size={12} style={{ width: "100%" }} className="watchlist__list">
+            {skeletonCols.map((_, i) => (
+              <MovieListRowSkeleton key={i} />
+            ))}
+          </Space>
+        )
       ) : watchlistItems.length === 0 ? (
         <Empty
           className="watchlist__empty"

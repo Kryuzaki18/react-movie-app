@@ -9,7 +9,6 @@ import {
   Empty,
   Segmented,
   Pagination,
-  Skeleton,
   Tabs,
 } from "antd";
 import {
@@ -22,6 +21,7 @@ import {
 } from "@ant-design/icons";
 import MovieCard from "../../components/ui/movie-card/MovieCard";
 import MovieListRow from "../../components/ui/movie-list-row/MovieListRow";
+import { MovieCardSkeleton, MovieListRowSkeleton } from "../../components/ui/movie-card-skeleton/MovieCardSkeleton";
 import { useBrowseStore, selectActiveFilters } from "../../store/browseStore";
 import { usePlayerStore } from "../../store/playerStore";
 import { useBrowseQuery } from "../../api/useBrowseQuery";
@@ -208,14 +208,21 @@ export default function Browse() {
   );
 
   const resultContent = isLoading ? (
-    <Row gutter={[16, 20]}>
-      {skeletonCols.map((_, i) => (
-        <Col key={i} xs={24} sm={12} md={8} lg={6}>
-          <Skeleton.Image active style={{ width: "100%", height: 180 }} />
-          <Skeleton active paragraph={{ rows: 2 }} style={{ marginTop: 8 }} />
-        </Col>
-      ))}
-    </Row>
+    layout === "grid" ? (
+      <Row gutter={[16, 20]}>
+        {skeletonCols.map((_, i) => (
+          <Col key={i} xs={24} sm={12} md={8} lg={6}>
+            <MovieCardSkeleton />
+          </Col>
+        ))}
+      </Row>
+    ) : (
+      <Space orientation="vertical" size={12} style={{ width: "100%" }}>
+        {skeletonCols.map((_, i) => (
+          <MovieListRowSkeleton key={i} />
+        ))}
+      </Space>
+    )
   ) : items.length === 0 ? (
     <Empty
       description={
