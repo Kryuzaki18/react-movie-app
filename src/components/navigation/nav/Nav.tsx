@@ -63,8 +63,8 @@ function NavInner({ onMenuOpen }: NavProps) {
     { type: "divider" },
     {
       key: "logout",
-      label: <Text style={{ color: "#e50914" }}>Sign Out</Text>,
-      icon: <LoginOutlined style={{ color: "#e50914" }} />,
+      label: <Text style={{ color: colors.accent }}>Sign Out</Text>,
+      icon: <LoginOutlined style={{ color: colors.accent }} />,
       onClick: handleSignout,
     },
   ];
@@ -138,7 +138,7 @@ function NavInner({ onMenuOpen }: NavProps) {
             icon={
               isDark ? (
                 <SunOutlined
-                  style={{ fontSize: 18, color: "#fadb14" }}
+                  style={{ fontSize: 18, color: colors.starRating }}
                   aria-hidden="true"
                 />
               ) : (

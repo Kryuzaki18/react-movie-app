@@ -14,16 +14,6 @@ interface ResetPasswordForm {
   confirm: string;
 }
 
-const ACCENT = '#e50914';
-
-const submitBtnStyle: React.CSSProperties = {
-  background: ACCENT,
-  borderColor: ACCENT,
-  fontWeight: 600,
-  height: 48,
-  borderRadius: 8,
-  fontSize: 15,
-};
 
 const iconWrapStyle: React.CSSProperties = {
   width: 72,
@@ -42,6 +32,15 @@ export default function ResetPassword() {
   const [form] = Form.useForm<ResetPasswordForm>();
   const { colors } = useTheme();
   const resetMutation = useResetPasswordMutation();
+
+  const submitBtnStyle: React.CSSProperties = {
+    background: colors.accent,
+    borderColor: colors.accent,
+    fontWeight: 600,
+    height: 48,
+    borderRadius: 8,
+    fontSize: 15,
+  };
   const [searchParams] = useSearchParams();
 
   const token = searchParams.get('token') ?? '';
@@ -92,7 +91,7 @@ export default function ResetPassword() {
         <Result
           icon={
             <div style={iconWrapStyle}>
-              <CheckCircleOutlined style={{ fontSize: 32, color: ACCENT }} />
+              <CheckCircleOutlined style={{ fontSize: 32, color: colors.accent }} />
             </div>
           }
           title={
@@ -187,7 +186,7 @@ export default function ResetPassword() {
       </Form>
 
       <div style={{ textAlign: 'center', marginTop: 8 }}>
-        <Link to="/login" style={{ color: ACCENT, fontSize: 14 }}>
+        <Link to="/login" style={{ color: colors.accent, fontSize: 14 }}>
           <ArrowLeftOutlined style={{ marginRight: 6 }} />
           Back to sign in
         </Link>

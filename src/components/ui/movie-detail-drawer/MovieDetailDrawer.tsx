@@ -26,7 +26,7 @@ import { useTheme } from "../../../context/ThemeContext";
 import useResolvedGenres from '../../../hooks/useResolvedGenres';
 import CastSection from "../cast-section/CastSection";
 import ExpandableText from "../expandable-text/ExpandableText";
-import { useWatchlistQuery, useAddToWatchlistMutation, useRemoveFromWatchlistMutation } from '../../../api/useWatchlistQuery';
+import useWatchlistStatus from '../../../hooks/useWatchlistStatus';
 import "./MovieDetailDrawer.css";
 
 const { Title, Text } = Typography;
@@ -49,22 +49,7 @@ function MovieDetailDrawerInner({
 
   const resolvedGenres = useResolvedGenres(movie?.genre);
 
-  const { data: watchlistItems = [] } = useWatchlistQuery();
-  const addMutation    = useAddToWatchlistMutation();
-  const removeMutation = useRemoveFromWatchlistMutation();
-
-  const movieId     = movie ? String(movie.id) : "";
-  const inWatchlist = watchlistItems.some((w) => w.movieId === movieId);
-  const isPending   = addMutation.isPending || removeMutation.isPending;
-
-  const handleWatchlistToggle = () => {
-    if (!movie) return;
-    if (inWatchlist) {
-      removeMutation.mutate(movieId);
-    } else {
-      addMutation.mutate(movie);
-    }
-  };
+  const { inWatchlist, isPending, toggle: toggleWatchlist } = useWatchlistStatus(movie);
 
   const backdropSrc = movie?.backdrop || movie?.thumbnail || "";
 
@@ -140,7 +125,7 @@ function MovieDetailDrawerInner({
               aria-label={`Rating: ${movie.rating} out of 10`}
             >
               <StarFilled
-                style={{ color: "#fadb14", fontSize: 18 }}
+                style={{ color: colors.starRating, fontSize: 18 }}
                 aria-hidden="true"
               />
               <Text className="detail-drawer__rating-value">
@@ -254,8 +239,8 @@ function MovieDetailDrawerInner({
                   size="large"
                   block
                   loading={isPending}
-                  icon={inWatchlist ? <HeartFilled style={{ color: "#e50914" }} aria-hidden="true" /> : <HeartOutlined aria-hidden="true" />}
-                  onClick={handleWatchlistToggle}
+                  icon={inWatchlist ? <HeartFilled style={{ color: colors.accent }} aria-hidden="true" /> : <HeartOutlined aria-hidden="true" />}
+                  onClick={toggleWatchlist}
                   aria-label={inWatchlist ? `Remove ${movie.title} from watchlist` : `Add ${movie.title} to watchlist`}
                 >
                   {inWatchlist ? "In Watchlist" : "Add to Watchlist"}

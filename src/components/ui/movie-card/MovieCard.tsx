@@ -1,14 +1,5 @@
 import { useState, memo } from "react";
-import {
-  Card,
-  Tag,
-  Rate,
-  Typography,
-  Space,
-  Button,
-  Tooltip,
-  Skeleton,
-} from "antd";
+import { Card, Tag, Rate, Typography, Space, Button, Tooltip, Skeleton } from "antd";
 import {
   PlayCircleOutlined,
   InfoCircleOutlined,
@@ -19,15 +10,15 @@ import {
 
 import type { Movie } from "../../../models/movieModel";
 import { useTheme } from "../../../context/ThemeContext";
-import useResolvedGenres from '../../../hooks/useResolvedGenres';
-import { useWatchlistQuery, useAddToWatchlistMutation, useRemoveFromWatchlistMutation } from '../../../api/useWatchlistQuery';
+import useResolvedGenres from "../../../hooks/useResolvedGenres";
+import useWatchlistStatus from "../../../hooks/useWatchlistStatus";
 import "./MovieCard.css";
 
 const { Text, Paragraph } = Typography;
 
 interface MovieCardProps {
-  movie: Movie;
-  onPlay: (movie: Movie) => void;
+  movie:    Movie;
+  onPlay:   (movie: Movie) => void;
   onDetail: (movie: Movie) => void;
 }
 
@@ -35,38 +26,17 @@ function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const { colors, isDark } = useTheme();
   const resolvedGenres = useResolvedGenres(movie.genre);
-
-  const { data: watchlistItems = [] } = useWatchlistQuery();
-  const addMutation    = useAddToWatchlistMutation();
-  const removeMutation = useRemoveFromWatchlistMutation();
-
-  const movieId   = String(movie.id);
-  const inWatchlist = watchlistItems.some((w) => w.movieId === movieId);
-  const isPending   = addMutation.isPending || removeMutation.isPending;
-
-  const handleWatchlistToggle = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (inWatchlist) {
-      removeMutation.mutate(movieId);
-    } else {
-      addMutation.mutate(movie);
-    }
-  };
+  const { inWatchlist, isPending, toggle } = useWatchlistStatus(movie);
 
   return (
     <Card
       hoverable
       className="movie-card"
-      style={{
-        background: colors.bgCard,
-        border: `1px solid ${colors.border}`,
-      }}
+      style={{ background: colors.bgCard, border: `1px solid ${colors.border}` }}
       styles={{ body: { padding: 0 } }}
       cover={
         <div className="movie-card__cover">
-          {!imgLoaded && (
-            <Skeleton.Image active className="movie-card__skeleton-img" />
-          )}
+          {!imgLoaded && <Skeleton.Image active className="movie-card__skeleton-img" />}
 
           <img
             alt={movie.title}
@@ -90,7 +60,7 @@ function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
                   size="large"
                   aria-label={`Play ${movie.title}`}
                   onClick={() => onPlay(movie)}
-                  style={{ background: "#e50914", borderColor: "#e50914" }}
+                  style={{ background: colors.accent, borderColor: colors.accent }}
                 />
               </Tooltip>
               <Tooltip title="More Info">
@@ -106,11 +76,17 @@ function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
               <Tooltip title={inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}>
                 <Button
                   shape="circle"
-                  icon={inWatchlist ? <HeartFilled style={{ color: "#e50914" }} /> : <HeartOutlined />}
+                  icon={inWatchlist
+                    ? <HeartFilled style={{ color: colors.accent }} />
+                    : <HeartOutlined />
+                  }
                   size="large"
                   loading={isPending}
-                  aria-label={inWatchlist ? `Remove ${movie.title} from watchlist` : `Add ${movie.title} to watchlist`}
-                  onClick={handleWatchlistToggle}
+                  aria-label={inWatchlist
+                    ? `Remove ${movie.title} from watchlist`
+                    : `Add ${movie.title} to watchlist`
+                  }
+                  onClick={toggle}
                   className="movie-card__overlay-btn-info"
                 />
               </Tooltip>
@@ -122,10 +98,7 @@ function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
               className="movie-card__rating"
               aria-label={`Rating: ${movie.rating} out of 10`}
             >
-              <StarFilled
-                style={{ color: "#fadb14", fontSize: 12 }}
-                aria-hidden="true"
-              />
+              <StarFilled style={{ color: colors.starRating, fontSize: 12 }} aria-hidden="true" />
               <Text className="movie-card__rating-value">{movie.rating}</Text>
             </div>
           )}
@@ -138,29 +111,18 @@ function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
             <Skeleton active paragraph={{ rows: 2 }} title={{ width: "80%" }} />
           ) : (
             <>
-              <Text
-                strong
-                className="movie-card__title"
-                style={{ color: colors.textPrimary }}
-              >
+              <Text strong className="movie-card__title" style={{ color: colors.textPrimary }}>
                 {movie.title}
               </Text>
 
               <Space size={4} wrap>
                 {resolvedGenres.slice(0, 2).map((rg) => (
-                  <Tag
-                    key={rg.key}
-                    color={rg.color || "default"}
-                    className="movie-card__tag"
-                  >
+                  <Tag key={rg.key} color={rg.color || "default"} className="movie-card__tag">
                     {rg.label}
                   </Tag>
                 ))}
-                <Text
-                  className="movie-card__meta"
-                  style={{ color: colors.textMuted }}
-                >
-                  {movie.year}{movie.duration && movie.duration !== 'N/A' ? ` · ${movie.duration}` : ''}
+                <Text className="movie-card__meta" style={{ color: colors.textMuted }}>
+                  {movie.year}{movie.duration && movie.duration !== "N/A" ? ` · ${movie.duration}` : ""}
                 </Text>
               </Space>
 

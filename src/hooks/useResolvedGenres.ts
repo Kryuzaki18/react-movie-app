@@ -1,12 +1,9 @@
 import { useMemo } from 'react';
 import { useTmdbStore } from '../store/tmdbStore';
 import { GENRE_COLORS } from '../constants/genres';
+import type { ResolvedGenre } from '../models/movieModel';
 
-export interface ResolvedGenre {
-  key: string;
-  label: string;
-  color: string;
-}
+export type { ResolvedGenre };
 
 export default function useResolvedGenres(genres: string[] | undefined): ResolvedGenre[] {
   const movieGenres = useTmdbStore((s) => s.movieGenres);

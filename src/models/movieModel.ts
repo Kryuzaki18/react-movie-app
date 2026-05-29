@@ -18,3 +18,9 @@ export interface Genre {
   label: string;
   value: string;
 }
+
+export interface ResolvedGenre {
+  key:   string;
+  label: string;
+  color: string;
+}

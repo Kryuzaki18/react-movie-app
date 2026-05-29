@@ -4,3 +4,4 @@ export type { YearRange } from './yearRanges';
 export { darkColors, lightColors } from './theme';
 export type { ThemeColors } from './theme';
 export { PAGE_SIZE_OPTIONS, DEFAULT_PAGE_SIZE } from './pagination';
+export type { WatchlistSortBy, WatchlistLayout, WatchlistMediaFilter } from '../models/watchlistModel';

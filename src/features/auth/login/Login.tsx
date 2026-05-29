@@ -15,27 +15,25 @@ import SocialLoginButtons from '../../../components/auth/SocialLoginButtons';
 const { Title, Text } = Typography;
 
 interface LoginForm {
-  email: string;
+  email:    string;
   password: string;
   remember: boolean;
 }
-
-const ACCENT = '#e50914';
-
-const submitBtnStyle: React.CSSProperties = {
-  background: ACCENT,
-  borderColor: ACCENT,
-  fontWeight: 600,
-  height: 48,
-  borderRadius: 8,
-  fontSize: 15,
-};
 
 export default function Login() {
   const [error, setError] = useState('');
   const [socialBusy, setSocialBusy] = useState(false);
   const [form] = Form.useForm<LoginForm>();
   const { colors } = useTheme();
+
+  const submitBtnStyle: React.CSSProperties = {
+    background: colors.accent,
+    borderColor: colors.accent,
+    fontWeight: 600,
+    height: 48,
+    borderRadius: 8,
+    fontSize: 15,
+  };
   const navigate = useNavigate();
   const signinMutation = useSigninMutation();
 
@@ -115,7 +113,7 @@ export default function Login() {
               </Tooltip>
             </Checkbox>
           </Form.Item>
-          <Link to="/forgot-password" style={{ color: ACCENT, fontSize: 13 }}>
+          <Link to="/forgot-password" style={{ color: colors.accent, fontSize: 13 }}>
             Forgot password?
           </Link>
         </Flex>
@@ -144,7 +142,7 @@ export default function Login() {
       <div style={{ textAlign: 'center', marginTop: 24 }}>
         <Text style={{ color: colors.textMuted }}>
           Don't have an account?{' '}
-          <Link to="/signup" style={{ color: ACCENT, fontWeight: 600 }}>
+          <Link to="/signup" style={{ color: colors.accent, fontWeight: 600 }}>
             Sign up free
           </Link>
         </Text>

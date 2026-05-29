@@ -139,7 +139,7 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
               disabled
               allowHalf
               defaultValue={movie.rating / 2}
-              style={{ fontSize: 14, color: "#fadb14" }}
+              style={{ fontSize: 14, color: colors.starRating }}
               aria-label={`Rating: ${movie.rating} out of 10`}
             />
             <Text className="hero-banner__rating-value">{movie.rating}/10</Text>

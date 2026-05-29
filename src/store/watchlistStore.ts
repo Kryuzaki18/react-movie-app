@@ -1,9 +1,8 @@
 import { create } from "zustand";
 import { devtools, persist, createJSONStorage } from "zustand/middleware";
+import type { WatchlistSortBy, WatchlistLayout, WatchlistMediaFilter } from "../models/watchlistModel";
 
-export type WatchlistSortBy = "newest" | "oldest" | "az" | "rating";
-export type WatchlistLayout = "grid" | "list";
-export type WatchlistMediaFilter = "all" | "movie" | "tv";
+export type { WatchlistSortBy, WatchlistLayout, WatchlistMediaFilter };
 
 interface WatchlistFilters {
   search: string;

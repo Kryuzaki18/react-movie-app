@@ -1,7 +1,6 @@
 import LegalLayout from './LegalLayout';
 import { Section, P, Ul, HighlightBox } from './LegalSection';
-
-const ACCENT = '#e50914';
+import { darkColors } from '../../constants/theme';
 
 export default function PrivacyPolicy() {
   return (
@@ -54,8 +53,8 @@ export default function PrivacyPolicy() {
         <P>
           Your use of social sign-in is also governed by the respective provider's privacy
           policy:{' '}
-          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: ACCENT }}>Google</a>,{' '}
-          <a href="https://twitter.com/en/privacy" target="_blank" rel="noopener noreferrer" style={{ color: ACCENT }}>X (Twitter)</a>.
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: darkColors.accent }}>Google</a>,{' '}
+          <a href="https://twitter.com/en/privacy" target="_blank" rel="noopener noreferrer" style={{ color: darkColors.accent }}>X (Twitter)</a>.
         </P>
       </Section>
 
@@ -94,7 +93,7 @@ export default function PrivacyPolicy() {
         <P>
           Your account data is retained for as long as your account is active. If you
           wish to delete your account and all associated data, contact us at{' '}
-          <a href="mailto:kjedumapit@gmail.com" style={{ color: ACCENT }}>kjedumapit@gmail.com</a>{' '}
+          <a href="mailto:kjedumapit@gmail.com" style={{ color: darkColors.accent }}>kjedumapit@gmail.com</a>{' '}
           and we will process your request within 30 days.
         </P>
       </Section>
@@ -135,7 +134,7 @@ export default function PrivacyPolicy() {
       <Section title="10. Contact">
         <P>
           For privacy-related questions or data deletion requests, contact us at{' '}
-          <a href="mailto:kjedumapit@gmail.com" style={{ color: ACCENT }}>kjedumapit@gmail.com</a>.
+          <a href="mailto:kjedumapit@gmail.com" style={{ color: darkColors.accent }}>kjedumapit@gmail.com</a>.
         </P>
       </Section>
     </LegalLayout>

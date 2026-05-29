@@ -1,7 +1,6 @@
 import LegalLayout from './LegalLayout';
 import { Section, P, Ul, HighlightBox } from './LegalSection';
-
-const ACCENT = '#e50914';
+import { darkColors } from '../../constants/theme';
 
 export default function TermsOfService() {
   return (
@@ -149,7 +148,7 @@ export default function TermsOfService() {
       <Section title="12. Contact">
         <P>
           If you have questions about these Terms of Service, contact us at{' '}
-          <a href="mailto:kjedumapit@gmail.com" style={{ color: ACCENT }}>kjedumapit@gmail.com</a>.
+          <a href="mailto:kjedumapit@gmail.com" style={{ color: darkColors.accent }}>kjedumapit@gmail.com</a>.
         </P>
       </Section>
     </LegalLayout>

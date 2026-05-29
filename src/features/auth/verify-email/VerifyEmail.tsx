@@ -12,8 +12,6 @@ import AuthLayout from '../AuthLayout';
 
 const { Title, Text } = Typography;
 
-const ACCENT = '#e50914';
-
 const iconWrapStyle: React.CSSProperties = {
   width: 72,
   height: 72,
@@ -24,17 +22,17 @@ const iconWrapStyle: React.CSSProperties = {
   margin: '0 auto 16px',
 };
 
-const btnStyle: React.CSSProperties = {
-  background: ACCENT,
-  borderColor: ACCENT,
-  fontWeight: 600,
-  height: 48,
-  borderRadius: 8,
-  fontSize: 15,
-};
-
 export default function VerifyEmail() {
   const { colors } = useTheme();
+
+  const btnStyle: React.CSSProperties = {
+    background: colors.accent,
+    borderColor: colors.accent,
+    fontWeight: 600,
+    height: 48,
+    borderRadius: 8,
+    fontSize: 15,
+  };
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token') ?? '';
 
@@ -46,7 +44,7 @@ export default function VerifyEmail() {
         <Result
           icon={
             <div style={{ ...iconWrapStyle, background: 'rgba(229,9,20,0.12)' }}>
-              <CloseCircleOutlined style={{ fontSize: 32, color: ACCENT }} />
+              <CloseCircleOutlined style={{ fontSize: 32, color: colors.accent }} />
             </div>
           }
           title={
@@ -91,7 +89,7 @@ export default function VerifyEmail() {
         <Result
           icon={
             <div style={{ ...iconWrapStyle, background: 'rgba(229,9,20,0.12)' }}>
-              <CheckCircleOutlined style={{ fontSize: 32, color: ACCENT }} />
+              <CheckCircleOutlined style={{ fontSize: 32, color: colors.accent }} />
             </div>
           }
           title={
@@ -126,7 +124,7 @@ export default function VerifyEmail() {
       <Result
         icon={
           <div style={{ ...iconWrapStyle, background: 'rgba(229,9,20,0.12)' }}>
-            <CloseCircleOutlined style={{ fontSize: 32, color: ACCENT }} />
+            <CloseCircleOutlined style={{ fontSize: 32, color: colors.accent }} />
           </div>
         }
         title={

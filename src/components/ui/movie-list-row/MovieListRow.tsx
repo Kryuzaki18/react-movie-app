@@ -1,18 +1,18 @@
-import { Space, Tag, Typography, Button, Tooltip } from 'antd';
-import type { TooltipProps } from 'antd';
-import { memo } from 'react';
-import { PlayCircleOutlined, InfoCircleOutlined, HeartOutlined, HeartFilled } from '@ant-design/icons';
-import type { Movie } from '../../../models/movieModel';
-import { useTheme } from '../../../context/ThemeContext';
-import useResolvedGenres from '../../../hooks/useResolvedGenres';
-import { useWatchlistQuery, useAddToWatchlistMutation, useRemoveFromWatchlistMutation } from '../../../api/useWatchlistQuery';
-import './MovieListRow.css';
+import { memo } from "react";
+import { Space, Tag, Typography, Button, Tooltip } from "antd";
+import type { TooltipProps } from "antd";
+import { PlayCircleOutlined, InfoCircleOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
+
+import type { Movie } from "../../../models/movieModel";
+import { useTheme } from "../../../context/ThemeContext";
+import useResolvedGenres from "../../../hooks/useResolvedGenres";
+import useWatchlistStatus from "../../../hooks/useWatchlistStatus";
+import "./MovieListRow.css";
 
 const { Text } = Typography;
 
-const TOOLTIP_TRIGGER: TooltipProps['trigger'] = window.matchMedia('(hover: none) and (pointer: coarse)').matches
-  ? []
-  : ['hover'];
+const TOOLTIP_TRIGGER: TooltipProps["trigger"] =
+  window.matchMedia("(hover: none) and (pointer: coarse)").matches ? [] : ["hover"];
 
 interface MovieListRowProps {
   movie:    Movie;
@@ -23,20 +23,7 @@ interface MovieListRowProps {
 function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
   const { colors } = useTheme();
   const resolvedGenres = useResolvedGenres(movie.genre);
-
-  const { data: watchlistItems = [] } = useWatchlistQuery();
-  const addMutation    = useAddToWatchlistMutation();
-  const removeMutation = useRemoveFromWatchlistMutation();
-
-  const movieId     = String(movie.id);
-  const inWatchlist = watchlistItems.some((w) => w.movieId === movieId);
-  const isPending   = addMutation.isPending || removeMutation.isPending;
-
-  const handleWatchlistToggle = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (inWatchlist) removeMutation.mutate(movieId);
-    else             addMutation.mutate(movie);
-  };
+  const { inWatchlist, isPending, toggle } = useWatchlistStatus(movie);
 
   return (
     <div
@@ -44,28 +31,20 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
       style={{ background: colors.bgCard, border: `1px solid ${colors.border}` }}
     >
       <div className="movie-list-row__media">
-        <img
-          src={movie.thumbnail}
-          alt={movie.title}
-          className="movie-list-row__thumb"
-        />
+        <img src={movie.thumbnail} alt={movie.title} className="movie-list-row__thumb" />
 
         <div className="movie-list-row__body">
           <div className="movie-list-row__info">
             <Space size={6} wrap className="movie-list-row__meta">
-              <Text style={{ color: colors.textSecondary, fontSize: 12 }}>
-                {movie.year}
-              </Text>
-              {movie.duration && movie.duration !== 'N/A' && (
-                <Text style={{ color: colors.textSecondary, fontSize: 12 }}>
-                  {movie.duration}
-                </Text>
+              <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{movie.year}</Text>
+              {movie.duration && movie.duration !== "N/A" && (
+                <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{movie.duration}</Text>
               )}
               {resolvedGenres.map((rg, i) => (
                 <Tag
                   key={rg.key}
-                  color={rg.color ?? 'default'}
-                  className={i >= 3 ? 'movie-list-row__tag--hide-mobile' : undefined}
+                  color={rg.color ?? "default"}
+                  className={i >= 3 ? "movie-list-row__tag--hide-mobile" : undefined}
                   style={{ margin: 0, fontSize: 11 }}
                 >
                   {rg.label}
@@ -73,9 +52,7 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
               ))}
             </Space>
 
-            <Text strong className="movie-list-row__title">
-              {movie.title}
-            </Text>
+            <Text strong className="movie-list-row__title">{movie.title}</Text>
 
             <Text className="movie-list-row__desc" style={{ color: colors.textMuted }}>
               {movie.description}
@@ -94,7 +71,7 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
               icon={<PlayCircleOutlined />}
               onClick={() => onPlay(movie)}
               aria-label={`Play ${movie.title}`}
-              style={{ background: '#e50914', borderColor: '#e50914' }}
+              style={{ background: colors.accent, borderColor: colors.accent }}
             />
           </Tooltip>
           <Tooltip title="More Info" trigger={TOOLTIP_TRIGGER}>
@@ -106,13 +83,22 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
               className="movie-list-row__btn-gray"
             />
           </Tooltip>
-          <Tooltip title={inWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'} trigger={TOOLTIP_TRIGGER}>
+          <Tooltip
+            title={inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}
+            trigger={TOOLTIP_TRIGGER}
+          >
             <Button
               size="middle"
               loading={isPending}
-              icon={inWatchlist ? <HeartFilled style={{ color: '#e50914' }} /> : <HeartOutlined />}
-              onClick={handleWatchlistToggle}
-              aria-label={inWatchlist ? `Remove ${movie.title} from watchlist` : `Add ${movie.title} to watchlist`}
+              icon={inWatchlist
+                ? <HeartFilled style={{ color: colors.accent }} />
+                : <HeartOutlined />
+              }
+              onClick={toggle}
+              aria-label={inWatchlist
+                ? `Remove ${movie.title} from watchlist`
+                : `Add ${movie.title} to watchlist`
+              }
               className="movie-list-row__btn-gray"
             />
           </Tooltip>

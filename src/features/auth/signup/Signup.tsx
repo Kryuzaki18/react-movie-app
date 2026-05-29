@@ -24,17 +24,6 @@ interface SignupForm {
   confirm: string;
 }
 
-const ACCENT = '#e50914';
-
-const submitBtnStyle: React.CSSProperties = {
-  background: ACCENT,
-  borderColor: ACCENT,
-  fontWeight: 600,
-  height: 48,
-  borderRadius: 8,
-  fontSize: 15,
-};
-
 export default function Signup() {
   const [step, setStep] = useState(0);
   const [done, setDone] = useState(false);
@@ -43,6 +32,15 @@ export default function Signup() {
   const { colors } = useTheme();
   const navigate = useNavigate();
   const signupMutation = useSignupMutation();
+
+  const submitBtnStyle: React.CSSProperties = {
+    background: colors.accent,
+    borderColor: colors.accent,
+    fontWeight: 600,
+    height: 48,
+    borderRadius: 8,
+    fontSize: 15,
+  };
 
   const handleNext = async () => {
     try {
@@ -221,7 +219,7 @@ export default function Signup() {
           <div style={{ textAlign: 'center', marginTop: 24 }}>
             <Text style={{ color: colors.textMuted }}>
               Already have an account?{' '}
-              <Link to="/login" style={{ color: ACCENT, fontWeight: 600 }}>
+              <Link to="/login" style={{ color: colors.accent, fontWeight: 600 }}>
                 Sign in
               </Link>
             </Text>

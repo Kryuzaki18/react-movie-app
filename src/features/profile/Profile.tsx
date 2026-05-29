@@ -235,8 +235,8 @@ export default function Profile() {
                 size="large"
                 loading={changeMutation.isPending}
                 style={{
-                  background: "#e50914",
-                  borderColor: "#e50914",
+                  background: colors.accent,
+                  borderColor: colors.accent,
                   fontWeight: 600,
                 }}
               >
@@ -254,7 +254,7 @@ export default function Profile() {
               size="small"
               loading={forgotMutation.isPending}
               disabled={forgotMutation.isSuccess}
-              style={{ color: "#e50914", padding: 0, height: "auto" }}
+              style={{ color: colors.accent, padding: 0, height: "auto" }}
               onClick={() =>
                 forgotMutation.mutate(
                   { email: user!.email },
@@ -277,7 +277,7 @@ export default function Profile() {
     <div className="profile__panel">
       <Title
         level={4}
-        style={{ marginTop: 0, marginBottom: 4, color: "#ff4d4f" }}
+        style={{ marginTop: 0, marginBottom: 4, color: colors.danger }}
       >
         Danger Zone
       </Title>
@@ -289,11 +289,11 @@ export default function Profile() {
 
       <div
         className="profile__danger-card"
-        style={{ border: `1px solid #ff4d4f`, borderRadius: 10 }}
+        style={{ border: `1px solid ${colors.danger}`, borderRadius: 10 }}
       >
         <div className="profile__danger-header">
-          <WarningOutlined style={{ color: "#ff4d4f", fontSize: 18 }} />
-          <Title level={5} style={{ margin: 0, color: "#ff4d4f" }}>
+          <WarningOutlined style={{ color: colors.danger, fontSize: 18 }} />
+          <Title level={5} style={{ margin: 0, color: colors.danger }}>
             Delete account
           </Title>
         </div>
@@ -321,7 +321,7 @@ export default function Profile() {
           <div>
             <Text style={{ color: colors.textMuted, display: "block", marginBottom: 6 }}>
               Type{" "}
-              <Text code style={{ color: "#ff4d4f" }}>
+              <Text code style={{ color: colors.danger }}>
                 {DELETE_PHRASE}
               </Text>
               <Tooltip title="Copy">

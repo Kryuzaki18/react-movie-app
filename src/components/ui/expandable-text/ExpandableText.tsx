@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
+import { useTheme } from '../../../context/ThemeContext';
 
 interface ExpandableTextProps {
-  text: string;
+  text:           string;
   collapsedLines?: number;
-  color?: string;
-  fontSize?: number | string;
-  lineHeight?: number;
+  color?:          string;
+  fontSize?:       number | string;
+  lineHeight?:     number;
 }
 
 export default function ExpandableText({
@@ -19,6 +20,7 @@ export default function ExpandableText({
   const [expanded, setExpanded] = useState(false);
   const [overflows, setOverflows] = useState(false);
   const measureRef = useRef<HTMLDivElement>(null);
+  const { colors } = useTheme();
 
   useEffect(() => {
     const el = measureRef.current;
@@ -26,20 +28,16 @@ export default function ExpandableText({
     setOverflows(el.scrollHeight > el.clientHeight + 2);
   }, [text, collapsedLines]);
 
-  const collapsedStyle: React.CSSProperties = {
-    display: '-webkit-box',
-    WebkitLineClamp: collapsedLines,
-    WebkitBoxOrient: 'vertical' as const,
-    overflow: 'hidden',
-  };
-
   return (
     <div>
       <div
         ref={measureRef}
         aria-hidden
         style={{
-          ...collapsedStyle,
+          display: '-webkit-box',
+          WebkitLineClamp: collapsedLines,
+          WebkitBoxOrient: 'vertical' as const,
+          overflow: 'hidden',
           position: 'absolute',
           visibility: 'hidden',
           pointerEvents: 'none',
@@ -77,17 +75,16 @@ export default function ExpandableText({
             gap: 4,
             fontSize: 12,
             fontWeight: 600,
-            color: '#e50914',
+            color: colors.accent,
             letterSpacing: '0.3px',
             transition: 'opacity 0.2s ease',
           }}
           aria-expanded={expanded}
         >
-          {expanded ? (
-            <>Show less <UpOutlined style={{ fontSize: 10 }} /></>
-          ) : (
-            <>View more <DownOutlined style={{ fontSize: 10 }} /></>
-          )}
+          {expanded
+            ? <><span>Show less</span> <UpOutlined style={{ fontSize: 10 }} /></>
+            : <><span>View more</span> <DownOutlined style={{ fontSize: 10 }} /></>
+          }
         </button>
       )}
     </div>

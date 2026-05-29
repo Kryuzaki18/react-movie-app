@@ -58,7 +58,7 @@ function PlayerHeader() {
           aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           icon={
             isDark
-              ? <SunOutlined style={{ fontSize: 18, color: "#fadb14" }} aria-hidden="true" />
+              ? <SunOutlined style={{ fontSize: 18, color: colors.starRating }} aria-hidden="true" />
               : <MoonOutlined style={{ fontSize: 18, color: colors.accent }} aria-hidden="true" />
           }
         />
@@ -254,7 +254,7 @@ export default function Player() {
               )}
               <div className="player-page__meta-item">
                 <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>Rating</Text>
-                <Text strong style={{ color: "#fadb14" }}>★ {movie.rating}</Text>
+                <Text strong style={{ color: colors.starRating }}>★ {movie.rating}</Text>
               </div>
             </div>
 

@@ -2,6 +2,7 @@ import { Component } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
 import { Button, Typography } from 'antd';
 import { WarningOutlined } from '@ant-design/icons';
+import { darkColors } from '../constants/theme';
 
 const { Title, Text } = Typography;
 
@@ -48,7 +49,7 @@ export class ErrorBoundary extends Component<Props, State> {
             textAlign: 'center',
           }}
         >
-          <WarningOutlined style={{ fontSize: 48, color: '#e50914' }} />
+          <WarningOutlined style={{ fontSize: 48, color: darkColors.accent }} />
           <Title level={3} style={{ margin: 0 }}>Something went wrong</Title>
           <Text type="secondary" style={{ maxWidth: 400 }}>
             An unexpected error occurred. Try refreshing the page.

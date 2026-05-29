@@ -13,22 +13,20 @@ interface ForgotPasswordForm {
   email: string;
 }
 
-const ACCENT = '#e50914';
-
-const submitBtnStyle: React.CSSProperties = {
-  background: ACCENT,
-  borderColor: ACCENT,
-  fontWeight: 600,
-  height: 48,
-  borderRadius: 8,
-  fontSize: 15,
-};
-
 export default function ForgotPassword() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
   const [form] = Form.useForm<ForgotPasswordForm>();
   const { colors } = useTheme();
+
+  const submitBtnStyle: React.CSSProperties = {
+    background: colors.accent,
+    borderColor: colors.accent,
+    fontWeight: 600,
+    height: 48,
+    borderRadius: 8,
+    fontSize: 15,
+  };
   const forgotMutation = useForgotPasswordMutation();
 
   const handleSubmit = (values: ForgotPasswordForm) => {
@@ -45,7 +43,7 @@ export default function ForgotPassword() {
   };
 
   const backToSignIn = (
-    <Link to="/login" style={{ color: ACCENT, fontSize: 14 }}>
+    <Link to="/login" style={{ color: colors.accent, fontSize: 14 }}>
       <ArrowLeftOutlined style={{ marginRight: 6 }} />
       Back to sign in
     </Link>
@@ -68,7 +66,7 @@ export default function ForgotPassword() {
                 margin: '0 auto 16px',
               }}
             >
-              <MailOutlined style={{ fontSize: 32, color: ACCENT }} />
+              <MailOutlined style={{ fontSize: 32, color: colors.accent }} />
             </div>
           }
           title={

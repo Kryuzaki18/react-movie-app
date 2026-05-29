@@ -9,7 +9,7 @@ import { Section, P } from './LegalSection';
 
 const { Text } = Typography;
 
-const ACCENT = '#e50914';
+import { darkColors } from '../../constants/theme';
 
 interface StatCardProps {
   icon: React.ReactNode;
@@ -30,7 +30,7 @@ function StatCard({ icon, value, label }: StatCardProps) {
         textAlign: 'center',
       }}
     >
-      <div style={{ fontSize: 28, color: ACCENT, marginBottom: 8 }}>{icon}</div>
+      <div style={{ fontSize: 28, color: darkColors.accent, marginBottom: 8 }}>{icon}</div>
       <div style={{ fontSize: 28, fontWeight: 800, color: colors.textPrimary, lineHeight: 1 }}>
         {value}
       </div>
@@ -121,7 +121,7 @@ export default function About() {
               style={{
                 background: 'rgba(229,9,20,0.1)',
                 border: '1px solid rgba(229,9,20,0.25)',
-                color: ACCENT,
+                color: darkColors.accent,
                 borderRadius: 6,
                 padding: '4px 10px',
                 fontSize: 13,
@@ -150,7 +150,7 @@ export default function About() {
       <Section title="Contact">
         <P>
           For questions, feedback, or takedown requests, reach out at{' '}
-          <a href="mailto:kjedumapit@gmail.com" style={{ color: ACCENT }}>
+          <a href="mailto:kjedumapit@gmail.com" style={{ color: darkColors.accent }}>
             kjedumapit@gmail.com
           </a>
           .

@@ -1,22 +1,24 @@
 export interface ThemeColors {
-  bgBase:         string;
-  bgCard:         string;
-  bgElevated:     string;
-  bgNav:          string;
-  border:         string;
-  borderSubtle:   string;
-  textPrimary:    string;
-  textSecondary:  string;
-  textMuted:      string;
-  accent:         string;
-  footerBg:       string;
-  inputBg:        string;
-  authBg:         string;
-  authCard:       string;
-  playerControls: string;
-  playerText:     string;
+  bgBase:          string;
+  bgCard:          string;
+  bgElevated:      string;
+  bgNav:           string;
+  border:          string;
+  borderSubtle:    string;
+  textPrimary:     string;
+  textSecondary:   string;
+  textMuted:       string;
+  accent:          string;
+  danger:          string;
+  starRating:      string;
+  footerBg:        string;
+  inputBg:         string;
+  authBg:          string;
+  authCard:        string;
+  playerControls:  string;
+  playerText:      string;
   playerTextMuted: string;
-  skeletonBg:     string;
+  skeletonBg:      string;
 }
 
 export const darkColors: ThemeColors = {
@@ -29,15 +31,17 @@ export const darkColors: ThemeColors = {
   textPrimary:    '#ffffff',
   textSecondary:  '#cccccc',
   textMuted:      '#888888',
-  accent:         '#e50914',
-  footerBg:       '#080810',
-  inputBg:        '#0d0d1a',
-  authBg:         'linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 50%, #0d0d1a 100%)',
-  authCard:       'rgba(26,26,46,0.95)',
-  playerControls: '#111111',
-  playerText:     '#ffffff',
+  accent:          '#e50914',
+  danger:          '#ff4d4f',
+  starRating:      '#fadb14',
+  footerBg:        '#080810',
+  inputBg:         '#0d0d1a',
+  authBg:          'linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 50%, #0d0d1a 100%)',
+  authCard:        'rgba(26,26,46,0.95)',
+  playerControls:  '#111111',
+  playerText:      '#ffffff',
   playerTextMuted: '#aaaaaa',
-  skeletonBg:     '#1a1a2e',
+  skeletonBg:      '#1a1a2e',
 };
 
 export const lightColors: ThemeColors = {
@@ -50,13 +54,15 @@ export const lightColors: ThemeColors = {
   textPrimary:    '#111111',
   textSecondary:  '#333333',
   textMuted:      '#666666',
-  accent:         '#e50914',
-  footerBg:       '#e8eaf0',
-  inputBg:        '#ffffff',
-  authBg:         'linear-gradient(135deg, #f0f2f5 0%, #e8e0f5 50%, #f0f2f5 100%)',
-  authCard:       'rgba(255,255,255,0.97)',
-  playerControls: '#1a1a1a',
-  playerText:     '#ffffff',
+  accent:          '#e50914',
+  danger:          '#ff4d4f',
+  starRating:      '#fadb14',
+  footerBg:        '#e8eaf0',
+  inputBg:         '#ffffff',
+  authBg:          'linear-gradient(135deg, #f0f2f5 0%, #e8e0f5 50%, #f0f2f5 100%)',
+  authCard:        'rgba(255,255,255,0.97)',
+  playerControls:  '#1a1a1a',
+  playerText:      '#ffffff',
   playerTextMuted: '#aaaaaa',
-  skeletonBg:     '#e8eaf0',
+  skeletonBg:      '#e8eaf0',
 };

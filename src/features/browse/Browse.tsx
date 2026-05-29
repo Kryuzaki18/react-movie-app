@@ -195,8 +195,8 @@ export default function Browse() {
             setPage(1);
           }}
           style={{
-            border: `1px solid ${selectedGenre === g.value ? "#e50914" : colors.border}`,
-            background: selectedGenre === g.value ? "#e50914" : "transparent",
+            border: `1px solid ${selectedGenre === g.value ? colors.accent : colors.border}`,
+            background: selectedGenre === g.value ? colors.accent : "transparent",
             color: selectedGenre === g.value ? "#fff" : colors.textMuted,
             fontWeight: selectedGenre === g.value ? 600 : 400,
           }}
@@ -270,7 +270,7 @@ export default function Browse() {
             {searchQuery && (
               <>
                 {" "}
-                for "<Text style={{ color: "#e50914" }}>{searchQuery}</Text>"
+                for "<Text style={{ color: colors.accent }}>{searchQuery}</Text>"
               </>
             )}
           </Text>

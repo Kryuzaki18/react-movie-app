@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState, useEffect } from "react";
+import { darkColors } from "./constants/theme";
 import { Link, BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Layout, ConfigProvider, theme } from "antd";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
@@ -82,7 +83,7 @@ function AppSplash({ visible, slowStart = false }: { visible: boolean; slowStart
             left: 0,
             height: "100%",
             width: "40%",
-            background: "#e50914",
+            background: darkColors.accent,
             borderRadius: 2,
             animation: "splashBar 1.4s ease-in-out infinite",
           }}
@@ -261,7 +262,7 @@ function ThemedApp() {
       theme={{
         algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
         token: {
-          colorPrimary: "#e50914",
+          colorPrimary: colors.accent,
           colorBgBase: colors.bgBase,
           colorTextBase: colors.textPrimary,
           borderRadius: 8,
@@ -277,12 +278,12 @@ function ThemedApp() {
             ? {
               darkItemBg: "transparent",
               darkSubMenuItemBg: "transparent",
-              darkItemSelectedBg: "rgba(229,9,20,0.15)",
+              darkItemSelectedBg: "rgba(229,9,20,0.15)",  // accent at 15% opacity
               darkItemSelectedColor: "#fff",
             }
             : {
-              itemSelectedBg: "rgba(229,9,20,0.08)",
-              itemSelectedColor: "#e50914",
+              itemSelectedBg: "rgba(229,9,20,0.08)",  // accent at 8% opacity
+              itemSelectedColor: colors.accent,
             },
           Input: {
             colorBgContainer: colors.inputBg,
@@ -298,7 +299,7 @@ function ThemedApp() {
           Drawer: { colorBgElevated: colors.bgBase },
           Modal: { contentBg: colors.bgBase, headerBg: colors.bgBase },
           Card: { colorBgContainer: colors.bgCard },
-          Slider: { colorPrimaryBorder: "#e50914", colorPrimary: "#e50914" },
+          Slider: { colorPrimaryBorder: colors.accent, colorPrimary: colors.accent },
         },
       }}
     >
