@@ -10,7 +10,6 @@ import { useTheme } from "../../context/ThemeContext";
 import ServerSelector from "../../components/ui/server-selector/ServerSelector";
 import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
 import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
-import CastSection from "../../components/ui/cast-section/CastSection";
 import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
 import useResolvedGenres from '../../hooks/useResolvedGenres';
 import ExpandableText from "../../components/ui/expandable-text/ExpandableText";
@@ -26,7 +25,7 @@ interface VideoPlayerProps {
 
 export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) {
   const [playing, setPlaying] = useState(false);
-  const [server, setServer] = useState(1);
+  const [server, setServer] = useState(0);
   const [season, setSeason] = useState(1);
   const [episode, setEpisode] = useState(1);
   const { colors } = useTheme();
@@ -195,24 +194,6 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
             color={colors.textSecondary}
           />
         </Flex>
-
-        {typeof movie.id === "number" && (
-          <div
-            style={{
-              minWidth: 0,
-              overflow: "hidden",
-              paddingBottom: "1rem",
-            }}
-          >
-            <CastSection
-              tmdbId={movie.id}
-              mediaType={movie.mediaType}
-              labelColor={colors.textMuted}
-              nameColor={colors.textPrimary}
-              charColor={colors.textMuted}
-            />
-          </div>
-        )}
       </Flex>
 
     </Modal>

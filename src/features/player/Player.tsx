@@ -77,7 +77,7 @@ export default function Player() {
   const [episode, setEpisode] = useState(() => parseInt(searchParams.get("episode") || "1", 10));
 
   const { colors } = useTheme();
-  const [servers, setServers] = useState(1);
+  const [servers, setServers] = useState(0);
 
   const movieId = id ? parseInt(id, 10) : null;
   const safeId = Number.isFinite(movieId) && movieId! > 0 ? movieId : null;
