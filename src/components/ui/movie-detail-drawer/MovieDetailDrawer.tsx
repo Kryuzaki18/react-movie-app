@@ -68,7 +68,8 @@ function MovieDetailDrawerInner({
 
   const backdropSrc = movie?.backdrop || movie?.thumbnail || "";
 
-  const tmdbId = typeof movie?.id === "number" ? movie.id : null;
+  const rawId = movie?.id;
+  const tmdbId = rawId != null && !isNaN(Number(rawId)) ? Number(rawId) : null;
 
   useEffect(() => {
     if (!open || !movie) return;
