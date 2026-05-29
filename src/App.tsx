@@ -27,6 +27,9 @@ const Profile    = lazy(() => import("./features/profile/Profile"));
 const About = lazy(() => import("./features/legal/About"));
 const PrivacyPolicy = lazy(() => import("./features/legal/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./features/legal/TermsOfService"));
+const EmailPreview = import.meta.env.DEV
+  ? lazy(() => import("./features/dev/EmailPreview"))
+  : null;
 
 const { Content, Footer } = Layout;
 
@@ -310,6 +313,16 @@ function ThemedApp() {
                 </Suspense>
               }
             />
+            {import.meta.env.DEV && EmailPreview && (
+              <Route
+                path="/dev/email-preview"
+                element={
+                  <Suspense fallback={<AppSplash visible />}>
+                    <EmailPreview />
+                  </Suspense>
+                }
+              />
+            )}
             <Route path="*" element={<AppLayout />} />
           </Routes>
         </AppBootstrap>

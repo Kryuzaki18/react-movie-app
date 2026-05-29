@@ -15,6 +15,10 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, "/api/v1"),
       },
+      "/dev/email-preview/": {
+        target: "http://localhost:4321",
+        changeOrigin: true,
+      },
     },
   },
 })
