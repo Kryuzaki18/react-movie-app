@@ -1,4 +1,4 @@
-const API_BASE = '/api';
+const API_BASE = "/api";
 
 export const API_ROUTES = {
   BASE: API_BASE,
@@ -20,13 +20,14 @@ export const API_ROUTES = {
   },
 
   WATCHLIST: {
-    BASE:      `${API_BASE}/watchlist`,
-    ITEM:      (movieId: string | number) => `${API_BASE}/watchlist/${encodeURIComponent(String(movieId))}`,
+    BASE: `${API_BASE}/watchlist`,
+    ITEM: (movieId: string | number) =>
+      `${API_BASE}/watchlist/${encodeURIComponent(String(movieId))}`,
   },
 
   USER: {
     CHANGE_PASSWORD: `${API_BASE}/change-password`,
-    DELETE_ACCOUNT:  `${API_BASE}/account`,
+    DELETE_ACCOUNT: `${API_BASE}/account`,
   },
 
   TMDB: {
@@ -43,7 +44,8 @@ export const API_ROUTES = {
       VIDEOS: (id: number) => `${API_BASE}/tmdb/movies/${id}/videos`,
       CREDITS: (id: number) => `${API_BASE}/tmdb/movies/${id}/credits`,
       SIMILAR: (id: number) => `${API_BASE}/tmdb/movies/${id}/similar`,
-      RECOMMENDATIONS: (id: number) => `${API_BASE}/tmdb/movies/${id}/recommendations`,
+      RECOMMENDATIONS: (id: number) =>
+        `${API_BASE}/tmdb/movies/${id}/recommendations`,
     },
 
     TV: {
@@ -58,7 +60,8 @@ export const API_ROUTES = {
       VIDEOS: (id: number) => `${API_BASE}/tmdb/tv/${id}/videos`,
       CREDITS: (id: number) => `${API_BASE}/tmdb/tv/${id}/credits`,
       SIMILAR: (id: number) => `${API_BASE}/tmdb/tv/${id}/similar`,
-      RECOMMENDATIONS: (id: number) => `${API_BASE}/tmdb/tv/${id}/recommendations`,
+      RECOMMENDATIONS: (id: number) =>
+        `${API_BASE}/tmdb/tv/${id}/recommendations`,
     },
 
     SEARCH_MULTI: `${API_BASE}/tmdb/search`,
@@ -68,7 +71,6 @@ export const API_ROUTES = {
 } as const;
 
 export interface EmbedServer {
-  id: number;
   label: string;
   movie: (id: number | string) => string;
   tv: (id: number | string, season: number, episode: number) => string;
@@ -76,63 +78,54 @@ export interface EmbedServer {
 
 export const EMBED_SERVERS: EmbedServer[] = [
   {
-    id: 1,
     label: "player.videasy",
     movie: (id) => `https://player.videasy.net/movie/${id}`,
     tv: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}`,
   },
   {
-    id: 2,
-    label: "ezvidapi",
-    movie: (id) => `https://ezvidapi.com/embed/movie/${id}?provider=vidsrc`,
-    tv: (id, s, e) => `https://ezvidapi.com/embed/tv/${id}/${s}/${e}?provider=vidsrc`,
-  },
-  {
-    id: 3,
-    label: 'VidSrc.to',
-    movie: (id) => `https://vidsrc.to/embed/movie/${id}`,
-    tv: (id, s, e) => `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
-  },
-  {
-    id: 4,
-    label: '2embed.online',
-    movie: (id) => `https://www.2embed.online/embed/movie/${id}`,
-    tv: (id, s, e) => `https://www.2embed.online/embed/tv/${id}/${s}/${e}`,
-  },
-  {
-    id: 5,
-    label: 'VidSrc.me',
-    movie: (id) => `https://vidsrc.me/embed/movie/${id}`,
-    tv: (id, s, e) => `https://vidsrc.me/embed/tv/${id}/${s}/${e}`,
-  },
-  {
-    id: 6,
-    label: 'VidSrc.mov',
-    movie: (id) => `https://vidsrc.mov/embed/movie/${id}`,
-    tv: (id, s, e) => `https://vidsrc.mov/embed/tv/${id}/${s}/${e}`,
-  },
-  {
-    id: 7,
-    label: 'VidSrc.fyi',
-    movie: (id) => `https://vidsrc.fyi/embed/movie/${id}`,
-    tv: (id, s, e) => `https://vidsrc.fyi/embed/tv/${id}/${s}/${e}`,
-  },
-  {
-    id: 8,
-    label: 'VidSrc.pm',
+    label: "VidSrc.pm",
     movie: (id) => `https://vidsrc.pm/embed/movie/${id}`,
     tv: (id, s, e) => `https://vidsrc.pm/embed/tv/${id}/${s}/${e}`,
   },
   {
-    id: 9,
-    label: 'VidSrc.io',
+    label: "ezvidapi",
+    movie: (id) => `https://ezvidapi.com/embed/movie/${id}?provider=vidsrc`,
+    tv: (id, s, e) =>
+      `https://ezvidapi.com/embed/tv/${id}/${s}/${e}?provider=vidsrc`,
+  },
+  {
+    label: "VidSrc.to",
+    movie: (id) => `https://vidsrc.to/embed/movie/${id}`,
+    tv: (id, s, e) => `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
+  },
+  {
+    label: "2embed.online",
+    movie: (id) => `https://www.2embed.online/embed/movie/${id}`,
+    tv: (id, s, e) => `https://www.2embed.online/embed/tv/${id}/${s}/${e}`,
+  },
+  {
+    label: "VidSrc.me",
+    movie: (id) => `https://vidsrc.me/embed/movie/${id}`,
+    tv: (id, s, e) => `https://vidsrc.me/embed/tv/${id}/${s}/${e}`,
+  },
+  {
+    label: "VidSrc.mov",
+    movie: (id) => `https://vidsrc.mov/embed/movie/${id}`,
+    tv: (id, s, e) => `https://vidsrc.mov/embed/tv/${id}/${s}/${e}`,
+  },
+  {
+    label: "VidSrc.fyi",
+    movie: (id) => `https://vidsrc.fyi/embed/movie/${id}`,
+    tv: (id, s, e) => `https://vidsrc.fyi/embed/tv/${id}/${s}/${e}`,
+  },
+  {
+    label: "VidSrc.io",
     movie: (id) => `https://vidsrc.io/embed/movie/${id}`,
     tv: (id, s, e) => `https://vidsrc.io/embed/tv/${id}/${s}/${e}`,
   },
   {
-    id: 10,
-    label: 'VidSrc.cc',
+    label: "VidSrc.cc",
     movie: (id) => `https://vidsrc.cc/v2/embed/movie/${id}`,
     tv: (id, s, e) => `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
-  },
+  }
 ];

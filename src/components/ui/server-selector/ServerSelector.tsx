@@ -16,14 +16,14 @@ export default function ServerSelector({ activeServer, onServerChange }: ServerS
       }}
     >
       <Flex gap={6} style={{ flexWrap: 'nowrap', width: 'max-content', paddingBottom: "0.3rem" }}>
-        {EMBED_SERVERS.map((server) => (
+        {EMBED_SERVERS.map((_, i) => (
           <Button
-            key={server.id}
+            key={i}
             size="small"
-            type={activeServer === server.id ? 'primary' : 'default'}
-            onClick={() => onServerChange(server.id)}
+            type={activeServer === i ? 'primary' : 'default'}
+            onClick={() => onServerChange(i)}
           >
-            Server {server.id}
+            Server {i + 1}
           </Button>
         ))}
       </Flex>

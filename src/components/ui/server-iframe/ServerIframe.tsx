@@ -17,8 +17,7 @@ export default function ServerIframe({
   episode = 1,
   className = 'player__iframe',
 }: ServerIframeProps) {
-  const embedServer = EMBED_SERVERS.find((s) => s.id === server) ?? EMBED_SERVERS[0];
-
+  const embedServer = EMBED_SERVERS[server];
   const src = mediaType === 'tv'
     ? embedServer.tv(mediaId, season, episode)
     : embedServer.movie(mediaId);
