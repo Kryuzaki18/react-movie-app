@@ -52,6 +52,31 @@
   margin-bottom: 16px;
 }
 
+.detail-drawer__production {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.detail-drawer__production-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.detail-drawer__production-label {
+  font-size: 11px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  min-width: 62px;
+  flex-shrink: 0;
+}
+
+.detail-drawer__production-value {
+  font-size: 13px !important;
+}
+
 .detail-drawer__rate {
   font-size: 16px !important;
   color: #fadb14 !important;

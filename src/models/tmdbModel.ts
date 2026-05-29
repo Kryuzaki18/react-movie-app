@@ -30,6 +30,16 @@ export interface TmdbMovieListItem {
   video:             boolean;
 }
 
+export interface TmdbProductionCountry {
+  iso_3166_1: string;
+  name:       string;
+}
+
+export interface TmdbSpokenLanguage {
+  iso_639_1: string;
+  name:      string;
+}
+
 export interface TmdbMovieDetail extends Omit<TmdbMovieListItem, 'genre_ids'> {
   genres:               TmdbGenre[];
   runtime:              number | null;
@@ -40,7 +50,8 @@ export interface TmdbMovieDetail extends Omit<TmdbMovieListItem, 'genre_ids'> {
   homepage:             string;
   imdb_id:              string | null;
   production_companies: TmdbProductionCompany[];
-  spoken_languages:     Array<{ iso_639_1: string; name: string }>;
+  production_countries: TmdbProductionCountry[];
+  spoken_languages:     TmdbSpokenLanguage[];
   belongs_to_collection: {
     id:            number;
     name:          string;

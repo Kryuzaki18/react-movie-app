@@ -8,6 +8,9 @@ import type {
   TmdbVideosResponse,
   TmdbCreditsResponse,
   TmdbGenre,
+  TmdbProductionCompany,
+  TmdbProductionCountry,
+  TmdbSpokenLanguage,
 } from '../models/tmdbModel';
 
 let movieGenresPromise: Promise<{ genres: TmdbGenre[] }> | null = null;
@@ -39,15 +42,19 @@ export interface TmdbTvSeason {
 }
 
 export interface TmdbTvDetail extends Omit<TmdbTvListItem, 'genre_ids'> {
-  genres: TmdbGenre[];
-  episode_run_time: number[];
-  number_of_seasons: number;
-  number_of_episodes: number;
-  seasons: TmdbTvSeason[];
-  status: string;
-  tagline: string;
-  homepage: string;
-  in_production: boolean;
+  genres:               TmdbGenre[];
+  episode_run_time:     number[];
+  number_of_seasons:    number;
+  number_of_episodes:   number;
+  seasons:              TmdbTvSeason[];
+  status:               string;
+  tagline:              string;
+  homepage:             string;
+  in_production:        boolean;
+  origin_country:       string[];
+  production_companies: TmdbProductionCompany[];
+  production_countries: TmdbProductionCountry[];
+  spoken_languages:     TmdbSpokenLanguage[];
 }
 
 export interface TmdbMultiResult {

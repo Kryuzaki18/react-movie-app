@@ -27,6 +27,7 @@ import useResolvedGenres from '../../../hooks/useResolvedGenres';
 import CastSection from "../cast-section/CastSection";
 import ExpandableText from "../expandable-text/ExpandableText";
 import useWatchlistStatus from '../../../hooks/useWatchlistStatus';
+import { useTmdbMovieDetailQuery, useTmdbTvDetailQuery } from '../../../api/useTmdbQuery';
 import "./MovieDetailDrawer.css";
 
 const { Title, Text } = Typography;
@@ -55,6 +56,17 @@ function MovieDetailDrawerInner({
 
   const rawId = movie?.id;
   const tmdbId = rawId != null && !isNaN(Number(rawId)) ? Number(rawId) : null;
+  const isTV = movie?.mediaType === "tv";
+
+  const { data: movieDetail } = useTmdbMovieDetailQuery(!isTV ? tmdbId : null);
+  const { data: tvDetail }    = useTmdbTvDetailQuery(isTV ? tmdbId : null);
+
+  const detail = isTV ? tvDetail : movieDetail;
+  const studio    = detail?.production_companies?.[0]?.name ?? null;
+  const country   = isTV
+    ? (tvDetail?.production_countries?.[0]?.name ?? tvDetail?.origin_country?.[0] ?? null)
+    : (movieDetail?.production_countries?.[0]?.name ?? null);
+  const language  = detail?.spoken_languages?.[0]?.name ?? null;
 
   useEffect(() => {
     if (!open || !movie) return;
@@ -184,6 +196,29 @@ function MovieDetailDrawerInner({
                 </Col>
               )}
             </Row>
+
+            {(studio || country || language) && (
+              <div className="detail-drawer__production">
+                {studio && (
+                  <div className="detail-drawer__production-item">
+                    <Text className="detail-drawer__production-label" style={{ color: colors.textMuted }}>Studio</Text>
+                    <Text className="detail-drawer__production-value" style={{ color: colors.textSecondary }}>{studio}</Text>
+                  </div>
+                )}
+                {country && (
+                  <div className="detail-drawer__production-item">
+                    <Text className="detail-drawer__production-label" style={{ color: colors.textMuted }}>Country</Text>
+                    <Text className="detail-drawer__production-value" style={{ color: colors.textSecondary }}>{country}</Text>
+                  </div>
+                )}
+                {language && (
+                  <div className="detail-drawer__production-item">
+                    <Text className="detail-drawer__production-label" style={{ color: colors.textMuted }}>Language</Text>
+                    <Text className="detail-drawer__production-value" style={{ color: colors.textSecondary }}>{language}</Text>
+                  </div>
+                )}
+              </div>
+            )}
 
             <Rate
               disabled
