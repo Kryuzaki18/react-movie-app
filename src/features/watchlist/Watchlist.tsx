@@ -34,16 +34,31 @@ export default function Watchlist() {
   const navigate = useNavigate();
   const { playMovie, openDetail } = usePlayerStore();
 
-  const { search, sortBy, layout, setSearch, setSortBy, setLayout } = useWatchlistStore();
+  const {
+    search,
+    sortBy,
+    layout,
+    mediaFilter,
+    setSearch,
+    setSortBy,
+    setLayout,
+    setMediaFilter,
+  } = useWatchlistStore();
 
   const { data: watchlistItems = [], isLoading } = useWatchlistQuery();
 
   const filtered = watchlistItems
     .filter((item) => item.title.toLowerCase().includes(search.toLowerCase()))
+    .filter(
+      (item) =>
+        mediaFilter === "all" || (item.mediaType ?? "movie") === mediaFilter,
+    )
     .sort((a, b) => {
-      if (sortBy === "newest") return new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime();
-      if (sortBy === "oldest") return new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime();
-      if (sortBy === "az")     return a.title.localeCompare(b.title);
+      if (sortBy === "newest")
+        return new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime();
+      if (sortBy === "oldest")
+        return new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime();
+      if (sortBy === "az") return a.title.localeCompare(b.title);
       if (sortBy === "rating") return b.rating - a.rating;
       return 0;
     });
@@ -67,10 +82,13 @@ export default function Watchlist() {
 
       <div
         className="watchlist__toolbar"
-        style={{ background: colors.bgCard, border: `1px solid ${colors.border}` }}
+        style={{
+          background: colors.bgCard,
+          border: `1px solid ${colors.border}`,
+        }}
       >
         <Row gutter={[12, 12]} align="middle">
-          <Col xs={24} sm={12} md={10} lg={10}>
+          <Col xs={24} sm={12} md={8} lg={8}>
             <Input
               placeholder="Search watchlist…"
               prefix={<SearchOutlined style={{ color: colors.textMuted }} />}
@@ -80,20 +98,38 @@ export default function Watchlist() {
               style={{ borderRadius: 8 }}
             />
           </Col>
-          <Col xs={24} sm={12} md={8} lg={8}>
+          <Col xs={24} sm={12} md={6} lg={6}>
             <Select
               value={sortBy}
               onChange={setSortBy}
               style={{ width: "100%" }}
               options={[
-                { label: "Newest first",  value: "newest" },
-                { label: "Oldest first",  value: "oldest" },
-                { label: "A → Z",         value: "az" },
+                { label: "Newest first", value: "newest" },
+                { label: "Oldest first", value: "oldest" },
+                { label: "A → Z", value: "az" },
                 { label: "Highest rated", value: "rating" },
               ]}
             />
           </Col>
-          <Col xs={24} sm={24} md={6} lg={6} className="watchlist__toolbar-layout">
+          <Col xs={24} sm={12} md={6} lg={6}>
+            <Segmented
+              value={mediaFilter}
+              onChange={(v) => setMediaFilter(v as "all" | "movie" | "tv")}
+              block
+              options={[
+                { value: "all", label: "All" },
+                { value: "movie", label: "Movies" },
+                { value: "tv", label: "TV Series" },
+              ]}
+            />
+          </Col>
+          <Col
+            xs={24}
+            sm={12}
+            md={4}
+            lg={4}
+            className="watchlist__toolbar-layout"
+          >
             <Segmented
               value={layout}
               onChange={(v) => setLayout(v as "grid" | "list")}
@@ -111,7 +147,11 @@ export default function Watchlist() {
           {skeletonCols.map((_, i) => (
             <Col key={i} xs={24} sm={12} md={8} lg={6}>
               <Skeleton.Image active style={{ width: "100%", height: 180 }} />
-              <Skeleton active paragraph={{ rows: 2 }} style={{ marginTop: 8 }} />
+              <Skeleton
+                active
+                paragraph={{ rows: 2 }}
+                style={{ marginTop: 8 }}
+              />
             </Col>
           ))}
         </Row>
@@ -121,7 +161,9 @@ export default function Watchlist() {
           image={<HeartOutlined className="watchlist__empty-icon" />}
           description={
             <Space direction="vertical" align="center" size={4}>
-              <Text strong style={{ fontSize: 16 }}>Your watchlist is empty</Text>
+              <Text strong style={{ fontSize: 16 }}>
+                Your watchlist is empty
+              </Text>
               <Text style={{ color: colors.textMuted }}>
                 Browse movies and TV series and add them to watch later.
               </Text>
@@ -136,7 +178,19 @@ export default function Watchlist() {
         <Empty
           description={
             <Text style={{ color: colors.textMuted }}>
-              No titles match "<strong>{search}</strong>"
+              No
+              {mediaFilter !== "all"
+                ? ` ${mediaFilter === "tv" ? "TV series" : "movies"}`
+                : " titles"}
+              {search ? (
+                <>
+                  {" "}
+                  matching "<strong>{search}</strong>"
+                </>
+              ) : (
+                " in your watchlist"
+              )}
+              .
             </Text>
           }
           style={{ padding: "60px 0" }}
@@ -145,12 +199,21 @@ export default function Watchlist() {
         <Row gutter={[16, 20]} className="watchlist__grid">
           {filtered.map((item) => (
             <Col key={item.movieId} xs={24} sm={12} md={8} lg={6}>
-              <MovieCard movie={watchlistItemToMovie(item)} onPlay={playMovie} onDetail={openDetail} />
+              <MovieCard
+                movie={watchlistItemToMovie(item)}
+                onPlay={playMovie}
+                onDetail={openDetail}
+              />
             </Col>
           ))}
         </Row>
       ) : (
-        <Space direction="vertical" size={12} style={{ width: "100%" }} className="watchlist__list">
+        <Space
+          direction="vertical"
+          size={12}
+          style={{ width: "100%" }}
+          className="watchlist__list"
+        >
           {filtered.map((item) => (
             <MovieListRow
               key={item.movieId}
