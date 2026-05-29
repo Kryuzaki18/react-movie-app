@@ -42,7 +42,7 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
   useEffect(() => {
     if (!open) {
       setPlaying(false);
-      setServer(1);
+      setServer(0);
       setSeason(1);
       setEpisode(1);
     }
