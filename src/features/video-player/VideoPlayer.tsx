@@ -1,4 +1,4 @@
-import { Modal, Typography, Space, Tag, Rate, Button, Flex, Spin } from "antd";
+import { Modal, Typography, Tag, Rate, Button, Flex, Spin } from "antd";
 import {
   PlayCircleOutlined,
   LinkOutlined,
@@ -177,23 +177,24 @@ export default function VideoPlayer({
           wrap={true}
           style={{ backgroundColor: colors.bgBase, padding: "0.5rem 0" }}
         >
-          <Space size={8}>
-            <Button
-              type="primary"
-              size="small"
-              icon={<LinkOutlined />}
-              onClick={() => {
-                const url =
-                  movie.mediaType === "tv"
-                    ? `/player/${movie.id}?type=tv&season=${season}&episode=${episode}`
-                    : `/player/${movie.id}`;
-                window.open(url, "_blank", "noopener,noreferrer");
-              }}
-              style={{ fontSize: 11 }}
-            >
-              Open in new tab
-            </Button>
-          </Space>
+          <Button
+            type="primary"
+            size="small"
+            icon={<LinkOutlined />}
+            onClick={() => {
+              const url =
+                movie.mediaType === "tv"
+                  ? `/player/${movie.id}?type=tv&season=${season}&episode=${episode}`
+                  : `/player/${movie.id}`;
+              window.open(url, "_blank", "noopener,noreferrer");
+            }}
+            style={{
+              fontSize: 11,
+              marginBottom: movie.mediaType === "tv" ? undefined : 7,
+            }}
+          >
+            Open in new tab
+          </Button>
 
           {movie.mediaType === "tv" && (
             <>
